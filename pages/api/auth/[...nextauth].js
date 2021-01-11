@@ -6,6 +6,7 @@ import Providers from 'next-auth/providers'
 const options = {
   // https://next-auth.js.org/configuration/providers
   providers: [
+    /*
     Providers.Email({
       server: process.env.EMAIL_SERVER, 
       from: process.env.EMAIL_FROM,
@@ -24,11 +25,13 @@ const options = {
       clientSecret: process.env.AUTH0_SECRET,
       domain: process.env.AUTH0_DOMAIN
     }),
+    */
     Providers.Cognito({
       clientId: process.env.COGNITO_CLIENT_ID,
       clientSecret: process.env.COGNITO_CLIENT_SECRET,
       domain: process.env.COGNITO_DOMAIN,
     }),
+    /*
     Providers.Facebook({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET
@@ -45,6 +48,7 @@ const options = {
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET
     }),
+    */
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
