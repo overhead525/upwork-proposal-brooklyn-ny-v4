@@ -24,6 +24,11 @@ const options = {
       clientSecret: process.env.AUTH0_SECRET,
       domain: process.env.AUTH0_DOMAIN
     }),
+    Providers.Cognito({
+      clientId: process.env.COGNITO_CLIENT_ID,
+      clientSecret: process.env.COGNITO_CLIENT_SECRET,
+      domain: process.env.COGNITO_DOMAIN,
+    }),
     Providers.Facebook({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET
