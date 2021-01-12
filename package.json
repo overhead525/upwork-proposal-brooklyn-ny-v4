@@ -1,16 +1,16 @@
 {
-  "name": "next-auth-example",
-  "version": "3.1.1",
-  "description": "An example project for NextAuth.js",
-  "repository": "https://github.com/nextauthjs/next-auth-example.git",
-  "homepage": "http://next-auth-example.now.sh",
+  "name": "upwork-proposal-brooklyn-ny-v4",
+  "version": "4.0.0",
+  "description": "A project for a proposal to be given to a job poster on Upwork. Allows users to create forms and share.",
+  "repository": "https://github.com/overhead525/upwork-proposal-brooklyn-ny-v4.git",
+  "homepage": "https://upwork-proposal-brooklyn-ny-v4.vercel.app",
   "main": "",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start"
   },
-  "author": "Iain Collins <me@iaincollins.com>",
+  "author": "Iain Collins <me@iaincollins.com>, Ritchel COusar <ritchelcousar@outlook.com>",
   "license": "ISC",
   "dependencies": {
     "formik": "^2.2.6",
