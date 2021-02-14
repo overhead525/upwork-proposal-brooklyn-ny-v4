@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest"
   },
   "author": "Iain Collins <me@iaincollins.com>, Ritchel COusar <ritchelcousar@outlook.com>",
   "license": "ISC",
