@@ -7,12 +7,12 @@ export type FormElementDoc = {
   type: formElementType;
   questionKey: string;
   helperText?: string;
-  choices?: [string];
+  choices?: string[][];
 };
 
 export type FormObjectDoc = {
   title: string;
-  pages: [[FormElementDoc]];
+  pages: FormElementDoc[][];
   url: string;
 };
 
