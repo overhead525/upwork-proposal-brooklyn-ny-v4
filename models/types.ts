@@ -21,12 +21,12 @@ export type FormDoc = Document & {
   published: FormObjectDoc;
 };
 
+export type MediaElementType = Document & {
+  mediaType: string;
+  [canononicalName: string]: string;
+};
+
 export type UserDoc = Document & {
-  forms: [string];
-  media: {
-    [mediaType: string]: {
-      // video: me-in-the-woods.mp4
-      [canononicalName: string]: string;
-    };
-  };
+  forms: string[];
+  media: MediaElementType[];
 };

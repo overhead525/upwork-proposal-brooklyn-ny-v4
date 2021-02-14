@@ -21,13 +21,15 @@ export const formSchema = new Schema({
   published: formObjectSchema,
 });
 
+export const mediaElementSchema = new Schema({
+  mediaType: String,
+  data: {
+    type: Map,
+    of: String,
+  },
+});
+
 export const userSchema = new Schema({
   forms: [String],
-  media: {
-    type: Map,
-    of: {
-      type: Map,
-      of: String,
-    },
-  },
+  media: [mediaElementSchema],
 });

@@ -26,11 +26,12 @@ export interface Form {
   published: FormObject;
 }
 
+export interface MediaElement {
+  mediaType: string;
+  [canononicalName: string]: string;
+}
+
 export interface User {
-  forms: [string];
-  media: {
-    [mediaType: string]: {
-      [canononicalName: string]: string;
-    };
-  };
+  forms: string[];
+  media: MediaElement[];
 }
