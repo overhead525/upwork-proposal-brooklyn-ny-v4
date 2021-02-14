@@ -2,7 +2,7 @@ import { Mongoose, Schema } from "mongoose";
 
 import { formElementType } from "./interfaces";
 
-const formElementSchema = new Schema({
+export const formElementSchema = new Schema({
   question: String,
   type: Number,
   questionKey: String,
@@ -10,7 +10,7 @@ const formElementSchema = new Schema({
   choices: [String],
 });
 
-const formObjectSchema = new Schema({
+export const formObjectSchema = new Schema({
   title: String,
   pages: [[formElementSchema]],
   url: String,
@@ -21,7 +21,7 @@ export const formSchema = new Schema({
   published: formObjectSchema,
 });
 
-export const mediaElementSchema = new Schema({
+const mediaElementSchema = new Schema({
   mediaType: String,
   data: {
     type: Map,
