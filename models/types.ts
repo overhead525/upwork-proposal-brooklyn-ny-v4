@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 
 import { formElementType } from "./interfaces";
 
-export type FormElementDoc = Document & {
+export type FormElementDoc = {
   question: string;
   type: formElementType;
   questionKey: string;
@@ -10,23 +10,23 @@ export type FormElementDoc = Document & {
   choices?: [string];
 };
 
-export type FormObjectDoc = Document & {
+export type FormObjectDoc = {
   title: string;
   pages: [[FormElementDoc]];
   url: string;
 };
 
-export type FormDoc = Document & {
+export type FormDoc = {
   preview: FormObjectDoc;
   published: FormObjectDoc;
 };
 
-export type MediaElementType = Document & {
+export type MediaElementType = {
   mediaType: string;
   [canononicalName: string]: string;
 };
 
-export type UserDoc = Document & {
+export type UserDoc = {
   forms: string[];
   media: MediaElementType[];
 };
