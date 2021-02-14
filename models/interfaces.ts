@@ -17,7 +17,7 @@ export interface FormElement {
 
 export interface FormObject {
   title: string;
-  pages: [FormElement[]];
+  pages: FormElement[][];
   url: string;
 }
 
