@@ -54,7 +54,7 @@ export const formSchema = new Schema({
   },
 });
 
-const mediaElementSchema = new Schema({
+export const mediaElementSchema = new Schema({
   mediaType: {
     type: String,
     required: true,
