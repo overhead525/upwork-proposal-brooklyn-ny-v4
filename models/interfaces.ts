@@ -7,6 +7,11 @@ export enum formElementType {
   URL,
 }
 
+export const choiceFormElementTypes = [
+  formElementType.RADIO,
+  formElementType.CHECKBOXES,
+];
+
 export interface FormElement {
   question: string; // The question presented to the user
   type: formElementType; // The type of question this element is

@@ -1,35 +1,78 @@
 import { Mongoose, Schema } from "mongoose";
 
-import { formElementType } from "./interfaces";
+import { choiceFormElementTypes, formElementType } from "./interfaces";
 
 export const formElementSchema = new Schema({
-  question: String,
-  type: Number,
-  questionKey: String,
-  helperText: String,
-  choices: [String],
+  question: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: Object.values(formElementType),
+    required: true,
+  },
+  questionKey: {
+    type: String,
+    required: true,
+  },
+  helperText: {
+    type: String,
+    required: false,
+  },
+  choices: {
+    type: [String],
+    required: () => {
+      return this.type in choiceFormElementTypes;
+    },
+  },
 });
 
 export const formObjectSchema = new Schema({
-  title: String,
-  pages: [[formElementSchema]],
-  url: String,
+  title: {
+    type: String,
+    required: true,
+  },
+  pages: {
+    type: [[formElementSchema]],
+    required: true,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
 });
 
 export const formSchema = new Schema({
-  preview: formObjectSchema,
-  published: formObjectSchema,
+  preview: {
+    type: formObjectSchema,
+    required: true,
+  },
+  published: {
+    type: formObjectSchema,
+    required: true,
+  },
 });
 
 const mediaElementSchema = new Schema({
-  mediaType: String,
+  mediaType: {
+    type: String,
+    required: true,
+  },
   data: {
     type: Map,
     of: String,
+    required: true,
   },
 });
 
 export const userSchema = new Schema({
-  forms: [String],
-  media: [mediaElementSchema],
+  forms: {
+    type: [String],
+    required: true,
+  },
+  media: {
+    type: [mediaElementSchema],
+    required: true,
+  },
 });
