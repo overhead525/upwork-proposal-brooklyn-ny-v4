@@ -17,7 +17,6 @@ const nullFormElement: FormElement = {
 const nullFormObject: FormObject = {
   title: null,
   pages: [[nullFormElement]],
-  url: null,
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

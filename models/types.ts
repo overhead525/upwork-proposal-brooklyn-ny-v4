@@ -13,7 +13,6 @@ export type FormElementDoc = {
 export type FormObjectDoc = {
   title: string;
   pages: FormElementDoc[][];
-  url: string;
 };
 
 export type FormDoc = {
