@@ -1,6 +1,9 @@
 import { FormElement } from "../../models";
 import { FormElementDoc } from "../../models/types";
 import { sampleFormElements } from "../constants/form";
+import { runValidationTestLogic } from "./sharedLogic";
+
+beforeEach(() => jest.useFakeTimers());
 
 describe("formElement schema validation is tight", () => {
   const missingPropertyValidationTest = async (missingProp: string) => {
@@ -13,16 +16,7 @@ describe("formElement schema validation is tight", () => {
 
     const testFormElement = new FormElement(testFormElementDoc);
 
-    let flag = 0;
-
-    testFormElement
-      .validate()
-      .then(() => flag++)
-      .catch((err) => {
-        expect(err.message).toContain(`${"`" + missingProp + "`"} is required`);
-      });
-
-    expect(flag).toBe(0);
+    await runValidationTestLogic(missingProp, testFormElement);
   };
 
   const missingChoiceDefinitionsTest = async (
@@ -34,16 +28,7 @@ describe("formElement schema validation is tight", () => {
     };
     const testFormElement = new FormElement(testFormElementDoc);
 
-    let flag = 0;
-
-    testFormElement
-      .validate()
-      .then(() => flag++)
-      .catch((err) => {
-        expect(err.message).toContain("`choices` is required");
-      });
-
-    expect(flag).toBe(0);
+    await runValidationTestLogic(undefined, testFormElement);
   };
 
   test("fails if no 'question' property is provided", async () => {
