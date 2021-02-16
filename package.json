@@ -9,7 +9,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "author": "Iain Collins <me@iaincollins.com>, Ritchel COusar <ritchelcousar@outlook.com>",
   "license": "ISC",
