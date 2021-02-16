@@ -23,7 +23,6 @@ export interface FormElement {
 export interface FormObject {
   title: string;
   pages: FormElement[][];
-  url: string;
 }
 
 export interface Form {

@@ -21,7 +21,4 @@ describe("formObject schema validation is tight", () => {
   test("fails if no 'pages' property is provided", async () => {
     await missingPropertyValidationTest("pages");
   });
-  test("fails if no 'url' property is provided", async () => {
-    await missingPropertyValidationTest("url");
-  });
 });

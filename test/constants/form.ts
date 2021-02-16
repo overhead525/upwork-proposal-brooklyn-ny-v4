@@ -49,25 +49,21 @@ const secondFormElementScramble: FormElement[] = createScrambledArray(
 export const sampleFormObjectV1Preview: FormObject = {
   title: "Taking the Order v1 (preview)",
   pages: [firstFormElementScramble, secondFormElementScramble],
-  url: "https://amazon.co.us/east-2/form/s9dkl2k/taking-the-order-v1/preview",
 };
 
 export const sampleFormObjectV1: FormObject = {
   title: "Taking the Order v1",
   pages: [firstFormElementScramble, secondFormElementScramble],
-  url: "https://amazon.co.us/east-2/form/s9dkl2k/taking-the-order-v1",
 };
 
 export const sampleFormObjectV2Preview: FormObject = {
   title: "Taking the Order v2",
   pages: [secondFormElementScramble, firstFormElementScramble],
-  url: "https://amazon.co.us/east-2/form/fj2ls92/taking-the-order-v2/preview",
 };
 
 export const sampleFormObjectV2: FormObject = {
   title: "Taking the Order v2",
   pages: [secondFormElementScramble, firstFormElementScramble],
-  url: "https://amazon.co.us/east-2/form/fj2ls92/taking-the-order-v2",
 };
 
 export const sampleFormV1: Form = {

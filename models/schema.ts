@@ -37,10 +37,6 @@ export const formObjectSchema = new Schema({
     type: [[formElementSchema]],
     required: true,
   },
-  url: {
-    type: String,
-    required: true,
-  },
 });
 
 export const formSchema = new Schema({
