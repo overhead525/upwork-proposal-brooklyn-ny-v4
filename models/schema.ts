@@ -23,7 +23,6 @@ export const formElementSchema = new Schema({
   choices: {
     type: [String],
     required: function () {
-      console.log(choiceFormElementTypes);
       return this.type in choiceFormElementTypes;
     },
   },
