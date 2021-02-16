@@ -6,12 +6,13 @@ export const runValidationTestLogic = (
 ) => {
   let flag = 0;
 
-  testModel
-    .validate()
-    .then(() => flag++)
-    .catch((err) => {
-      expect(err.message).toContain(`${"`" + missingProp + "`"} is required`);
-    });
-
-  expect(flag).toBe(0);
+  return testModel.validate().then(
+    () => flag++,
+    (reason) => {
+      expect(reason.message).toContain(
+        `${"`" + missingProp + "`"} is required`
+      );
+      expect(flag).toBe(0);
+    }
+  );
 };
