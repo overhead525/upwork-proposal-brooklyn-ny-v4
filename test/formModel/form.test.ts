@@ -1,7 +1,7 @@
 import { Form } from "../../models";
 import { FormDoc } from "../../models/types";
 import { sampleFormV1 } from "../constants/form";
-import { runValidationTestLogic } from "./sharedLogic";
+import { runValidationTestLogic } from "../sharedLogic";
 
 describe("form schema validation is tight", () => {
   const missingPropertyValidationTest = async (missingProp: string) => {

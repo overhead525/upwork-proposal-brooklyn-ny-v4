@@ -1,7 +1,7 @@
 import { FormElement } from "../../models";
 import { FormElementDoc } from "../../models/types";
 import { sampleFormElements } from "../constants/form";
-import { runValidationTestLogic } from "./sharedLogic";
+import { runValidationTestLogic } from "../sharedLogic";
 
 beforeEach(() => jest.useFakeTimers());
 
