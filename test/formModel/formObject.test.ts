@@ -1,7 +1,7 @@
 import { FormObject } from "../../models";
 import { FormObjectDoc } from "../../models/types";
 import { sampleFormObjectV1 } from "../constants/form";
-import { runValidationTestLogic } from "./sharedLogic";
+import { runValidationTestLogic } from "../sharedLogic";
 
 describe("formObject schema validation is tight", () => {
   const missingPropertyValidationTest = async (missingProp: string) => {
