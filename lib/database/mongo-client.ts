@@ -5,16 +5,9 @@ const filledURL = process.env.MONGO_URL.replace(
   process.env.DATABASE_ROOT_PASSWORD
 );
 
-mongoose.connect(
-  filledURL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  () =>
-    console.log(
-      process.env.DATABASE_ROOT_PASSWORD + "\n" + process.env.MONGO_URL
-    )
-);
+mongoose.connect(filledURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 export const db = mongoose.connection;
