@@ -23,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   console.log(req.body);
 
   const numUsers = await db.collection("users").countDocuments();
-  console.log(`There are ${numUsers} users in the "users" collection`);
+  const userDataString = `There are ${numUsers} users in the "users" collection`;
 
-  res.send("performed request");
+  res.send(`performed request\n${userDataString}`);
 };
