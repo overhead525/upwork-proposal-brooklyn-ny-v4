@@ -1,6 +1,11 @@
 import * as mongoose from "mongoose";
 
-mongoose.connect(process.env.MONGO_URL, {
+const filledURL = process.env.MONGO_URL.replace(
+  "<variable>",
+  process.env.DATABASE_ROOT_PASSWORD
+);
+
+mongoose.connect(filledURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
