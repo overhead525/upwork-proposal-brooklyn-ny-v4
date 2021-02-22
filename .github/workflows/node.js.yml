@@ -28,7 +28,7 @@ jobs:
     - run: npm ci
     - run: npm run test:unit
     - run: |
-        npm build && npm start &
+        npm run build && npm start &
         sleep 5
         kill -9 `lsof -i:3000 -t`
       env: 
