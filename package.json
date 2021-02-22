@@ -9,12 +9,14 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "jest --runInBand --detectOpenHandles --forceExit"
+    "test:unit": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:integration": "newman run brooklyn_v4_forms_api_requests.json"
   },
   "author": "Iain Collins <me@iaincollins.com>, Ritchel COusar <ritchelcousar@outlook.com>",
   "license": "ISC",
   "dependencies": {
     "formik": "^2.2.6",
+    "newman": "^5.2.2",
     "next": "^10.0.5",
     "next-auth": "^3.3.0",
     "react": "^16.13.1",
