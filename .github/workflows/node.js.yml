@@ -29,7 +29,7 @@ jobs:
     - run: npm run test:unit
     - run: |
         npm run build
-        npm start
+        npm start &
         sleep 5
         lsof -i tcp:3000
       env: 
