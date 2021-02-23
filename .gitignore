@@ -108,6 +108,3 @@ dist
 .env.local
 
 .DS_Store
-
-# Python Virtual Environment Files
-venv
