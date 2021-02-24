@@ -47,35 +47,33 @@ const secondFormElementScramble: FormElement[] = createScrambledArray(
 );
 
 export const sampleFormObjectV1Preview: FormObject = {
-  id: "9e68394d-c568-4f1c-97f5-a8919ae75367",
   title: "Taking the Order v1 (preview)",
   pages: [firstFormElementScramble, secondFormElementScramble],
 };
 
 export const sampleFormObjectV1: FormObject = {
-  id: "80c674ad-cb26-47e9-87c5-f66ffee109df",
   title: "Taking the Order v1",
   pages: [firstFormElementScramble, secondFormElementScramble],
 };
 
 export const sampleFormObjectV2Preview: FormObject = {
-  id: "1b3ae3b6-b0de-45a9-bb96-fad12829f8e4",
   title: "Taking the Order v2",
   pages: [secondFormElementScramble, firstFormElementScramble],
 };
 
 export const sampleFormObjectV2: FormObject = {
-  id: "9c5327ce-43d2-4483-a723-848abd611f4d",
   title: "Taking the Order v2",
   pages: [secondFormElementScramble, firstFormElementScramble],
 };
 
 export const sampleFormV1: Form = {
+  id: "1b3ae3b6-b0de-45a9-bb96-fad12829f8e4",
   preview: sampleFormObjectV1Preview,
   published: sampleFormObjectV1,
 };
 
 export const sampleFormV2: Form = {
+  id: "9c5327ce-43d2-4483-a723-848abd611f4d",
   preview: sampleFormObjectV2Preview,
   published: sampleFormObjectV2,
 };

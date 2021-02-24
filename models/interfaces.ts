@@ -21,12 +21,12 @@ export interface FormElement {
 }
 
 export interface FormObject {
-  id: string;
   title: string;
   pages: FormElement[][];
 }
 
 export interface Form {
+  id: string;
   preview: FormObject;
   published: FormObject;
 }
