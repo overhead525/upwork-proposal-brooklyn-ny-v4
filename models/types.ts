@@ -11,6 +11,7 @@ export type FormElementDoc = {
 };
 
 export type FormObjectDoc = {
+  id: string;
   title: string;
   pages: FormElementDoc[][];
 };

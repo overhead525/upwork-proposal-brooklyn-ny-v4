@@ -21,6 +21,7 @@ export interface FormElement {
 }
 
 export interface FormObject {
+  id: string;
   title: string;
   pages: FormElement[][];
 }
