@@ -2,7 +2,7 @@ import { MediaElement, User } from "../../models/interfaces";
 import { sampleFormObjectV1, sampleFormObjectV2 } from "../constants/form";
 import { createScrambledArray } from "../../helpers";
 
-const [titleV1, titleV2] = [sampleFormObjectV1.title, sampleFormObjectV2.title];
+const [idV1, idV2] = [sampleFormObjectV1.id, sampleFormObjectV2.id];
 
 export const sampleMediaElements: MediaElement[] = [
   {
@@ -26,11 +26,11 @@ export const sampleMediaElements: MediaElement[] = [
 ];
 
 export const marcus: User = {
-  forms: [titleV1, titleV2],
+  forms: [idV1, idV2],
   media: createScrambledArray(sampleMediaElements),
 };
 
 export const jenny: User = {
-  forms: [titleV2, titleV1],
+  forms: [idV2, idV1],
   media: createScrambledArray(sampleMediaElements),
 };
