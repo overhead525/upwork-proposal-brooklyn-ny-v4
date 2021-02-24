@@ -14,6 +14,9 @@ describe("form schema validation is tight", () => {
 
     await runValidationTestLogic(missingProp, testForm);
   };
+  test("fails if no 'id' property is provided", async () => {
+    await missingPropertyValidationTest("id");
+  });
 
   test("fails if no 'preview' property is provided", async () => {
     await missingPropertyValidationTest("preview");

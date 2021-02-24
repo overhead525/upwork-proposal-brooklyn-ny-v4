@@ -11,12 +11,12 @@ export type FormElementDoc = {
 };
 
 export type FormObjectDoc = {
-  id: string;
   title: string;
   pages: FormElementDoc[][];
 };
 
 export type FormDoc = {
+  id: string;
   preview: FormObjectDoc;
   published: FormObjectDoc;
 };
