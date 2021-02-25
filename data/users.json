@@ -32,6 +32,13 @@
         "data": {
           "TellusNisiEu": "https://amazon.co.us/east-1/s3/tellusnisieu.png"
         }
+      },
+      {
+        "mediaType": "mov",
+        "data": {
+          "BlanditNam": "https://amazon.co.us/east-1/s3/blanditnam.mov",
+          "AliquetMassaId": "https://amazon.co.us/east-1/s3/aliquetmassaid"
+        }
       }
     ]
   },
@@ -41,6 +48,20 @@
       "52668bec-6622-4477-b94e-44da05d8f8f3",
       "ee96350e-bce7-4a02-9eb0-acef1b4c037c",
       "0a9f681e-5046-4c58-8b04-80782ef15950"
+    ],
+    "media": [
+      {
+        "mediaType": "jpeg",
+        "data": {
+          "QuamNec": "https://amazon.co.us/east-1/s3/quamnec.jpeg"
+        }
+      },
+      {
+        "mediaType": "gif",
+        "data": {
+          "Primis": "https://amazon.co.us/east-1/s3/primis.gif"
+        }
+      }
     ]
   },
   "vsindellc": {
