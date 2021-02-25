@@ -1,8 +1,8 @@
 import { MediaElement, User } from "../../models/interfaces";
-import { sampleFormV1, sampleFormV2 } from "../constants/form";
+import { forms } from "../constants/form";
 import { createScrambledArray } from "../../helpers";
 
-const [idV1, idV2] = [sampleFormV1.id, sampleFormV2.id];
+const [idV1, idV2] = [...Object.keys(forms)];
 
 export const sampleMediaElements: MediaElement[] = [
   {

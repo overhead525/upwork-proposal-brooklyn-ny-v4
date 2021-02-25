@@ -40,10 +40,6 @@ export const formObjectSchema = new Schema({
 });
 
 export const formSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   preview: {
     type: formObjectSchema,
     required: true,

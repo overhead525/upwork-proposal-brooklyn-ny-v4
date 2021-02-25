@@ -67,13 +67,16 @@ export const sampleFormObjectV2: FormObject = {
 };
 
 export const sampleFormV1: Form = {
-  id: "1b3ae3b6-b0de-45a9-bb96-fad12829f8e4",
   preview: sampleFormObjectV1Preview,
   published: sampleFormObjectV1,
 };
 
 export const sampleFormV2: Form = {
-  id: "9c5327ce-43d2-4483-a723-848abd611f4d",
   preview: sampleFormObjectV2Preview,
   published: sampleFormObjectV2,
+};
+
+export const forms = {
+  "1b3ae3b6-b0de-45a9-bb96-fad12829f8e4": sampleFormV1,
+  "9c5327ce-43d2-4483-a723-848abd611f4d": sampleFormV2,
 };

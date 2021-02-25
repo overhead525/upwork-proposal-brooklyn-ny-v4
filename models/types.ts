@@ -16,7 +16,6 @@ export type FormObjectDoc = {
 };
 
 export type FormDoc = {
-  id: string;
   preview: FormObjectDoc;
   published: FormObjectDoc;
 };

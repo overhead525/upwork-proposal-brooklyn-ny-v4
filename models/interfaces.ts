@@ -26,7 +26,6 @@ export interface FormObject {
 }
 
 export interface Form {
-  id: string;
   preview: FormObject;
   published: FormObject;
 }
