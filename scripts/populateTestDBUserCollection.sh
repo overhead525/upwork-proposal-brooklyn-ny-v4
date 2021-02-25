@@ -1,0 +1,1 @@
+mongoimport --uri "mongodb+srv://root:$password@cluster0.c1rtm.mongodb.net/test-brooklyn-v4?retryWrites=true&w=majority" --collection users --drop --file ../data/users.json
