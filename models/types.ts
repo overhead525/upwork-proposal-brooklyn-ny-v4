@@ -5,14 +5,14 @@ import { formElementType } from "./interfaces";
 export type FormElementDoc = {
   question: string;
   type: formElementType;
-  questionKey: string;
+  formElementKey: string;
   helperText?: string;
   choices?: string[];
 };
 
 export type FormObjectDoc = {
   title: string;
-  pages: FormElementDoc[][];
+  pages: string[][];
 };
 
 export type FormDoc = {

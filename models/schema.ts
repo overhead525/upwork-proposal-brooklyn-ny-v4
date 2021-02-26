@@ -12,7 +12,7 @@ export const formElementSchema = new Schema({
     enum: Object.values(formElementType),
     required: true,
   },
-  questionKey: {
+  formElementKey: {
     type: String,
     required: true,
   },
@@ -34,7 +34,7 @@ export const formObjectSchema = new Schema({
     required: true,
   },
   pages: {
-    type: [[formElementSchema]],
+    type: [[String]],
     required: true,
   },
 });
