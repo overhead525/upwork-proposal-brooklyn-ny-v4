@@ -2,11 +2,54 @@
   "08e6b314-b31c-4b45-b310-84c6da00e72d": {
     "preview": {
       "title": "Politics Survey",
-      "pages": []
+      "pages": [
+        [
+          {
+            "question": "Which party do you most associate with?",
+            "type": 0,
+            "questionKey": "whichPartyDoYouMostAssociateWith",
+            "helperText": "If 'independent', choose other",
+            "choices": ["Democrat", "Republican", "Green", "Other"]
+          },
+          {
+            "question": "Were you satisfied with the outcome of the 2020 presidential election?",
+            "type": 1,
+            "questionKey": "wereYouSatisfiedWithTheOutcomeOf",
+            "choices": ["Yes", "No"]
+          },
+          {
+            "question": "What dissapointed you about the outcome of the 2020 presidential election?",
+            "type": 2,
+            "questionKey": "whatDissapointedYouAboutTheOutcomeOf",
+            "helperText": "Limit 200 characters"
+          }
+        ]
+      ]
     },
     "published": {
       "title": "Political Survey",
-      "pages": []
+      "pages": [
+        [
+          {
+            "question": "Which party do you most associate with?",
+            "type": 0,
+            "questionKey": "whichPartyDoYouMostAssociateWith",
+            "choices": ["Democrat", "Republican", "Independent", "Other"]
+          },
+          {
+            "question": "Were you satisfied with the outcome of the 2020 presidential election?",
+            "type": 1,
+            "questionKey": "wereYouSatisfiedWithTheOutcomeOf",
+            "choices": ["Yes", "No"]
+          },
+          {
+            "question": "What dissapointed you about the outcome of the 2020 presidential election?",
+            "type": 2,
+            "questionKey": "whatDissapointedYouAboutTheOutcomeOf",
+            "helperText": "Limit 200 characters"
+          }
+        ]
+      ]
     }
   },
   "325a91f7-d55d-4983-8f2b-76ffd86c33b8": {
@@ -51,81 +94,81 @@
   },
   "ab83803c-ec3d-4526-bf9a-f6cd83a5c92e": {
     "preview": {
-      "title": "",
+      "title": "Employee Engagement",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Employee Satisfaction",
       "pages": []
     }
   },
   "52668bec-6622-4477-b94e-44da05d8f8f3": {
     "preview": {
-      "title": "",
+      "title": "Team Performance",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Team Performance",
       "pages": []
     }
   },
   "ee96350e-bce7-4a02-9eb0-acef1b4c037c": {
     "preview": {
-      "title": "",
+      "title": "Rob and Leah's Vacation",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Leah and Rob's Vacation",
       "pages": []
     }
   },
   "0a9f681e-5046-4c58-8b04-80782ef15950": {
     "preview": {
-      "title": "",
+      "title": "Logo Testing",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Logo Testing",
       "pages": []
     }
   },
   "8a4571e8-7c47-4368-b7b1-9cd8c9b4292e": {
     "preview": {
-      "title": "",
+      "title": "New Hire Onboarding",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Fresh Recruit Onboarding",
       "pages": []
     }
   },
   "c0b2a5cf-c99f-4fc3-ad3c-027ea290080d": {
     "preview": {
-      "title": "",
+      "title": "University Faculty Satisfaction",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "University Faculty Satisfaction",
       "pages": []
     }
   },
   "2c69b6b3-ae49-47fb-b275-63ad6ceab92c": {
     "preview": {
-      "title": "",
+      "title": "Donation Form",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "Donor Endowment Survey",
       "pages": []
     }
   },
   "8789cd1c-af0b-4e78-b86b-5105e9823d2e": {
     "preview": {
-      "title": "",
+      "title": "Zodiac Sign Quiz",
       "pages": []
     },
     "published": {
-      "title": "",
+      "title": "What Your Zodiac Sign Says About You",
       "pages": []
     }
   }
