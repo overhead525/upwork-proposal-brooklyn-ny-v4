@@ -12,13 +12,13 @@ export const sampleFormElements: FormElement[] = [
   {
     question: "How old are you?",
     type: formElementType.SHORT_ANSWER,
-    formElementKey: "howOldAreYou",
+    questionKey: "howOldAreYou",
     helperText: "Enter a number between 1 and 100 (endpoints inclusive)",
   },
   {
     question: "What would you like to eat?",
     type: formElementType.CHECKBOXES,
-    formElementKey: "whatWouldYouLikeToEat",
+    questionKey: "whatWouldYouLikeToEat",
     helperText: "Choose as many as you'd like",
     choices: [
       "McDouble",
@@ -33,7 +33,7 @@ export const sampleFormElements: FormElement[] = [
   {
     question: "How would you like to pay?",
     type: formElementType.RADIO,
-    formElementKey: "howWouldYouLikeToPay",
+    questionKey: "howWouldYouLikeToPay",
     choices: ["Debit Card", "Paypal", "Venmo", "Stripe", "Google Pay"],
   },
 ];
