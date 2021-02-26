@@ -38,12 +38,18 @@ export const sampleFormElements: FormElement[] = [
   },
 ];
 
-const firstFormElementScramble: FormElement[] = createScrambledArray(
-  sampleFormElements
+export const formElements = {
+  "42f37e59-0779-50f2-8f41-cf361ecfbb5a": sampleFormElements[0],
+  "df1505bb-7bd1-5652-b980-487062bba813": sampleFormElements[1],
+  "04bc3efb-e7f1-5f35-8833-236b700e9969": sampleFormElements[2],
+};
+
+const firstFormElementScramble: string[] = createScrambledArray(
+  Object.keys(formElements)
 );
 
-const secondFormElementScramble: FormElement[] = createScrambledArray(
-  sampleFormElements
+const secondFormElementScramble: string[] = createScrambledArray(
+  Object.keys(formElements)
 );
 
 export const sampleFormObjectV1Preview: FormObject = {

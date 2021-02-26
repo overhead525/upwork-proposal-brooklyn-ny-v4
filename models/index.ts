@@ -9,7 +9,11 @@ import { model } from "mongoose";
 
 export const Form = model("Form", formSchema, "forms");
 
-export const FormElement = model("FormElement", formElementSchema);
+export const FormElement = model(
+  "FormElement",
+  formElementSchema,
+  "formElements"
+);
 
 export const FormObject = model("FormObject", formObjectSchema);
 

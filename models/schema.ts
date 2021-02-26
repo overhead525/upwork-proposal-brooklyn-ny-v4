@@ -34,7 +34,7 @@ export const formObjectSchema = new Schema({
     required: true,
   },
   pages: {
-    type: [[formElementSchema]],
+    type: [[String]],
     required: true,
   },
 });
