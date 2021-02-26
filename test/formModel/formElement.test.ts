@@ -40,7 +40,7 @@ describe("formElement schema validation is tight", () => {
   });
 
   test("fails if no 'questionKey' property is provided", async () => {
-    await missingPropertyValidationTest("questionKey");
+    await missingPropertyValidationTest("formElementKey");
   });
 
   test("fails if 'choices' property is not filled on a question of type RADIO", async () => {

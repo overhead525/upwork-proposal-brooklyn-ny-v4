@@ -12,7 +12,7 @@ export const formElementSchema = new Schema({
     enum: Object.values(formElementType),
     required: true,
   },
-  questionKey: {
+  formElementKey: {
     type: String,
     required: true,
   },

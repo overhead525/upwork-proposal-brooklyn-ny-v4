@@ -15,7 +15,7 @@ export const choiceFormElementTypes = [
 export interface FormElement {
   question: string; // The question presented to the user
   type: formElementType; // The type of question this element is
-  questionKey: string; // A key for programmatic access (usually the first few words (max 7) of the question)
+  formElementKey: string; // A key for programmatic access
   helperText?: string; // The helper text to be presented to the user for additional instructions
   choices?: string[]; // Some types of questions have choices, like radio or checkbox questions
 }

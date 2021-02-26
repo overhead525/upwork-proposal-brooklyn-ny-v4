@@ -12,7 +12,7 @@ export type FormElementDoc = {
 
 export type FormObjectDoc = {
   title: string;
-  pages: String[][];
+  pages: string[][];
 };
 
 export type FormDoc = {
