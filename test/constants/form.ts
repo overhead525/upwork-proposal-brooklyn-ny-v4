@@ -14,6 +14,7 @@ export const sampleFormElements: FormElement[] = [
     type: formElementType.SHORT_ANSWER,
     questionKey: "howOldAreYou",
     helperText: "Enter a number between 1 and 100 (endpoints inclusive)",
+    draftOf: "35484843-d1b7-4997-8c22-c080f644d8a6",
   },
   {
     question: "What would you like to eat?",
@@ -35,6 +36,7 @@ export const sampleFormElements: FormElement[] = [
     type: formElementType.RADIO,
     questionKey: "howWouldYouLikeToPay",
     choices: ["Debit Card", "Paypal", "Venmo", "Stripe", "Google Pay"],
+    displayFor: "e4329830-1547-41ad-a0d8-e5c785a3382f",
   },
 ];
 

@@ -12,7 +12,7 @@ export const formElementSchema = new Schema({
     enum: Object.values(formElementType),
     required: true,
   },
-  formElementKey: {
+  questionKey: {
     type: String,
     required: true,
   },
@@ -24,6 +24,18 @@ export const formElementSchema = new Schema({
     type: [String],
     required: function () {
       return this.type in choiceFormElementTypes;
+    },
+  },
+  draftOf: {
+    type: String,
+    required: function () {
+      return !this.displayFor;
+    },
+  },
+  displayFor: {
+    type: String,
+    required: function () {
+      return !this.draftOf;
     },
   },
 });

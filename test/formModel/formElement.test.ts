@@ -31,6 +31,28 @@ describe("formElement schema validation is tight", () => {
     await runValidationTestLogic(undefined, testFormElement);
   };
 
+  type referenceProp = "draftOf" | "displayFor";
+
+  const missingReferenceTest = async (
+    formElementDoc: FormElementDoc,
+    refOption: referenceProp
+  ) => {
+    const determineTestDoc = (): FormElementDoc => {
+      if (refOption === "draftOf")
+        return { ...formElementDoc, draftOf: undefined };
+      if (refOption === "displayFor")
+        return {
+          ...formElementDoc,
+          displayFor: undefined,
+        };
+    };
+
+    const testFormElementDoc: FormElementDoc = determineTestDoc();
+    const testFormElement = new FormElement(testFormElementDoc);
+
+    await runValidationTestLogic(refOption, testFormElement);
+  };
+
   test("fails if no 'question' property is provided", async () => {
     await missingPropertyValidationTest("question");
   });
@@ -49,5 +71,13 @@ describe("formElement schema validation is tight", () => {
 
   test("fails if 'choices' property is not filled on a question of type CHECKBOXES", async () => {
     await missingChoiceDefinitionsTest(sampleFormElements[1]);
+  });
+
+  test("fails if 'draftOf' property is not defined when 'displayFor' is also undefined", async () => {
+    await missingReferenceTest(sampleFormElements[0], "draftOf");
+  });
+
+  test("fails if 'draftOf' property is not defined when 'displayFor' is also undefined", async () => {
+    await missingReferenceTest(sampleFormElements[2], "displayFor");
   });
 });

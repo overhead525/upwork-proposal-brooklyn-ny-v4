@@ -8,6 +8,8 @@ export type FormElementDoc = {
   questionKey: string;
   helperText?: string;
   choices?: string[];
+  draftOf?: string;
+  displayFor?: string;
 };
 
 export type FormObjectDoc = {

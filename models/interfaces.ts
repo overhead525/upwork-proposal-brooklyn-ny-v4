@@ -18,6 +18,8 @@ export interface FormElement {
   questionKey: string; // A key for programmatic access
   helperText?: string; // The helper text to be presented to the user for additional instructions
   choices?: string[]; // Some types of questions have choices, like radio or checkbox questions
+  draftOf?: string; // A uuid string of the "published" version of this formElement
+  displayFor?: string; // A uuid string of the "preview" version of this formElement
 }
 
 export interface FormObject {
