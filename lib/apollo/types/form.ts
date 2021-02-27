@@ -16,11 +16,13 @@ const form = gql`
     questionKey: String!
     helperText: String
     choices: [String!]
+    draftOf: String
+    displayFor: String
   }
 
   type FormObject {
     title: String!
-    pages: [[FormElement!]!]!
+    pages: [[String!]!]!
   }
 
   type Form {
@@ -29,7 +31,10 @@ const form = gql`
   }
 
   extend type Query {
-    forms: [Form]!
+    form(uuid: String!): Form
+    forms: [Form]
+    formElement(uuid: String!): FormElement
+    formElements(uuids: [String!]!): [FormElement]
   }
 `;
 
