@@ -4,52 +4,15 @@
       "title": "Politics Survey",
       "pages": [
         [
-          {
-            "question": "Which party do you most associate with?",
-            "type": 0,
-            "questionKey": "whichPartyDoYouMostAssociateWith",
-            "helperText": "If 'independent', choose other",
-            "choices": ["Democrat", "Republican", "Green", "Other"]
-          },
-          {
-            "question": "Were you satisfied with the outcome of the 2020 presidential election?",
-            "type": 1,
-            "questionKey": "wereYouSatisfiedWithTheOutcomeOf",
-            "choices": ["Yes", "No"]
-          },
-          {
-            "question": "What dissapointed you about the outcome of the 2020 presidential election?",
-            "type": 2,
-            "questionKey": "whatDissapointedYouAboutTheOutcomeOf",
-            "helperText": "Limit 200 characters"
-          }
+          "6dfd3c7d-24a0-4db8-b66a-5f5f7bad1321",
+          "c2d81a07-b222-4f46-beb7-af6e47f1e1c4",
+          "812658ba-73d7-42ce-a867-6336faee79fa"
         ]
       ]
     },
     "published": {
       "title": "Political Survey",
-      "pages": [
-        [
-          {
-            "question": "Which party do you most associate with?",
-            "type": 0,
-            "questionKey": "whichPartyDoYouMostAssociateWith",
-            "choices": ["Democrat", "Republican", "Independent", "Other"]
-          },
-          {
-            "question": "Were you satisfied with the outcome of the 2020 presidential election?",
-            "type": 1,
-            "questionKey": "wereYouSatisfiedWithTheOutcomeOf",
-            "choices": ["Yes", "No"]
-          },
-          {
-            "question": "What dissapointed you about the outcome of the 2020 presidential election?",
-            "type": 2,
-            "questionKey": "whatDissapointedYouAboutTheOutcomeOf",
-            "helperText": "Limit 200 characters"
-          }
-        ]
-      ]
+      "pages": [[]]
     }
   },
   "325a91f7-d55d-4983-8f2b-76ffd86c33b8": {
