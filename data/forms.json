@@ -12,17 +12,41 @@
     },
     "published": {
       "title": "Political Survey",
-      "pages": [[]]
+      "pages": [
+        [
+          "443ea603-f2ba-46e3-b08b-5b2dbb63e00c",
+          "8f31a612-b6cf-4fc5-8d48-03d2e002a05f",
+          "7738bec8-9bc0-45a5-a3f2-36179d2120df"
+        ]
+      ]
     }
   },
   "325a91f7-d55d-4983-8f2b-76ffd86c33b8": {
     "preview": {
       "title": "Saturday Party RSVP",
-      "pages": []
+      "pages": [
+        [
+          "75d4d24d-7a04-4fb7-a69c-e62a63fffe6b",
+          "61adbcad-7a11-4966-abdc-90f92cd197c7"
+        ],
+        [
+          "9e71312b-cf3f-4fe1-93fa-7bdb7a5e6f2e",
+          "59f31484-0371-413d-aa2e-32514d0c6f69"
+        ]
+      ]
     },
     "published": {
       "title": "Party RSVP",
-      "pages": []
+      "pages": [
+        [
+          "b3bff7f2-f8be-49e7-a461-67619930e03e",
+          "5ee891a9-9736-47b2-b674-71e8459cbae0"
+        ],
+        [
+          "16ba4744-c443-4f30-9e66-cf6960dda848",
+          "0f287274-8ed9-4ac9-8367-43c6ffcdce52"
+        ]
+      ]
     }
   },
   "64444c7a-2740-4ad5-8378-3522cef2b54d": {
