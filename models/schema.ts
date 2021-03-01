@@ -62,14 +62,24 @@ export const formSchema = new Schema({
   },
 });
 
+export const mediaElementDataTuple = new Schema({
+  canononicalName: {
+    type: String,
+    required: true,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
 export const mediaElementSchema = new Schema({
   mediaType: {
     type: String,
     required: true,
   },
   data: {
-    type: Map,
-    of: String,
+    type: [mediaElementDataTuple],
     required: true,
   },
 });

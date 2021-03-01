@@ -4,6 +4,7 @@ import {
   formObjectSchema,
   mediaElementSchema,
   userSchema,
+  mediaElementDataTuple,
 } from "./schema";
 import { model } from "mongoose";
 
@@ -16,6 +17,11 @@ export const FormElement = model(
 );
 
 export const FormObject = model("FormObject", formObjectSchema);
+
+export const MediaElementDataTuple = model(
+  "MediaElementDataTuple",
+  mediaElementDataTuple
+);
 
 export const MediaElement = model("MediaElement", mediaElementSchema);
 

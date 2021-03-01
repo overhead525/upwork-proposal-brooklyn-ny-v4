@@ -22,9 +22,14 @@ export type FormDoc = {
   published: FormObjectDoc;
 };
 
+export type MediaElementDataTupleType = {
+  canononicalName: string;
+  url: string;
+};
+
 export type MediaElementType = {
   mediaType: string;
-  [canononicalName: string]: string;
+  data: MediaElementDataTupleType[];
 };
 
 export type UserDoc = {

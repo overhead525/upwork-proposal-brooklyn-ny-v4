@@ -1,5 +1,8 @@
-import { MediaElement } from "../../models";
-import { MediaElementType } from "../../models/types";
+import { MediaElement, MediaElementDataTuple } from "../../models";
+import {
+  MediaElementDataTupleType,
+  MediaElementType,
+} from "../../models/types";
 import { sampleMediaElements } from "../constants/user";
 import { runValidationTestLogic } from "../sharedLogic";
 
@@ -25,5 +28,31 @@ describe("mediaElement schema validation is tight", () => {
 
   test("fails if no 'data' property is provided", async () => {
     await missingPropertyValidationTest("data");
+  });
+});
+
+describe("mediaElementDataTuple schema validation is tight", () => {
+  const missingPropertyValidationTest = async (missingProp: string) => {
+    const testMediaElementDataTupleDoc: MediaElementDataTupleType = {
+      ...sampleMediaElements[0].data[0],
+    };
+
+    Object.defineProperty(testMediaElementDataTupleDoc, missingProp, {
+      value: null,
+    });
+
+    const testMediaElementDataTuple = new MediaElementDataTuple(
+      testMediaElementDataTupleDoc
+    );
+
+    await runValidationTestLogic(missingProp, testMediaElementDataTuple);
+  };
+
+  test("fails if no 'canononicalName' property is provided", async () => {
+    await missingPropertyValidationTest("canononicalName");
+  });
+
+  test("fails if no 'url' property is provided", async () => {
+    await missingPropertyValidationTest("url");
   });
 });

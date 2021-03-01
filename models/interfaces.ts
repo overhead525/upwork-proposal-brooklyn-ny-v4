@@ -32,9 +32,14 @@ export interface Form {
   published: FormObject;
 }
 
+interface MediaElementDataTuple {
+  canononicalName: string;
+  url: string;
+}
+
 export interface MediaElement {
   mediaType: string;
-  [canononicalName: string]: string;
+  data: MediaElementDataTuple[];
 }
 
 export interface User {
