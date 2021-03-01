@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from "apollo-server-micro";
 
 const user = gql`
   type MediaElementDataTuple {
@@ -8,7 +8,7 @@ const user = gql`
 
   type MediaElementType {
     mediaType: String!
-    data: [mediaElementDataTuple!]!
+    data: [MediaElementDataTuple!]!
   }
 
   type User {

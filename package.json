@@ -15,7 +15,7 @@
   "author": "Iain Collins <me@iaincollins.com>, Ritchel COusar <ritchelcousar@outlook.com>",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.21.0",
+    "apollo-server-micro": "^2.21.0",
     "formik": "^2.2.6",
     "graphql": "^15.5.0",
     "newman": "^5.2.2",

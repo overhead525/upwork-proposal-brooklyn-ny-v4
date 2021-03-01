@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from "apollo-server-micro";
 
 const root = gql`
   type Query {

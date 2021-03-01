@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from "apollo-server-micro";
 
 const form = gql`
   enum FormElementType {
@@ -12,7 +12,7 @@ const form = gql`
 
   type FormElement {
     question: String!
-    type: formElementType!
+    type: FormElementType!
     questionKey: String!
     helperText: String
     choices: [String!]
@@ -26,8 +26,8 @@ const form = gql`
   }
 
   type Form {
-    preview: formObject!
-    published: formObject!
+    preview: FormObject!
+    published: FormObject!
   }
 
   extend type Query {
