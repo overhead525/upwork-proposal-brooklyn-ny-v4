@@ -43,6 +43,7 @@ export interface MediaElement {
 }
 
 export interface User {
+  username: string;
   forms: string[];
   media: MediaElement[];
 }

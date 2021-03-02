@@ -33,6 +33,7 @@ export type MediaElementType = {
 };
 
 export type UserDoc = {
+  username: string;
   forms: string[];
   media: MediaElementType[];
 };

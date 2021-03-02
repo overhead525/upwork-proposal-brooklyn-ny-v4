@@ -85,6 +85,10 @@ export const mediaElementSchema = new Schema({
 });
 
 export const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+  },
   forms: {
     type: [String],
     required: true,
