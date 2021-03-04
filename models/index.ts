@@ -7,22 +7,23 @@ import {
   mediaElementDataTuple,
 } from "./schema";
 import { model } from "mongoose";
+import { db } from "../lib/database/mongo-client";
 
-export const Form = model("Form", formSchema, "forms");
+export const Form = db.model("Form", formSchema, "forms");
 
-export const FormElement = model(
+export const FormElement = db.model(
   "FormElement",
   formElementSchema,
   "formElements"
 );
 
-export const FormObject = model("FormObject", formObjectSchema);
+export const FormObject = db.model("FormObject", formObjectSchema);
 
-export const MediaElementDataTuple = model(
+export const MediaElementDataTuple = db.model(
   "MediaElementDataTuple",
   mediaElementDataTuple
 );
 
-export const MediaElement = model("MediaElement", mediaElementSchema);
+export const MediaElement = db.model("MediaElement", mediaElementSchema);
 
-export const User = model("User", userSchema, "users");
+export const User = db.model("User", userSchema, "users");
