@@ -6,7 +6,6 @@ import {
   userSchema,
   mediaElementDataTuple,
 } from "./schema";
-import { model } from "mongoose";
 import { db } from "../lib/database/mongo-client";
 
 export const Form = db.model("Form", formSchema, "forms");
