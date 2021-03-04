@@ -1,5 +1,9 @@
 import { FormElement, Form, User } from "../../../models/index";
 
+/**
+ * TODO: Add some authorization to this route, just for Devs
+ */
+
 export default async function () {
   // Drop any documents already inside of the test-database
   await FormElement.deleteMany({});
