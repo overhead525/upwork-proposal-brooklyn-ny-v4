@@ -1,4 +1,4 @@
-import { MediaElement, MediaElementDataTuple } from "../../models";
+import { MediaElement, MediaElementDataTuple } from "../testModels";
 import {
   MediaElementDataTupleType,
   MediaElementType,

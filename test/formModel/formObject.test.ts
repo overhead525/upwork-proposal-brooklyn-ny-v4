@@ -1,4 +1,4 @@
-import { FormObject } from "../../models";
+import { FormObject } from "../testModels";
 import { FormObjectDoc } from "../../models/types";
 import { sampleFormObjectV1 } from "../constants/form";
 import { runValidationTestLogic } from "../sharedLogic";

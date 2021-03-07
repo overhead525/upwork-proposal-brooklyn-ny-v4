@@ -1,4 +1,4 @@
-import { FormElement } from "../../models";
+import { FormElement } from "../testModels";
 import { FormElementDoc } from "../../models/types";
 import { sampleFormElements } from "../constants/form";
 import { runValidationTestLogic } from "../sharedLogic";

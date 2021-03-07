@@ -1,4 +1,4 @@
-import { User } from "../../models";
+import { User } from "../testModels";
 import { UserDoc } from "../../models/types";
 import { marcus, jenny } from "../constants/user";
 import { runValidationTestLogic } from "../sharedLogic";
