@@ -9,7 +9,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test:unit": "&& jest --runInBand --detectOpenHandles --forceExit",
+    "test:unit": "jest --runInBand --detectOpenHandles --forceExit",
     "test:integration": "newman run brooklyn_v4_forms_api_requests.json"
   },
   "author": "Iain Collins <me@iaincollins.com>, Ritchel Cousar <ritchelcousar@outlook.com>",
