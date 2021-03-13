@@ -1,122 +1,36 @@
-# NextAuth.js Example
+# Upwork Proposal Brooklyn NY V4
 
-[next-auth-example.now.sh](https://next-auth-example.now.sh)
+https://upwork-proposal-brooklyn-ny-v4-4ohnbh3l2.vercel.app/
 
-## About this project
+This project is a web application built to satisfy a proposal I found while browsing job postings on Upwork. The client wanted the following:
+- Users can create forms 
+- Users can share those forms with anyone they want.
+- Users can store media
+- Users can stream media
+- Users can share their media with anyone they want.
+  
+This type of web application requires knowledge of a lot of techniqus and skills I believe to be fundamental in a senior web engineers arsenal. I want this project to serve as evidence of my skill level. This way, no one will have to "gamble" on whether or not I can contribute to their team. I want to give them a peace of mind.
 
-This is an example of how to use [NextAuth.js](https://next-auth.js.org) library to add authentication to a [Next.js](https://nextjs.org) application.
+## Architecture
 
-## About NextAuth.js
+![Architecture Diagram]("./../assets/architecture-diagram-50.jpg)
 
-NextAuth.js is an easy to implement, full-stack (client/server) open source authentication library designed for [Next.js](https://nextjs.org) and [Serverless](https://now.sh).
+The project is built primarily with NextJS. This was the best decision we could have made. Development has been a piece of cake, leaving more time to configure our many external services (Atlas, S3, Lambda, etc.)
 
-Go to [next-auth.js.org](https://next-auth.js.org) for more information and documentation.
+### User Interface
+Our front-end development only works with GraphQL and React. This keeps things simple in case we need to bring on extra help. Keeping the bar low will make it easier to find qualified help if needed.
 
-*NextAuth.js is not associated with Vercel or Next.js.*
+### Database
+We love MongoDB. We're using the cloud provider they offer called Atlas. Simple Setup. In our application we have the notion of first-class citizens. There are three:
+- Users
+- Forms
+- FormElements
 
-## Getting started
+**FormElements** are basically the questions, titles, labels, etc. that make up a Form. FormElements can be re-used in other forms, so they are purposefully not coupled to any particular forms.
 
-### 1. Clone the repository and install dependancies
+**Forms** are similar, in that a single form can be edited by multiple users. As long as a user is authorized, they can edit a form.
 
-```
-git clone https://github.com/iaincollins/next-auth-example.git
-cd next-auth-example
-npm i
-```
+**Users** are first-class citizens by default for authorization purposes. We use AWS Cognito to authenticate users. Once a new user is registed in AWS Cognito, we use a lambda function to consume the registration, and create the new user in our Atlas Cloud MongoDB database (PENDING).
 
-### 2. Configure your local environment
-
-Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
-
-```
-cp .env.local.example .env.local
-```
-
-Add details for one or more providers (e.g. Google, Twitter, GitHub, Email, etc).
-
-#### Database configuration
-
-A database is needed to persist user accounts and to support email sign in, but you can still use NextAuth.js for authentication without one by using OAuth for authentication. If you do not specify a database, JSON Web Tokens will be enabled by default.
-
-You can skip configuring a database and come back to it later if you want.
-
-When configuring your database you should also install an appropriate node_module.
-
-* **SQLite**
-
-  Install module:
-  `npm i sqlite3`
-
-  Database URI:
-  `sqlite://localhost/:memory:?synchronize=true`
-
-* **MySQL**
-
-  Install module:
-  `npm i mysql`
-
-  Database URI:
-  `mysql://username:password@127.0.0.1:3306/database_name?synchronize=true`
-
-* **Postgres**
-
-  Install module:
-  `npm i pg`
-
-  Database URI:
-  `postgres://username:password@127.0.0.1:5432/database_name?synchronize=true`
-
-* **MongoDB**
-
-  Install module:
-  `npm i mongodb`
-
-  Database URI:
-  `mongodb://username:password@127.0.0.1:27017/database_name?synchronize=true`
-
-Notes:
-
-* The example .env specifies an in-memory SQLite database that does not persist data.
-* SQLite is suitable for development / testing but not for production.
-* The option `?synchronize=true` automatically syncs schema changes to the database. It should not be used in production as may result in data loss if there are changes to the schema or to NextAuth.js
-* You can also specify a [TypeORM connection object](https://typeorm.io/#/connection-options) in `pages/api/auth/[...nextauth].js` instead of a database URL / connection string.
-
-### 3. Configure authentication providers
-
-* Review and update options in `pages/api/auth/[...nextauth].js` as needed.
-
-* When setting up OAUTH, in the developer admin page for each of your OAuth services, you should configure the callback URL to use a callback path of `{server}/api/auth/callback/{provider}`.
-
-  e.g. For Google OAuth you would use: `http://localhost:3000/api/auth/callback/google`
-
-  A list of configured providers and their callback URLs is available from the endpoint `/api/auth/providers`. You can find more information at https://next-auth.js.org/configuration/providers
-
-* You can also choose to specify an SMTP server for passwordless sign in via email.
-
-### 4. Start the application
-
-To run your site locally, use:
-
-```
-npm run dev
-```
-
-To run it it production mode, use:
-
-```
-npm build
-npm start
-```
-
-### 5. Configuring for production
-
-You must set the NEXTAUTH_URL environment variable with the URL of your site, before deploying to production.
-
-e.g. `NEXTAUTH_URL=https://example.com`
-
-To do this in on Vercel, you can use the [Vercel project dashboard](https://vercel.com/dashboard) or the `now env` command:
-
-    now env add NEXTAUTH_URL production
-
-Be sure to also set environment variables for the Client ID and Client Secret values for all your authentication providers.
-
+### Media Streaming
+We use *GraphQL Resolvers* to process requests from our front-end to stream media from our S3 media bucket. The resolvers decide if the user is authorized to view the media, and subsequently either provide the URL to the media (200), or reject the request (404);
