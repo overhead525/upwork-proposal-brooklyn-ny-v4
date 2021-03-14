@@ -27,10 +27,20 @@ export class Users extends MongoDataSource<any, Context> {
     // Make sure to check if there is another user with that same username
     // We do NOT want duplicate usernames
     const newUserDoc: UserDoc = {
+      username,
       forms: [],
       media: [],
     };
     const newUser = new User(newUserDoc);
+    newUser
+      .save()
+      .then((doc) => {
+        if (doc) return true;
+      })
+      .catch((err) => {
+        console.error(err);
+        return err;
+      });
   }
 
   async deleteUser(username: string) {}
