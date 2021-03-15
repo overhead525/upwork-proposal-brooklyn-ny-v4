@@ -4,7 +4,7 @@ import { formElementType } from "./interfaces";
 
 export type FormElementDoc = {
   question: string;
-  type: formElementType;
+  type: formElementType | string;
   questionKey: string;
   helperText?: string;
   choices?: string[];

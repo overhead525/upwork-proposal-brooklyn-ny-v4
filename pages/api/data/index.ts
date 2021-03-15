@@ -8,13 +8,16 @@ import { FormResolvers } from "../../../lib/apollo/resolvers/formResolvers";
 import { UserResolvers } from "../../../lib/apollo/resolvers/userResolvers";
 import { db } from "../../../lib/database/mongo-client";
 import { Forms } from "../../../lib/apollo/data-sources/Forms";
+import { FormElements } from "../../../lib/apollo/data-sources/FormElements";
+import { FormElementResolvers } from "../../../lib/apollo/resolvers/formElementResolvers";
 
 const apolloServer = new ApolloServer({
   typeDefs: schemaArray,
-  resolvers: { ...UserResolvers, ...FormResolvers },
+  resolvers: { ...UserResolvers, ...FormResolvers, ...FormElementResolvers },
   dataSources: () => ({
     users: new Users(db.collection("users")),
     forms: new Forms(db.collection("forms")),
+    formElements: new FormElements(db.collection("formElements")),
   }),
 });
 

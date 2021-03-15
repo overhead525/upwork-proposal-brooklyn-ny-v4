@@ -56,7 +56,7 @@ const form = gql`
     getForms: [Form]
 
     "Retrieves a specific FormElement based on its UUID."
-    getFormElement(uuid: String!): FormElement
+    getFormElement(formElementID: String!): FormElement
 
     "Retrieves a list of FormElements based on an array of UUIDs."
     getFormElements(uuids: [String!]!): [FormElement]
