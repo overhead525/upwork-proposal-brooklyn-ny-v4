@@ -225,7 +225,7 @@ export class UserLoader {
     this.constructMediaElementDataTuples();
     this.splitMediaElementDataTuplesByExtension();
     this.assignMediaToUsers();
-    this.assignFormsToUsers();
+    await this.assignFormsToUsers();
 
     this.users.forEach(async (user) => await User.create(user));
   }
