@@ -4,7 +4,6 @@
 import { ApolloServer } from "apollo-server-micro";
 import { Users } from "../../../lib/apollo/data-sources/Users";
 import schemaArray from "../../../lib/apollo/types";
-import { User } from "../../../models";
 import { UserResolvers } from "../../../lib/apollo/data-sources/Users";
 import { db } from "../../../lib/database/mongo-client";
 
