@@ -1,7 +1,6 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
 import { MediaElementType, UserDoc } from "../../../models/types";
 import { ObjectID } from "mongodb";
-import { User } from "../../../models";
 import { Document } from "mongoose";
 
 interface Context {
