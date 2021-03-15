@@ -1,4 +1,4 @@
-import { FormElement, Form, User } from "../../../models/index";
+import * as mongoose from "mongoose";
 import { formElements } from "../../../data/formElements";
 import { forms } from "../../../data/forms";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -13,9 +13,9 @@ import { S3 } from "@aws-sdk/client-s3";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   // Drop any documents already inside of the test-database
-  await FormElement.deleteMany({});
-  await Form.deleteMany({});
-  await User.deleteMany({});
+  await mongoose.connection.collection("formElements").deleteMany({});
+  await mongoose.connection.collection("forms").deleteMany({});
+  await mongoose.connection.collection("users").deleteMany({});
 
   // Create Loader Objects from Classes
   const FELoader = new FormElementLoader(formElements);
