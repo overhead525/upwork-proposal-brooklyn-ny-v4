@@ -47,7 +47,7 @@ export class Users extends MongoDataSource<UserDoc, Context> {
 
   async deleteUser(userID: ObjectID): Promise<boolean> {
     try {
-      User.deleteOne({ id: userID.toHexString() }, null, (err) => {
+      this.collection.deleteOne({ id: userID.toHexString() }, null, (err) => {
         if (err) throw err;
       });
       return true;
