@@ -2,25 +2,30 @@ import { MongoDataSource } from "apollo-datasource-mongodb";
 import { MediaElementType, UserDoc } from "../../../models/types";
 import { ObjectID } from "mongodb";
 import { User } from "../../../models";
+import { Document } from "mongoose";
 
 interface Context {
   loggedInUser: UserDoc;
 }
 
-export class Users extends MongoDataSource<any, Context> {
-  async getUser(userID: ObjectID): Promise<UserDoc> {
-    const response: UserDoc = await this.findOneById(userID, { ttl: 3600 });
+interface ExtendedUserDoc extends Document, UserDoc {}
+
+export class Users extends MongoDataSource<UserDoc, Context> {
+  async getUser(userID: string) {
+    const response = await this.findOneById(userID, {
+      ttl: 3600,
+    });
     return response;
   }
 
-  async getUserFormsAll(userID: ObjectID): Promise<string[]> {
-    const userFormIDs = await (await this.findOneById(userID)).forms;
-    return userFormIDs;
+  async getUserFormsAll(userID: string): Promise<string[]> {
+    const userFormIDs = await this.getUser(userID);
+    return userFormIDs.forms;
   }
 
-  async getUserMediaAll(userID: ObjectID): Promise<MediaElementType[]> {
-    const userMedia = await (await this.findOneById(userID)).media;
-    return userMedia;
+  async getUserMediaAll(userID: string): Promise<MediaElementType[]> {
+    const userMedia = await this.getUser(userID);
+    return userMedia.media;
   }
 
   async createUser(username: string): Promise<boolean> {
@@ -31,17 +36,42 @@ export class Users extends MongoDataSource<any, Context> {
       forms: [],
       media: [],
     };
-    const newUser = new User(newUserDoc);
-    newUser
-      .save()
-      .then((doc) => {
-        if (doc) return true;
-      })
-      .catch((err) => {
-        console.error(err);
-        return err;
-      });
+
+    try {
+      await this.collection.insertOne(newUserDoc);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
-  async deleteUser(username: string) {}
+  async deleteUser(userID: ObjectID): Promise<boolean> {
+    try {
+      User.deleteOne({ id: userID.toHexString() }, null, (err) => {
+        if (err) throw err;
+      });
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }
+
+export const UserResolvers = {
+  Query: {
+    getUser: async (_source, { userID }, { dataSources: { users } }) =>
+      await users.getUser(userID),
+    getUserFormsAll: async (_source, { userID }, { dataSources: { users } }) =>
+      await users.getUserFormsAll(userID),
+    getUserMediaAll: async (_source, { userID }, { dataSources: { users } }) =>
+      await users.getUserMediaAll(userID),
+  },
+  Mutation: {
+    createUser: async (username, _, { dataSources: { users } }) =>
+      await users.createUser(username),
+    deleteUser: async (userID, _, { dataSources: { users } }) =>
+      await users.deleteUser(userID),
+  },
+};
