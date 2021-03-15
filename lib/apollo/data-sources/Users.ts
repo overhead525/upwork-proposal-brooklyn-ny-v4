@@ -27,7 +27,7 @@ export class Users extends MongoDataSource<UserDoc, Context> {
     return userMedia.media;
   }
 
-  async createUser(username: string): Promise<boolean> {
+  async createUser(username: string) {
     // Make sure to check if there is another user with that same username
     // We do NOT want duplicate usernames
     const newUserDoc: UserDoc = {
@@ -36,24 +36,21 @@ export class Users extends MongoDataSource<UserDoc, Context> {
       media: [],
     };
 
-    try {
-      await this.collection.insertOne(newUserDoc);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
+    const existing = await this.collection.findOne({ username });
+    if (existing) {
+      return new Error("Could not create new user, username is already taken");
+    } else {
+      const result = await this.collection.insertOne(newUserDoc);
+      return result.ops[0];
     }
   }
 
-  async deleteUser(userID: ObjectID): Promise<boolean> {
+  async deleteUser(username: string) {
     try {
-      this.collection.deleteOne({ id: userID.toHexString() }, null, (err) => {
-        if (err) throw err;
-      });
-      return true;
+      const result = await this.collection.deleteOne({ username });
+      return result.deletedCount > 0;
     } catch (error) {
-      console.error(error);
-      return false;
+      return error;
     }
   }
 }
@@ -68,9 +65,9 @@ export const UserResolvers = {
       await users.getUserMediaAll(userID),
   },
   Mutation: {
-    createUser: async (username, _, { dataSources: { users } }) =>
+    createUser: async (_source, { username }, { dataSources: { users } }) =>
       await users.createUser(username),
-    deleteUser: async (userID, _, { dataSources: { users } }) =>
-      await users.deleteUser(userID),
+    deleteUser: async (_source, { username }, { dataSources: { users } }) =>
+      await users.deleteUser(username),
   },
 };

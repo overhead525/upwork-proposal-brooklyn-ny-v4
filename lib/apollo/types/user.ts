@@ -41,7 +41,7 @@ const user = gql`
   extend type Mutation {
     createUser(username: String): User
 
-    deleteUser(username: String): Boolean
+    deleteUser(username: String): Boolean!
   }
 `;
 
