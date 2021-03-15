@@ -4,14 +4,17 @@
 import { ApolloServer } from "apollo-server-micro";
 import { Users } from "../../../lib/apollo/data-sources/Users";
 import schemaArray from "../../../lib/apollo/types";
-import { UserResolvers } from "../../../lib/apollo/data-sources/Users";
+import { FormResolvers } from "../../../lib/apollo/resolvers/formResolvers";
+import { UserResolvers } from "../../../lib/apollo/resolvers/userResolvers";
 import { db } from "../../../lib/database/mongo-client";
+import { Forms } from "../../../lib/apollo/data-sources/Forms";
 
 const apolloServer = new ApolloServer({
   typeDefs: schemaArray,
-  resolvers: { ...UserResolvers },
+  resolvers: { ...UserResolvers, ...FormResolvers },
   dataSources: () => ({
     users: new Users(db.collection("users")),
+    forms: new Forms(db.collection("forms")),
   }),
 });
 

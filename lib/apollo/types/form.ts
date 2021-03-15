@@ -50,7 +50,7 @@ const form = gql`
 
   extend type Query {
     "Retrieves a specific Form based on its UUID."
-    getForm(uuid: String!): Form
+    getForm(formID: String!): Form
 
     "Retrieves all of the forms that belong to a specific user. User must be authenticated."
     getForms: [Form]
