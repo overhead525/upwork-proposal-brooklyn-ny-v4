@@ -1,3 +1,6 @@
+import { FormDoc, UserDoc } from "../../../models/types";
+import { grabFormElementIDsFromForm } from "./shared";
+
 export const UserResolvers = {
   Query: {
     getUser: async (_source, { userID }, { dataSources: { users } }) =>
@@ -10,7 +13,37 @@ export const UserResolvers = {
   Mutation: {
     createUser: async (_source, { username }, { dataSources: { users } }) =>
       await users.createUser(username),
-    deleteUser: async (_source, { username }, { dataSources: { users } }) =>
-      await users.deleteUser(username),
+    deleteUser: async (
+      _source,
+      { userID },
+      { dataSources: { users, forms, formElements } }
+    ) => {
+      try {
+        const user: UserDoc = await users.getUser(userID);
+        const userForms: FormDoc[] = forms.getForms(user.forms);
+        const userFormElementIDs: string[] = [];
+
+        userForms.forEach((form) => {
+          grabFormElementIDsFromForm(form, userFormElementIDs);
+        });
+
+        // Delete formElements associated with current user
+        userFormElementIDs.forEach(async (formElementID) => {
+          await formElements.deleteFormElement(formElementID);
+        });
+
+        // Delete forms associated with current user
+        user.forms.forEach(async (formID) => {
+          await forms.deleteForm(formID);
+        });
+
+        // Delete current user
+        await users.deleteUser(user.username);
+
+        return `Successfully deleted user ${user.username}`;
+      } catch (error) {
+        return error;
+      }
+    },
   },
 };
