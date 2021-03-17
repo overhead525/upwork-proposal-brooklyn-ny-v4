@@ -1,37 +1,56 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
 import { MediaElementType, UserDoc } from "../../../models/types";
 import { ObjectID } from "mongodb";
-import { User } from "../../../models";
+import { Document } from "mongoose";
 
 interface Context {
   loggedInUser: UserDoc;
 }
 
-export class Users extends MongoDataSource<any, Context> {
-  async getUser(userID: ObjectID): Promise<UserDoc> {
-    const response: UserDoc = await this.findOneById(userID, { ttl: 3600 });
+interface ExtendedUserDoc extends Document, UserDoc {}
+
+export class Users extends MongoDataSource<UserDoc, Context> {
+  async getUser(userID: string) {
+    const response = await this.findOneById(userID, {
+      ttl: 3600,
+    });
     return response;
   }
 
-  async getUserFormsAll(userID: ObjectID): Promise<string[]> {
-    const userFormIDs = await (await this.findOneById(userID)).forms;
-    return userFormIDs;
+  async getUserFormsAll(userID: string): Promise<string[]> {
+    const userFormIDs = await this.getUser(userID);
+    return userFormIDs.forms;
   }
 
-  async getUserMediaAll(userID: ObjectID): Promise<MediaElementType[]> {
-    const userMedia = await (await this.findOneById(userID)).media;
-    return userMedia;
+  async getUserMediaAll(userID: string): Promise<MediaElementType[]> {
+    const userMedia = await this.getUser(userID);
+    return userMedia.media;
   }
 
-  async createUser(username: string): Promise<boolean> {
+  async createUser(username: string) {
     // Make sure to check if there is another user with that same username
     // We do NOT want duplicate usernames
     const newUserDoc: UserDoc = {
+      username,
       forms: [],
       media: [],
     };
-    const newUser = new User(newUserDoc);
+
+    const existing = await this.collection.findOne({ username });
+    if (existing) {
+      return new Error("Could not create new user, username is already taken");
+    } else {
+      const result = await this.collection.insertOne(newUserDoc);
+      return result.ops[0];
+    }
   }
 
-  async deleteUser(username: string) {}
+  async deleteUser(username: string) {
+    try {
+      const result = await this.collection.deleteOne({ username });
+      return result.deletedCount > 0;
+    } catch (error) {
+      return error;
+    }
+  }
 }

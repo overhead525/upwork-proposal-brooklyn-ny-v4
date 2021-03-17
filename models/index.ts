@@ -6,6 +6,8 @@ import {
   userSchema,
   mediaElementDataTuple,
 } from "./schema";
+
+/*
 import { db } from "../lib/database/mongo-client";
 
 export const Form = db.model("Form", formSchema, "forms");
@@ -26,3 +28,4 @@ export const MediaElementDataTuple = db.model(
 export const MediaElement = db.model("MediaElement", mediaElementSchema);
 
 export const User = db.model("User", userSchema, "users");
+*/

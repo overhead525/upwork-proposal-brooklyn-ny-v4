@@ -11,3 +11,8 @@ mongoose.connect(filledURL, {
 });
 
 export const db = mongoose.connection;
+
+export const loaderConnection = mongoose.createConnection(filledURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});

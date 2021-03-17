@@ -21,6 +21,8 @@ const user = gql`
 
   "Registered user of this application"
   type User {
+    username: String!
+
     "An array of UUIDs that represent all of the forms that belong to this user."
     forms: [String!]
 
@@ -29,14 +31,17 @@ const user = gql`
   }
 
   extend type Query {
-    "Retrieves a list of UUIDs representing all of the forms that belong to the current user."
-    getFormUUIDs: [String!]
+    getUser(userID: String): User!
 
-    "Retrieves data on a single media file and its location."
-    getSingleMedia: MediaElementType
+    getUserFormsAll(userID: String): [String!]
 
-    "Retrieves data on all media files that belong to the current user."
-    getMultipleMedia: [MediaElementType!]
+    getUserMediaAll(userID: String): [MediaElementType!]
+  }
+
+  extend type Mutation {
+    createUser(username: String): User
+
+    deleteUser(username: String): Boolean!
   }
 `;
 

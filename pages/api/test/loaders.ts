@@ -1,4 +1,3 @@
-import { FormElement, Form, User } from "../../../models/index";
 import {
   FormDoc,
   FormElementDoc,
@@ -7,11 +6,27 @@ import {
   UserDoc,
 } from "../../../models/types";
 import { Document } from "mongoose";
+import { loaderConnection } from "../../../lib/database/mongo-client";
 
 import { S3, _Object } from "@aws-sdk/client-s3";
+import {
+  formElementSchema,
+  formSchema,
+  userSchema,
+} from "../../../models/schema";
 
 interface StoredFormElement extends FormElementDoc, Document {}
 interface StoredForm extends FormDoc, Document {}
+
+const FormElement = loaderConnection.model(
+  "FormElement",
+  formElementSchema,
+  "formElements"
+);
+
+const Form = loaderConnection.model("Form", formSchema, "forms");
+
+const User = loaderConnection.model("User", userSchema, "users");
 
 export class FormElementLoader {
   private formElements: FormElementDoc[] = [];
@@ -210,7 +225,7 @@ export class UserLoader {
     this.constructMediaElementDataTuples();
     this.splitMediaElementDataTuplesByExtension();
     this.assignMediaToUsers();
-    this.assignFormsToUsers();
+    await this.assignFormsToUsers();
 
     this.users.forEach(async (user) => await User.create(user));
   }
