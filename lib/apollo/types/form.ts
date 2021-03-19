@@ -28,6 +28,16 @@ const form = gql`
     displayFor: String
   }
 
+  type OptionalFormElement {
+    question: String
+    type: FormElementType
+    questionKey: String
+    helperText: String
+    choices: [String!]
+    draftOf: String
+    displayFor: String
+  }
+
   """
   A 'Form Object' is an agnostic object that represents a form in the application.
   They are the direct result of combining Form Elements together.
@@ -57,9 +67,17 @@ const form = gql`
 
     "Retrieves a specific FormElement based on its UUID."
     getFormElement(formElementID: String!): FormElement
+  }
 
-    "Retrieves a list of FormElements based on an array of UUIDs."
-    getFormElements(uuids: [String!]!): [FormElement]
+  extend type Mutation {
+    createFormElement(formElement: FormElement!): FormElement
+
+    deleteFormElement(formElementID: String!): Boolean
+
+    updateFormElement(
+      formElementID: String!
+      alterationObject: OptionalFormElement
+    ): Boolean
   }
 `;
 
