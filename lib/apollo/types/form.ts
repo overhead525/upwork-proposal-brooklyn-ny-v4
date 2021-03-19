@@ -70,7 +70,15 @@ const form = gql`
   }
 
   extend type Mutation {
-    createFormElement(formElement: FormElement!): FormElement
+    createFormElement(
+      question: String!
+      type: FormElementType
+      questionKey: String!
+      helperText: String
+      choices: [String!]
+      draftOf: String
+      displayFor: String
+    ): FormElement
 
     deleteFormElement(formElementID: String!): Boolean
 

@@ -11,10 +11,27 @@ export const FormElementResolvers = {
   Mutation: {
     createFormElement: async (
       _source,
-      { formElement },
+      {
+        question,
+        type,
+        questionKey,
+        helperText,
+        choices,
+        draftOf = undefined,
+        displayFor = undefined,
+      },
       { dataSources: { formElements } }
     ) => {
       try {
+        const formElement = {
+          question,
+          type,
+          questionKey,
+          helperText,
+          choices,
+        };
+        if (draftOf) Object.assign(formElement, { draftOf });
+        else Object.assign(formElement, { displayFor });
         return await formElements.createFormElement(formElement);
       } catch (error) {
         return error;
