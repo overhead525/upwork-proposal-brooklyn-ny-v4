@@ -4,16 +4,24 @@ import { FormElementDoc, OptionalFormElementDoc } from "../../../models/types";
 
 export class FormElements extends MongoDataSource<FormElementDoc> {
   async getFormElements(formElementIDs: string[]) {
-    return formElementIDs.map(async (id) => {
-      await this.getFormElement(id);
-    });
+    try {
+      return formElementIDs.map(async (id) => {
+        await this.getFormElement(id);
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   async getFormElement(formElementID: string) {
-    const response = await this.findOneById(formElementID, { ttl: 3600 });
-    // @ts-ignore
-    response.type = formElementType[Number.parseInt(response.type)];
-    return response;
+    try {
+      const response = await this.findOneById(formElementID, { ttl: 3600 });
+      // @ts-ignore
+      response.type = formElementType[Number.parseInt(response.type)];
+      return response;
+    } catch (error) {
+      return error;
+    }
   }
 
   async createFormElement(formElement: FormElementDoc) {
