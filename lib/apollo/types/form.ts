@@ -84,7 +84,13 @@ const form = gql`
 
     updateFormElement(
       formElementID: String!
-      alterationObject: OptionalFormElement
+      question: String
+      type: FormElementType
+      questionKey: String
+      helperText: String
+      choices: [String!]
+      draftOf: String
+      displayFor: String
     ): Boolean
   }
 `;

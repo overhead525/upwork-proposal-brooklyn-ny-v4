@@ -50,10 +50,31 @@ export const FormElementResolvers = {
     },
     updateFormElement: async (
       _source,
-      { formElementID, alterationObject },
+      {
+        formElementID,
+        question = undefined,
+        type = undefined,
+        questionKey = undefined,
+        helperText = undefined,
+        choices = undefined,
+        draftOf = undefined,
+        displayFor = undefined,
+      },
       { dataSources: { formElements } }
     ) => {
       try {
+        const alterationObject = {
+          question,
+          type,
+          questionKey,
+          helperText,
+          choices,
+          draftOf,
+          displayFor,
+        };
+        Object.entries(alterationObject).forEach((pair) => {
+          if (!pair[1]) delete alterationObject[pair[0].toString()];
+        });
         return await formElements.updateFormElement(
           formElementID,
           alterationObject
