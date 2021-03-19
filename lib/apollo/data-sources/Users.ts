@@ -1,5 +1,9 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { MediaElementType, UserDoc } from "../../../models/types";
+import {
+  MediaElementType,
+  OptionalUserDoc,
+  UserDoc,
+} from "../../../models/types";
 import { ObjectID } from "mongodb";
 import { Document } from "mongoose";
 
@@ -45,10 +49,25 @@ export class Users extends MongoDataSource<UserDoc, Context> {
     }
   }
 
-  async deleteUser(username: string) {
+  async deleteUser(username: string): Promise<boolean> {
     try {
       const result = await this.collection.deleteOne({ username });
       return result.deletedCount > 0;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async updateUser(
+    userID: string,
+    alterationObject: OptionalUserDoc
+  ): Promise<boolean> {
+    try {
+      let user = await this.getUser(userID);
+      user = { ...user, ...alterationObject };
+      // @ts-ignore
+      await user.save();
+      return true;
     } catch (error) {
       return error;
     }

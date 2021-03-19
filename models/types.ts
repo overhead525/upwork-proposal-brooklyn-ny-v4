@@ -1,6 +1,14 @@
-import { Document } from "mongoose";
-
 import { formElementType } from "./interfaces";
+
+export type OptionalFormElementDoc = FormElementDoc & {
+  question?: string;
+  type?: formElementType | string;
+  questionKey?: string;
+  helperText?: string;
+  choices?: string[];
+  draftOf?: string;
+  displayFor?: string;
+};
 
 export type FormElementDoc = {
   question: string;
@@ -12,9 +20,19 @@ export type FormElementDoc = {
   displayFor?: string;
 };
 
+export type OptionalFormObjectDoc = FormObjectDoc & {
+  title?: string;
+  pages?: string[][];
+};
+
 export type FormObjectDoc = {
   title: string;
   pages: string[][];
+};
+
+export type OptionalFormDoc = FormDoc & {
+  preview?: OptionalFormObjectDoc;
+  published?: OptionalFormObjectDoc;
 };
 
 export type FormDoc = {
@@ -22,14 +40,30 @@ export type FormDoc = {
   published: FormObjectDoc;
 };
 
+export type OptionalMediaElementDataTupleType = MediaElementDataTupleType & {
+  canononicalName?: string;
+  url?: string;
+};
+
 export type MediaElementDataTupleType = {
   canononicalName: string;
   url: string;
 };
 
+export type OptionalMediaElementType = MediaElementType & {
+  mediaType?: string;
+  data: OptionalMediaElementDataTupleType[];
+};
+
 export type MediaElementType = {
   mediaType: string;
   data: MediaElementDataTupleType[];
+};
+
+export type OptionalUserDoc = UserDoc & {
+  username?: string;
+  forms?: string[];
+  media?: OptionalMediaElementType[];
 };
 
 export type UserDoc = {

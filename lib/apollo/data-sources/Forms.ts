@@ -1,5 +1,5 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { FormDoc } from "../../../models/types";
+import { FormDoc, OptionalFormDoc } from "../../../models/types";
 
 export class Forms extends MongoDataSource<FormDoc> {
   async getForms(formIDs: string[]) {
@@ -29,6 +29,21 @@ export class Forms extends MongoDataSource<FormDoc> {
     try {
       const response = await this.collection.deleteOne({ id: formID });
       return response.deletedCount > 0;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async updateForm(
+    formID: string,
+    alterationObject: OptionalFormDoc
+  ): Promise<boolean> {
+    try {
+      let form = this.getForm(formID);
+      form = { ...form, ...alterationObject };
+      // @ts-ignore
+      await form.save();
+      return true;
     } catch (error) {
       return error;
     }
