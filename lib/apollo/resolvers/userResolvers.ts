@@ -3,16 +3,44 @@ import { grabFormElementIDsFromForm } from "./shared";
 
 export const UserResolvers = {
   Query: {
-    getUser: async (_source, { userID }, { dataSources: { users } }) =>
-      await users.getUser(userID),
-    getUserFormsAll: async (_source, { userID }, { dataSources: { users } }) =>
-      await users.getUserFormsAll(userID),
-    getUserMediaAll: async (_source, { userID }, { dataSources: { users } }) =>
-      await users.getUserMediaAll(userID),
+    getUser: async (_source, { userID }, { dataSources: { users } }) => {
+      try {
+        return await users.getUser(userID);
+      } catch (error) {
+        return error;
+      }
+    },
+    getUserFormsAll: async (
+      _source,
+      { userID },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.getUserFormsAll(userID);
+      } catch (error) {
+        return error;
+      }
+    },
+    getUserMediaAll: async (
+      _source,
+      { userID },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.getUserMediaAll(userID);
+      } catch (error) {
+        return error;
+      }
+    },
   },
   Mutation: {
-    createUser: async (_source, { username }, { dataSources: { users } }) =>
-      await users.createUser(username),
+    createUser: async (_source, { username }, { dataSources: { users } }) => {
+      try {
+        return await users.createUser(username);
+      } catch (error) {
+        return error;
+      }
+    },
     deleteUser: async (
       _source,
       { userID },
@@ -41,6 +69,17 @@ export const UserResolvers = {
         await users.deleteUser(user.username);
 
         return `Successfully deleted user ${user.username}`;
+      } catch (error) {
+        return error;
+      }
+    },
+    updateUser: async (
+      _source,
+      { userID, alterationObject },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUser(userID, alterationObject);
       } catch (error) {
         return error;
       }

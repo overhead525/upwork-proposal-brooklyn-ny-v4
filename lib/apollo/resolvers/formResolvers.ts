@@ -8,6 +8,13 @@ export const FormResolvers = {
     },
   },
   Mutation: {
+    createForm: async (_source, { form }, { dataSources: { forms } }) => {
+      try {
+        return await forms.createForm(form);
+      } catch (error) {
+        return error;
+      }
+    },
     deleteForm: async (
       _source,
       { formID },
@@ -27,6 +34,17 @@ export const FormResolvers = {
 
         if (response === true) return `successfully deleted form: ${formID}`;
         return response; // as Error
+      } catch (error) {
+        return error;
+      }
+    },
+    updateForm: async (
+      _source,
+      { formID, alterationObject },
+      { dataSources: { forms } }
+    ) => {
+      try {
+        return await forms.updateForm(formID, alterationObject);
       } catch (error) {
         return error;
       }
