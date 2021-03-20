@@ -10,7 +10,7 @@ export type OptionalFormElementDoc = FormElementDoc & {
   displayFor?: string;
 };
 
-export type FormElementDoc = {
+export type FormElementDoc = Document & {
   question: string;
   type: formElementType | string;
   questionKey: string;
@@ -25,7 +25,7 @@ export type OptionalFormObjectDoc = FormObjectDoc & {
   pages?: string[][];
 };
 
-export type FormObjectDoc = {
+export type FormObjectDoc = Document & {
   title: string;
   pages: string[][];
 };
@@ -35,7 +35,7 @@ export type OptionalFormDoc = FormDoc & {
   published?: OptionalFormObjectDoc;
 };
 
-export type FormDoc = {
+export type FormDoc = Document & {
   preview: FormObjectDoc;
   published: FormObjectDoc;
 };
@@ -66,7 +66,7 @@ export type OptionalUserDoc = UserDoc & {
   media?: OptionalMediaElementType[];
 };
 
-export type UserDoc = {
+export type UserDoc = Document & {
   username: string;
   forms: string[];
   media: MediaElementType[];

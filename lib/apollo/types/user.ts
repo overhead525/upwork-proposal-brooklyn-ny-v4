@@ -48,7 +48,7 @@ const user = gql`
     updateUser(userID: String!): User
 
     "A mutation for deleting a user based on their username, which is unique"
-    deleteUser(userID: String!): Boolean
+    deleteUser(userID: String!): Boolean!
   }
 `;
 
