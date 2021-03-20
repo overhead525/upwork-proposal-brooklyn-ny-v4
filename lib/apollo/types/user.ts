@@ -21,6 +21,7 @@ const user = gql`
 
   "Registered user of this application"
   type User {
+    "A unique string representing the user's display name across the application"
     username: String!
 
     "An array of UUIDs that represent all of the forms that belong to this user."
@@ -31,17 +32,23 @@ const user = gql`
   }
 
   extend type Query {
-    getUser(userID: String): User!
-
-    getUserFormsAll(userID: String): [String!]
-
-    getUserMediaAll(userID: String): [MediaElementType!]
+    """
+    A query for fetching the user's data from the database
+    """
+    getUser(username: String!): User
   }
 
   extend type Mutation {
-    createUser(username: String): User
+    """
+    A mutation for creating a new user based on their chosen username
+    """
+    createUser(userID: String!): User
 
-    deleteUser(username: String): Boolean!
+    "A mutation for updating the user's data within the database"
+    updateUser(userID: String!): User
+
+    "A mutation for deleting a user based on their username, which is unique"
+    deleteUser(userID: String!): Boolean
   }
 `;
 
