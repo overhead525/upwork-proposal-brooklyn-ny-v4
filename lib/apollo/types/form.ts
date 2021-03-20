@@ -28,6 +28,10 @@ const form = gql`
     displayFor: String
   }
 
+  """
+  OptionalFormElements were introduced to provide as part of a solution to allow
+  developers to mutate nested parts of a database entry using a GraphQL route
+  """
   type OptionalFormElement {
     question: String
     type: FormElementType
@@ -60,19 +64,19 @@ const form = gql`
 
   extend type Query {
     "Retrieves a specific Form based on its UUID."
-    getForm(formID: String!): Form
-
-    "Retrieves all of the forms that belong to a specific user. User must be authenticated."
-    getForms: [Form]
+    getForm(formID: String!): Form!
 
     "Retrieves a specific FormElement based on its UUID."
     getFormElement(formElementID: String!): FormElement
   }
 
   extend type Mutation {
+    """
+    A mutation for creating a new form element inside of the database.
+    """
     createFormElement(
       question: String!
-      type: FormElementType
+      type: FormElementType!
       questionKey: String!
       helperText: String
       choices: [String!]
@@ -80,8 +84,29 @@ const form = gql`
       displayFor: String
     ): FormElement
 
+    """
+    A mutation for creating a new form in the database
+    """
+    createForm(
+      previewTitle: String!
+      previewPages: [[String!]!]!
+      publishedTitle: String!
+      publishedPages: [[String!]!]!
+    ): Form
+
+    """
+    A mutation for deleting formElements from the database by their ObjectID from MongoDB
+    """
     deleteFormElement(formElementID: String!): Boolean
 
+    """
+    A mutation for deleting forms from the database by their ObjectID from MongoDB
+    """
+    deleteForm(formID: String!): Boolean
+
+    """
+    A mutation for updating formElements, but only the property you need to specifically update.
+    """
     updateFormElement(
       formElementID: String!
       question: String
@@ -91,7 +116,18 @@ const form = gql`
       choices: [String!]
       draftOf: String
       displayFor: String
-    ): Boolean
+    ): FormElement
+
+    """
+    A mutation for updating forms, but only the property/properties you need to update.
+    """
+    updateForm(
+      formID: String!
+      previewTitle: String
+      previewPages: [[String!]!]
+      publishedTitle: String
+      publishedPages: [[String!]!]
+    ): Form
   }
 `;
 
