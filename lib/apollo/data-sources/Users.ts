@@ -1,14 +1,23 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
 import {
-  MediaElementType,
-  OptionalUserDoc,
-  UserDoc,
-} from "../../../models/types";
-import { ObjectID } from "mongodb";
-import { Document } from "mongoose";
+  Maybe,
+  MutationCreateUserArgs,
+  MutationDeleteUserArgs,
+  MutationUpdateUserArgs,
+  QueryGetUserArgs,
+  User,
+} from "../../../src/generated/graphql";
 
 interface Context {
-  loggedInUser: UserDoc;
+  loggedInUser: User;
 }
 
-export class Users extends MongoDataSource<UserDoc, Context> {}
+export class Users extends MongoDataSource<User, Context> {
+  async createUser(args: MutationCreateUserArgs): Maybe<User> {}
+
+  async getUser(args: QueryGetUserArgs): Maybe<User> {}
+
+  async updateUser(args: MutationUpdateUserArgs): Maybe<User> {}
+
+  async deleteUser(args: MutationDeleteUserArgs): Maybe<User> {}
+}
