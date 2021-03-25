@@ -1,5 +1,4 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { FormElementDoc } from "../../../models/types";
 import {
   Maybe,
   MutationCreateFormElementArgs,
@@ -10,18 +9,62 @@ import {
   Scalars,
 } from "../../../src/generated/graphql";
 
-export class FormElements extends MongoDataSource<FormElementDoc> {
+export class FormElements extends MongoDataSource<FormElement> {
   async createFormElement(
     args: MutationCreateFormElementArgs
-  ): Maybe<FormElement> {}
+  ): Promise<Maybe<FormElement>> {
+    const newFormElement: FormElement = {
+      ...args,
+    };
+    try {
+      const response = await this.collection.insertOne(newFormElement);
+      return response.ops[0];
+    } catch (error) {
+      return error;
+    }
+  }
 
-  async getFormElement(args: QueryGetFormElementArgs): Maybe<FormElement> {}
+  async getFormElement(
+    args: QueryGetFormElementArgs
+  ): Promise<Maybe<FormElement>> {
+    try {
+      const response = await this.findOneById(args.formElementID);
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
 
   async updateFormElement(
     args: MutationUpdateFormElementArgs
-  ): Maybe<FormElement> {}
+  ): Promise<Maybe<FormElement>> {
+    try {
+      const formElement = await this.findOneById(args.formElementID);
+      const { formElementID, ...changes } = args;
+      const newFormElement = {
+        ...formElement,
+        ...changes,
+      };
+      const response = await this.collection.findOneAndUpdate(
+        { id: formElementID },
+        newFormElement
+      );
+      return response.value;
+    } catch (error) {
+      return error;
+    }
+  }
 
   async deleteFormElement(
     args: MutationDeleteFormElementArgs
-  ): Scalars["Boolean"];
+  ): Promise<Scalars["Boolean"]> {
+    try {
+      const response = await this.collection.findOneAndDelete({
+        id: args.formElementID,
+      });
+      return response.ok === 1;
+    } catch (error) {
+      return error;
+    }
+  }
 }
