@@ -42,10 +42,29 @@ const user = gql`
     """
     A mutation for creating a new user based on their chosen username
     """
-    createUser(userID: String!): User
+    createUser(username: String!): User
 
     "A mutation for updating the user's data within the database"
-    updateUser(userID: String!): User
+    updateUserUsername(userID: String!, newUsername: String!): User
+
+    "A mutation for changing the user's forms list"
+    updateUserForms(userID: String!, formChanges: [String!]): User
+
+    "A mutation for updating the user's media list components name"
+    updateUserMediaName(userID: String!, newMediaName: String!): User
+
+    "A mutation for updating the user's media list components url"
+    updateUserMediaURL(userID: String!, newMediaURL: String!): User
+
+    "A mutation for adding new media to the user's media list"
+    updateUserAddMedia(
+      userID: String!
+      mediaName: String!
+      mediaURL: String!
+    ): User
+
+    "A mutation for removing media from the user's media list"
+    updateUserDeleteMedia(userID: String!, mediaName: String!): User
 
     "A mutation for deleting a user based on their username, which is unique"
     deleteUser(userID: String!): Boolean!
