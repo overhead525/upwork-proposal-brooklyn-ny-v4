@@ -1,49 +1,68 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { FormDoc, OptionalFormDoc } from "../../../models/types";
+import {
+  Form,
+  Maybe,
+  Scalars,
+  MutationCreateFormArgs,
+  MutationDeleteFormArgs,
+  MutationUpdateFormArgs,
+  QueryGetFormArgs,
+} from "../../../src/generated/graphql";
 
-export class Forms extends MongoDataSource<FormDoc> {
-  async getForms(formIDs: string[]) {
-    const response = formIDs.map(async (id) => {
-      return this.getForm(id);
-    });
-    return response;
-  }
+export class Forms extends MongoDataSource<Form> {
+  async createForm(args: MutationCreateFormArgs): Promise<Maybe<Form>> {
+    const newForm: Form = {
+      preview: {
+        title: args.previewTitle,
+        pages: args.previewPages,
+      },
+      published: {
+        title: args.publishedTitle,
+        pages: args.publishedPages,
+      },
+    };
 
-  async getForm(formID: string) {
-    const response = await this.findOneById(formID, {
-      ttl: 3600,
-    });
-    return response;
-  }
-
-  async createForm(form: FormDoc) {
     try {
-      const response = await this.collection.insertOne(form);
+      const response = await this.collection.insertOne(newForm);
       return response.ops[0];
     } catch (error) {
       return error;
     }
   }
 
-  async deleteForm(formID: string) {
+  async getForm(args: QueryGetFormArgs): Promise<Maybe<Form>> {
     try {
-      const response = await this.collection.deleteOne({ id: formID });
-      return response.deletedCount > 0;
+      const response = await this.findOneById(args.formID);
+      return response;
     } catch (error) {
       return error;
     }
   }
 
-  async updateForm(
-    formID: string,
-    alterationObject: OptionalFormDoc
-  ): Promise<boolean> {
+  async updateForm(args: MutationUpdateFormArgs): Promise<Maybe<Form>> {
     try {
-      let form = this.getForm(formID);
-      form = { ...form, ...alterationObject };
-      // @ts-ignore
-      await form.save();
-      return true;
+      const form = await this.findOneById(args.formID);
+      const { formID, ...changes } = args;
+      const newForm = {
+        ...form,
+        ...changes,
+      };
+      const response = await this.collection.findOneAndUpdate(
+        { id: formID },
+        newForm
+      );
+      return response.value;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async deleteForm(args: MutationDeleteFormArgs): Promise<Scalars["Boolean"]> {
+    try {
+      const response = await this.collection.findOneAndDelete({
+        id: args.formID,
+      });
+      return response.ok === 1;
     } catch (error) {
       return error;
     }

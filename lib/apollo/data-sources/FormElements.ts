@@ -1,57 +1,68 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { formElementType } from "../../../models/interfaces";
-import { FormElementDoc, OptionalFormElementDoc } from "../../../models/types";
+import {
+  Maybe,
+  MutationCreateFormElementArgs,
+  QueryGetFormElementArgs,
+  FormElement,
+  MutationDeleteFormElementArgs,
+  MutationUpdateFormElementArgs,
+  Scalars,
+} from "../../../src/generated/graphql";
 
-export class FormElements extends MongoDataSource<FormElementDoc> {
-  async getFormElements(formElementIDs: string[]) {
+export class FormElements extends MongoDataSource<FormElement> {
+  async createFormElement(
+    args: MutationCreateFormElementArgs
+  ): Promise<Maybe<FormElement>> {
+    const newFormElement: FormElement = {
+      ...args,
+    };
     try {
-      return formElementIDs.map(async (id) => {
-        await this.getFormElement(id);
-      });
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async getFormElement(formElementID: string) {
-    try {
-      const response = await this.findOneById(formElementID, { ttl: 3600 });
-      // @ts-ignore
-      response.type = formElementType[Number.parseInt(response.type)];
-      return response;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async createFormElement(formElement: FormElementDoc) {
-    try {
-      const response = await this.collection.insertOne(formElement);
+      const response = await this.collection.insertOne(newFormElement);
       return response.ops[0];
     } catch (error) {
       return error;
     }
   }
 
-  async deleteFormElement(formElementID: string) {
+  async getFormElement(
+    args: QueryGetFormElementArgs
+  ): Promise<Maybe<FormElement>> {
     try {
-      const response = await this.collection.deleteOne({ id: formElementID });
-      return response.deletedCount > 0;
+      const response = await this.findOneById(args.formElementID);
+      return response;
     } catch (error) {
       return error;
     }
   }
 
   async updateFormElement(
-    formElementID: string,
-    alterationObject: OptionalFormElementDoc
-  ): Promise<Boolean> {
+    args: MutationUpdateFormElementArgs
+  ): Promise<Maybe<FormElement>> {
     try {
-      let formElement = await this.getFormElement(formElementID);
-      formElement = { ...formElement, ...alterationObject };
-      // @ts-ignore
-      await formElement.save();
-      return true;
+      const formElement = await this.findOneById(args.formElementID);
+      const { formElementID, ...changes } = args;
+      const newFormElement = {
+        ...formElement,
+        ...changes,
+      };
+      const response = await this.collection.findOneAndUpdate(
+        { id: formElementID },
+        newFormElement
+      );
+      return response.value;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async deleteFormElement(
+    args: MutationDeleteFormElementArgs
+  ): Promise<Scalars["Boolean"]> {
+    try {
+      const response = await this.collection.findOneAndDelete({
+        id: args.formElementID,
+      });
+      return response.ok === 1;
     } catch (error) {
       return error;
     }
