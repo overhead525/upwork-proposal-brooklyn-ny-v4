@@ -21,3 +21,7 @@ export const StyledSide = styled.div`
   justify-content: ${(props: StyledSideProps) =>
     props.side.toLowerCase() === "left" ? "flex-start" : "flex-end"};
 `;
+
+export const StyledList = styled.div`
+  width: 18rem;
+`;

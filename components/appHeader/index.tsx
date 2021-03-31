@@ -1,3 +1,4 @@
+import { AppSwitcher } from "./appSwitcher";
 import { StyledAppHeader, StyledSide } from "./styledComponents";
 
 interface AppHeaderProps {}
@@ -5,7 +6,9 @@ interface AppHeaderProps {}
 export const AppHeader: React.FC<AppHeaderProps> = () => {
   return (
     <StyledAppHeader>
-      <StyledSide side="left">Left</StyledSide>
+      <StyledSide side="left">
+        <AppSwitcher />
+      </StyledSide>
       <StyledSide side="right">Right</StyledSide>
     </StyledAppHeader>
   );
