@@ -18,6 +18,7 @@ export const StyledSide = styled.div`
       ? "margin-left: 1rem;"
       : "margin-right: 1rem;"}
 
+  align-items: center;
   justify-content: ${(props: StyledSideProps) =>
     props.side.toLowerCase() === "left" ? "flex-start" : "flex-end"};
 `;
