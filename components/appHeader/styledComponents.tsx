@@ -9,12 +9,15 @@ export const StyledAppHeader = styled.div`
 `;
 
 interface StyledSideProps {
-  side: string;
+  side: "left" | "right";
 }
 export const StyledSide = styled.div`
   display: flex;
-  margin: 0 1rem;
+  ${(props: StyledSideProps) =>
+    props.side.toLowerCase() === "left"
+      ? "margin-left: 1rem;"
+      : "margin-right: 1rem;"}
 
   justify-content: ${(props: StyledSideProps) =>
-    props.side === "left" ? "flex-start" : "flex-end"};
+    props.side.toLowerCase() === "left" ? "flex-start" : "flex-end"};
 `;
