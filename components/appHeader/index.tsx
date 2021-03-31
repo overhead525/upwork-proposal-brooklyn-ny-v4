@@ -2,6 +2,7 @@ import Image from "next/image";
 import { AppSwitcher } from "./appSwitcher";
 import { AvatarHandler } from "./avatarHandler";
 import { BreadcrumbHandler } from "./breadcrumbHandler";
+import { SettingsButton } from "./settingsButton";
 import { StyledAppHeader, StyledSide } from "./styledComponents";
 
 interface AppHeaderProps {}
@@ -18,6 +19,7 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
         />
       </StyledSide>
       <StyledSide side="right">
+        <SettingsButton />
         <AvatarHandler />
       </StyledSide>
     </StyledAppHeader>
