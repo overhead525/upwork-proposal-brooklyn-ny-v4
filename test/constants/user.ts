@@ -48,11 +48,13 @@ export const sampleMediaElements: MediaElement[] = [
 ];
 
 export const marcus: User = {
+  username: "marcus123",
   forms: [idV1, idV2],
   media: createScrambledArray(sampleMediaElements),
 };
 
 export const jenny: User = {
+  username: "jenny456",
   forms: [idV2, idV1],
   media: createScrambledArray(sampleMediaElements),
 };

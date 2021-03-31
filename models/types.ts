@@ -1,6 +1,6 @@
 import { formElementType } from "./interfaces";
 
-export type OptionalFormElementDoc = FormElementDoc & {
+export type OptionalFormElementDoc = {
   question?: string;
   type?: formElementType | string;
   questionKey?: string;
@@ -10,7 +10,7 @@ export type OptionalFormElementDoc = FormElementDoc & {
   displayFor?: string;
 };
 
-export type FormElementDoc = Document & {
+export type FormElementDoc = {
   question: string;
   type: formElementType | string;
   questionKey: string;
@@ -20,27 +20,27 @@ export type FormElementDoc = Document & {
   displayFor?: string;
 };
 
-export type OptionalFormObjectDoc = FormObjectDoc & {
+export type OptionalFormObjectDoc = {
   title?: string;
   pages?: string[][];
 };
 
-export type FormObjectDoc = Document & {
+export type FormObjectDoc = {
   title: string;
   pages: string[][];
 };
 
-export type OptionalFormDoc = FormDoc & {
+export type OptionalFormDoc = {
   preview?: OptionalFormObjectDoc;
   published?: OptionalFormObjectDoc;
 };
 
-export type FormDoc = Document & {
+export type FormDoc = {
   preview: FormObjectDoc;
   published: FormObjectDoc;
 };
 
-export type OptionalMediaElementDataTupleType = MediaElementDataTupleType & {
+export type OptionalMediaElementDataTupleType = {
   canononicalName?: string;
   url?: string;
 };
@@ -50,7 +50,7 @@ export type MediaElementDataTupleType = {
   url: string;
 };
 
-export type OptionalMediaElementType = MediaElementType & {
+export type OptionalMediaElementType = {
   mediaType?: string;
   data: OptionalMediaElementDataTupleType[];
 };
@@ -60,13 +60,13 @@ export type MediaElementType = {
   data: MediaElementDataTupleType[];
 };
 
-export type OptionalUserDoc = UserDoc & {
+export type OptionalUserDoc = {
   username?: string;
   forms?: string[];
   media?: OptionalMediaElementType[];
 };
 
-export type UserDoc = Document & {
+export type UserDoc = {
   username: string;
   forms: string[];
   media: MediaElementType[];

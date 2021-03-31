@@ -33,12 +33,12 @@ jobs:
         aws-region: us-east-1
     - run: npm ci
     - run: npm run test:unit
-    - run: |
-        npm run build
-        npm start &
-        sleep 5
-        npm run test:integration
-        lsof -i tcp:3000
+    # - run: |
+    #     npm run build
+    #     npm start &
+    #     sleep 5
+    #     npm run test:integration
+    #     lsof -i tcp:3000
       env: 
         NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
         COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
