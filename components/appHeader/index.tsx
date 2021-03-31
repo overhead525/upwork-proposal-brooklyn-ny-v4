@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { AppSwitcher } from "./appSwitcher";
+import { AvatarHandler } from "./avatarHandler";
 import { BreadcrumbHandler } from "./breadcrumbHandler";
 import { StyledAppHeader, StyledSide } from "./styledComponents";
 
@@ -16,7 +17,9 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
           formTitles={["Political Survey"]}
         />
       </StyledSide>
-      <StyledSide side="right">Right</StyledSide>
+      <StyledSide side="right">
+        <AvatarHandler />
+      </StyledSide>
     </StyledAppHeader>
   );
 };
