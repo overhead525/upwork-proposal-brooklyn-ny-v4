@@ -26,3 +26,7 @@ export const StyledSide = styled.div`
 export const StyledList = styled.div`
   width: 18rem;
 `;
+
+export const StyledBreadcrumbsWrapper = styled.div`
+  margin-left: 1.2rem;
+`;
