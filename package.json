@@ -16,6 +16,7 @@
   "author": "Iain Collins <me@iaincollins.com>, Ritchel Cousar <ritchelcousar@outlook.com>",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.3.13",
     "@aws-sdk/client-s3": "^3.8.0",
     "apollo-datasource-mongodb": "^0.3.0",
     "apollo-server-micro": "^2.21.0",
