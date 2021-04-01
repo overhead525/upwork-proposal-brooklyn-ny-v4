@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { ActionButtonProps, ActionButtonGroup } from "./actionButtonGroup";
-import { actionButtons } from "./actionButtonHandler";
 import { AppSwitcher } from "./appSwitcher";
 import { AvatarHandler } from "./avatarHandler";
 import { BreadcrumbHandler } from "./breadcrumbHandler";
@@ -13,15 +12,11 @@ interface PageThemeObject {
   };
 }
 
-interface AppHeaderProps {}
+interface AppHeaderProps {
+  actionButtons: ActionButtonProps[];
+}
 
-export const AppHeader: React.FC<AppHeaderProps> = () => {
-  const pageTheme: PageThemeObject = {
-    formBuilder: {
-      actionButtons,
-    },
-  };
-
+export const AppHeader: React.FC<AppHeaderProps> = ({ actionButtons }) => {
   return (
     <StyledAppHeader>
       <StyledSide side="left">
@@ -33,7 +28,7 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
         />
       </StyledSide>
       <StyledSide side="right">
-        <ActionButtonGroup buttons={pageTheme.formBuilder.actionButtons} />
+        <ActionButtonGroup buttons={actionButtons} />
         <SettingsButton />
         <AvatarHandler />
       </StyledSide>
