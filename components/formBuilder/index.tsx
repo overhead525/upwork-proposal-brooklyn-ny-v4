@@ -9,7 +9,10 @@ import {
 
 const StyledFormBuilder = styled.main`
   display: grid;
-  place-items: center;
+
+  height: 100vh;
+
+  grid-template-rows: auto 1fr;
 `;
 
 interface FormBuilderProps {
