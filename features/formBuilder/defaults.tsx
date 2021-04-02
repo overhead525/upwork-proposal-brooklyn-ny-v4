@@ -1,6 +1,7 @@
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Typography from "@material-ui/core/Typography";
 import { ActionButtonProps } from "../../components/appHeader/actionButtonGroup";
+import { Editor } from "../../components/formBuilder/editor";
 import { TabsHandlerProps } from "../../components/formBuilder/tabsHandler";
 
 export const actionButtons: ActionButtonProps[] = [
@@ -31,7 +32,7 @@ export const tabs: TabsHandlerProps = {
     },
     {
       label: "Editor",
-      content: <Typography variant="subtitle1">Editor</Typography>,
+      content: <Editor />,
     },
     {
       label: "Workflows",
