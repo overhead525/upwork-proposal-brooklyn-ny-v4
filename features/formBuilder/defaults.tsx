@@ -3,6 +3,8 @@ import Typography from "@material-ui/core/Typography";
 import { ActionButtonProps } from "../../components/appHeader/actionButtonGroup";
 import { Editor } from "../../components/formBuilder/editor";
 import { TabsHandlerProps } from "../../components/formBuilder/tabsHandler";
+import { Element } from "../../components/formBuilder/editor/elementSelector";
+import { ElementsSelectorIcon } from "./components";
 
 export const actionButtons: ActionButtonProps[] = [
   {
@@ -48,3 +50,30 @@ export const tabs: TabsHandlerProps = {
     },
   ],
 };
+
+export const elements: Element[] = [
+  {
+    icon: <ElementsSelectorIcon color="ocean" icon="radio" />,
+    text: "Radio",
+  },
+  {
+    icon: <ElementsSelectorIcon color="blue" icon="checkboxes" />,
+    text: "Checkboxes",
+  },
+  {
+    icon: <ElementsSelectorIcon color="orange" icon="short_answer" />,
+    text: "Short Answer",
+  },
+  {
+    icon: <ElementsSelectorIcon color="red" icon="short_answer" />,
+    text: "Long Answer",
+  },
+  {
+    icon: <ElementsSelectorIcon color="green" icon="email" />,
+    text: "Email",
+  },
+  {
+    icon: <ElementsSelectorIcon color="purple" icon="url" />,
+    text: "URL",
+  },
+];

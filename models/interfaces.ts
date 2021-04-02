@@ -1,3 +1,11 @@
+export type FormElementType =
+  | "radio"
+  | "checkboxes"
+  | "short_answer"
+  | "long_answer"
+  | "email"
+  | "url";
+
 export enum formElementType {
   RADIO,
   CHECKBOXES,
