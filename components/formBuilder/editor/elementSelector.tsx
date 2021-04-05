@@ -9,8 +9,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import { elementsSelector } from "../../../features/formBuilder/formBuilderSlice";
-import { motion, PanInfo } from "framer-motion";
-import pointInPolygon from "point-in-polygon";
+import { motion, PanInfo, useAnimation } from "framer-motion";
 
 export interface Element {
   icon: JSX.Element;
@@ -25,14 +24,33 @@ export const ElementSelector: React.FC<ElementSelectorProps> = ({
   dropAreaRef,
 }) => {
   const elements = useSelector(elementsSelector);
+  const cardControls = useAnimation();
 
   const renderElementCards = (_elements: Element[]) => {
     return _elements.map((element, index) => {
       return (
         <motion.div
+          animate={cardControls}
           drag
           dragConstraints={dropAreaRef}
           dragMomentum={false}
+          onDragEnd={(event, info: PanInfo) => {
+            if (info.offset.x > 360) {
+              cardControls.start({
+                x: -info.delta.x,
+                y: -info.delta.y,
+                transition: { duration: 0 },
+              });
+              return;
+            }
+            cardControls.start({
+              x: -info.delta.x,
+              y: -info.delta.y,
+              transition: { duration: 0.2 },
+            });
+          }}
+          whileHover={{ scale: 1.1 }}
+          whileDrag={{ scale: 0.75, opacity: 0.8 }}
           key={index}
         >
           <StyledElementCard>

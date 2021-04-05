@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useRef } from "react";
 import styled from "styled-components";
 import { ElementSelector } from "./elementSelector";
 
