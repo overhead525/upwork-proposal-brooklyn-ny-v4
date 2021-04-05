@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyledHeaderWrapper,
   StyledElementsWrapper,
@@ -8,28 +9,41 @@ import {
 import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import { elementsSelector } from "../../../features/formBuilder/formBuilderSlice";
+import { motion, PanInfo } from "framer-motion";
+import pointInPolygon from "point-in-polygon";
 
 export interface Element {
   icon: JSX.Element;
   text: string;
 }
 
-export interface ElementSelectorProps {}
+export interface ElementSelectorProps {
+  dropAreaRef: React.RefObject<any>;
+}
 
-export const ElementSelector: React.FC<ElementSelectorProps> = () => {
+export const ElementSelector: React.FC<ElementSelectorProps> = ({
+  dropAreaRef,
+}) => {
   const elements = useSelector(elementsSelector);
 
   const renderElementCards = (_elements: Element[]) => {
     return _elements.map((element, index) => {
       return (
-        <StyledElementCard key={index}>
-          <StyledCardContent>
-            {element.icon}
-            <Typography style={{ paddingLeft: "1rem" }}>
-              {element.text}
-            </Typography>
-          </StyledCardContent>
-        </StyledElementCard>
+        <motion.div
+          drag
+          dragConstraints={dropAreaRef}
+          dragMomentum={false}
+          key={index}
+        >
+          <StyledElementCard>
+            <StyledCardContent>
+              {element.icon}
+              <Typography style={{ paddingLeft: "1rem" }}>
+                {element.text}
+              </Typography>
+            </StyledCardContent>
+          </StyledElementCard>
+        </motion.div>
       );
     });
   };

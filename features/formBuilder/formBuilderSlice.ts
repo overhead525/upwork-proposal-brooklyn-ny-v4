@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { actionButtons, elements, tabs } from "./defaults";
+import { actionButtons, dragPolygons, elements, tabs } from "./defaults";
 
 export const formBuilderSlice = createSlice({
   name: "formBuilder",
@@ -7,6 +7,7 @@ export const formBuilderSlice = createSlice({
     actionButtons: actionButtons,
     tabs: tabs,
     elements: elements,
+    dragPolygons: dragPolygons,
   },
   reducers: {},
 });

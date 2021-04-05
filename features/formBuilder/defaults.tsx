@@ -77,3 +77,8 @@ export const elements: Element[] = [
     text: "URL",
   },
 ];
+
+export const dragPolygons = {
+  home: null,
+  destination: null,
+};
