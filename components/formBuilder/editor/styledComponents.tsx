@@ -29,3 +29,19 @@ export const StyledElementCard = styled(Card)`
 export const StyledCardContent = styled(CardContent)`
   display: flex;
 `;
+
+export const StyledDragDestination = styled.div`
+  display: grid;
+  place-items: center;
+
+  padding: 0 2rem;
+  background-color: yellow;
+`;
+
+export const StyledFormElement = styled(Card)`
+  width: 34rem;
+`;
+
+export const StyledFormElementSkeleton = styled(Card)`
+  width: 34rem;
+`;

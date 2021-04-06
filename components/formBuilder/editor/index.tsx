@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import styled from "styled-components";
+import { ElementsDestination } from "./elementDestination";
 import { ElementSelector } from "./elementSelector";
+import { StyledDragDestination } from "./styledComponents";
 
 const StyledEditorWrapper = styled.div`
   width: 100%;
@@ -30,10 +32,7 @@ export const Editor: React.FC<EditorProps> = () => {
         <div ref={elementsHome}>
           <ElementSelector dropAreaRef={dropArea} />
         </div>
-        <div
-          style={{ backgroundColor: "yellow" }}
-          ref={elementsDestination}
-        ></div>
+        <ElementsDestination />
       </StyledDragWrapper>
     </StyledEditorWrapper>
   );
