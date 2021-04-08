@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import {
   StyledHeaderWrapper,
   StyledElementsWrapper,
@@ -10,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import { elementsSelector } from "../../../features/formBuilder/formBuilderSlice";
 import { motion, PanInfo, useAnimation } from "framer-motion";
+import { ElementCard } from "./elementCard";
 
 export interface Element {
   icon: JSX.Element;
@@ -18,10 +25,17 @@ export interface Element {
 
 export interface ElementSelectorProps {
   dropAreaRef: React.RefObject<any>;
+  setDragPointerCoordinates: Dispatch<
+    SetStateAction<{
+      x: number;
+      y: number;
+    }>
+  >;
 }
 
 export const ElementSelector: React.FC<ElementSelectorProps> = ({
   dropAreaRef,
+  setDragPointerCoordinates,
 }) => {
   const elements = useSelector(elementsSelector);
   const cardControls = useAnimation();
@@ -29,39 +43,13 @@ export const ElementSelector: React.FC<ElementSelectorProps> = ({
   const renderElementCards = (_elements: Element[]) => {
     return _elements.map((element, index) => {
       return (
-        <motion.div
-          animate={cardControls}
-          drag
-          dragConstraints={dropAreaRef}
-          dragMomentum={false}
-          onDragEnd={(event, info: PanInfo) => {
-            if (info.offset.x > 360) {
-              cardControls.start({
-                x: -info.delta.x,
-                y: -info.delta.y,
-                transition: { duration: 0 },
-              });
-              return;
-            }
-            cardControls.start({
-              x: -info.delta.x,
-              y: -info.delta.y,
-              transition: { duration: 0.2 },
-            });
-          }}
-          whileHover={{ scale: 1.1 }}
-          whileDrag={{ scale: 0.75, opacity: 0.8 }}
+        <ElementCard
+          setDragPointerCoordinates={setDragPointerCoordinates}
+          dropAreaRef={dropAreaRef}
           key={index}
-        >
-          <StyledElementCard>
-            <StyledCardContent>
-              {element.icon}
-              <Typography style={{ paddingLeft: "1rem" }}>
-                {element.text}
-              </Typography>
-            </StyledCardContent>
-          </StyledElementCard>
-        </motion.div>
+          icon={element.icon}
+          text={element.text}
+        />
       );
     });
   };

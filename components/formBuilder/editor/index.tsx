@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import { ElementsDestination } from "./elementDestination";
 import { ElementSelector } from "./elementSelector";
@@ -21,6 +21,11 @@ const StyledDragWrapper = styled.div`
 interface EditorProps {}
 
 export const Editor: React.FC<EditorProps> = () => {
+  const [dragPointerCoordinates, setDragPointerCoordinates] = useState({
+    x: 0,
+    y: 0,
+  });
+
   const elementsHome = useRef(null);
   const elementsDestination = useRef(null);
   const dropArea = useRef(null);
@@ -30,9 +35,12 @@ export const Editor: React.FC<EditorProps> = () => {
       <div style={{ backgroundColor: "blue" }}></div>
       <StyledDragWrapper ref={dropArea}>
         <div ref={elementsHome}>
-          <ElementSelector dropAreaRef={dropArea} />
+          <ElementSelector
+            dropAreaRef={dropArea}
+            setDragPointerCoordinates={setDragPointerCoordinates}
+          />
         </div>
-        <ElementsDestination />
+        <ElementsDestination dragPointerCoordinates={dragPointerCoordinates} />
       </StyledDragWrapper>
     </StyledEditorWrapper>
   );
