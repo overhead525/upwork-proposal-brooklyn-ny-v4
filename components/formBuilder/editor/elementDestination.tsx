@@ -1,9 +1,9 @@
 import { StyledDragDestination, StyledFormElement } from "./styledComponents";
-import { elementsSelector } from "../../../features/formDisplay/formDisplaySlice";
-import { useSelector } from "react-redux";
+import { DropArea } from "./dropArea";
 import { MouseEvent, PropsWithRef, useEffect, useRef, useState } from "react";
 import { EventInfo, motion, useAnimation } from "framer-motion";
 import { Card, CardContent, Typography } from "@material-ui/core";
+import { isInsidePolygon } from "./utility";
 
 interface ElementsDestinationProps {
   dragPointerCoordinates: { x: number; y: number };
@@ -14,10 +14,10 @@ type Orientation = "above" | "below";
 export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   dragPointerCoordinates,
 }) => {
-  const [formElements, setFormElements] = useState([0, 1, 2, 3, 4]);
+  const [formElements, setFormElements] = useState([0, 1, 2]);
 
   const renderSingleElement = (key) => {
-    const [translated, setTranslated] = useState(false);
+    // const [translated, setTranslated] = useState(false);
 
     const elementRef = useRef(null);
 
@@ -46,37 +46,6 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
       elementRef.current.style.border = "";
     };
 
-    const isInsidePolygon = (): boolean => {
-      const boundingRect: DOMRect = elementRef.current.getBoundingClientRect();
-      if (!boundingRect) return;
-
-      const withinBounds = (
-        point: { x: number; y: number },
-        top: number,
-        right: number,
-        bottom: number,
-        left: number
-      ): boolean => {
-        if (
-          left < point.x &&
-          point.x < right &&
-          top < point.y &&
-          point.y < bottom
-        ) {
-          return true;
-        }
-        return false;
-      };
-
-      return withinBounds(
-        dragPointerCoordinates,
-        boundingRect.top - boundingRect.height / 3,
-        boundingRect.right,
-        boundingRect.bottom + boundingRect.height / 3,
-        boundingRect.left
-      );
-    };
-
     const determineHalf = (): "upper" | "lower" => {
       const boundingRect: DOMRect = elementRef.current.getBoundingClientRect();
       if (!boundingRect) return;
@@ -99,8 +68,9 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
       );
     };
 
+    /*
     useEffect(() => {
-      const inside = isInsidePolygon();
+      const inside = isInsidePolygon(elementRef, dragPointerCoordinates);
       if (inside && !translated) {
         setTranslated(true);
 
@@ -119,6 +89,7 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         }
       }
     });
+    */
 
     return (
       <motion.div key={key} ref={elementRef} animate={formElementControls}>
@@ -132,10 +103,34 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   };
 
   const renderFormElements = () => {
-    return formElements.map((el, index) => {
-      return renderSingleElement(index);
+    const formElementsArr = formElements.map((el, index, arr) => {
+      return index < arr.length - 1
+        ? renderSingleElement(index)
+        : renderSingleElement(index);
     });
+    const finalFEs = [];
+    formElementsArr.forEach((el, i, arr) => {
+      if (i < arr.length - 1) {
+        finalFEs.push(el);
+        finalFEs.push(
+          <DropArea
+            dragPointerCoordinates={dragPointerCoordinates}
+            className="between"
+          />
+        );
+      } else {
+        finalFEs.push(el);
+      }
+    });
+    console.log(finalFEs);
+    return finalFEs;
   };
 
-  return <StyledDragDestination>{renderFormElements()}</StyledDragDestination>;
+  return (
+    <StyledDragDestination>
+      <DropArea dragPointerCoordinates={dragPointerCoordinates} />
+      <div>{renderFormElements()}</div>
+      <DropArea dragPointerCoordinates={dragPointerCoordinates} />
+    </StyledDragDestination>
+  );
 };

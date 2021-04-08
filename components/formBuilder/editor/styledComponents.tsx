@@ -32,16 +32,40 @@ export const StyledCardContent = styled(CardContent)`
 
 export const StyledDragDestination = styled.div`
   display: grid;
-  place-items: center;
+  grid-template-rows: 1fr auto 1fr;
 
-  padding: 0 2rem;
-  background-color: yellow;
+  margin: 0 auto;
 `;
 
 export const StyledFormElement = styled(Card)`
   width: 34rem;
 `;
 
+export const StyledFormElementWrapper = styled.div`
+  margin: 0 auto;
+`;
+
 export const StyledFormElementSkeleton = styled(Card)`
   width: 34rem;
+`;
+
+/*
+export const StyledDropArea = styled.div`
+  width: 34rem;
+  height: 100%;
+
+  background-color: ${(props) =>
+    props.about === "hovered" ? "rgba(0, 0, 255, 0.5)" : ""};
+  border: ${(props) => (props.about === "hovered" ? "3px solid blue" : "")};
+  border-radius: ${(props) => (props.about === "hovered" ? "3px" : "")};
+`;
+*/
+
+export const StyledDropArea = styled.div`
+  width: 34rem;
+  height: ${(props) => (props.className === "between" ? "3rem" : "100%")};
+
+  background-color: ${(props) =>
+    props.about === "hovered" ? "rgba(0, 0, 255, 0.5)" : ""};
+  border-radius: ${(props) => (props.about === "hovered" ? "3px" : "")};
 `;
