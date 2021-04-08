@@ -14,7 +14,7 @@ type Orientation = "above" | "below";
 export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   dragPointerCoordinates,
 }) => {
-  const [formElements, setFormElements] = useState([0, 1, 2]);
+  const [formElements, setFormElements] = useState([0, 1, 2, 3, 4]);
 
   const renderSingleElement = (key) => {
     const [translated, setTranslated] = useState(false);
@@ -29,22 +29,24 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         y: 15 * multiplier,
         transition: { duration: 0.2 },
       });
-      elementRef.current.style.boxShadow = "-1px 35px 6px -13px #446ec5";
+      if (!invert) {
+        elementRef.current.style.borderTop = "3px solid blue";
+        elementRef.current.style.borderRadius = "3px";
+        return;
+      }
+      elementRef.current.style.borderBottom = "3px solid blue";
+      elementRef.current.style.borderRadius = "3px";
     };
 
-    const undoMakeRoom = (invert: boolean = true) => {
-      const multiplier = invert ? -1 : 1;
-      formElementControls.start({
-        y: -15 * multiplier,
+    const undoMakeRoom = () => {
+      formElementControls.set({
+        y: 0,
         transition: { duration: 0.2 },
       });
-      elementRef.current.style.boxShadow = "";
+      elementRef.current.style.border = "";
     };
 
-    const isInsidePolygon = (): {
-      inside: boolean;
-      half: "upper" | "lower";
-    } => {
+    const isInsidePolygon = (): boolean => {
       const boundingRect: DOMRect = elementRef.current.getBoundingClientRect();
       if (!boundingRect) return;
 
@@ -66,6 +68,19 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         return false;
       };
 
+      return withinBounds(
+        dragPointerCoordinates,
+        boundingRect.top - boundingRect.height / 3,
+        boundingRect.right,
+        boundingRect.bottom + boundingRect.height / 3,
+        boundingRect.left
+      );
+    };
+
+    const determineHalf = (): "upper" | "lower" => {
+      const boundingRect: DOMRect = elementRef.current.getBoundingClientRect();
+      if (!boundingRect) return;
+
       const upperOrLowerHalf = (
         point: { x: number; y: number },
         top: number,
@@ -76,35 +91,34 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         if (point.y > top + height / 2 && point.y < bottom) return "lower";
       };
 
-      return {
-        inside: withinBounds(
-          dragPointerCoordinates,
-          boundingRect.top,
-          boundingRect.right,
-          boundingRect.bottom,
-          boundingRect.left
-        ),
-        half: upperOrLowerHalf(
-          dragPointerCoordinates,
-          boundingRect.top,
-          boundingRect.bottom,
-          boundingRect.height
-        ),
-      };
+      return upperOrLowerHalf(
+        dragPointerCoordinates,
+        boundingRect.top - boundingRect.height / 3,
+        boundingRect.bottom + boundingRect.height / 3,
+        boundingRect.height
+      );
     };
 
     useEffect(() => {
-      const inside = isInsidePolygon().inside;
-      const half = isInsidePolygon().half;
+      const inside = isInsidePolygon();
       if (inside && !translated) {
         setTranslated(true);
-        makeRoom();
+
+        const half = determineHalf();
+        if (half === "upper") {
+          makeRoom(false);
+        }
+        if (half === "lower") {
+          makeRoom(true);
+        }
       }
-      if (!inside && translated) {
-        undoMakeRoom();
+      if (!inside) {
         setTranslated(false);
+        if (!translated) {
+          undoMakeRoom();
+        }
       }
-    }, [dragPointerCoordinates]);
+    });
 
     return (
       <motion.div key={key} ref={elementRef} animate={formElementControls}>
