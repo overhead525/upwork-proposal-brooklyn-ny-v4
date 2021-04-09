@@ -9,4 +9,5 @@ export default configureStore({
     formDisplay: formDisplayReducer,
     editorDragAndDrop: editorDragAndDrop,
   },
+  devTools: process.env.NODE_ENV !== "production",
 });
