@@ -2,25 +2,22 @@ import { motion, PanInfo, useAnimation } from "framer-motion";
 import { StyledElementCard, StyledCardContent } from "./styledComponents";
 import Typography from "@material-ui/core/Typography";
 import { Dispatch, SetStateAction } from "react";
+import { useDispatch } from "react-redux";
+import { updateDragPointerCoordinates } from "../../../features/formBuilder/editorDragAndDropSlice";
 
 interface ElementCardProps {
   dropAreaRef: React.RefObject<any>;
   icon: JSX.Element;
   text: string;
-  setDragPointerCoordinates: Dispatch<
-    SetStateAction<{
-      x: number;
-      y: number;
-    }>
-  >;
 }
 
 export const ElementCard: React.FC<ElementCardProps> = ({
   dropAreaRef,
   icon,
   text,
-  setDragPointerCoordinates,
 }) => {
+  const dispatch = useDispatch();
+
   const cardControls = useAnimation();
 
   return (
@@ -28,12 +25,12 @@ export const ElementCard: React.FC<ElementCardProps> = ({
       animate={cardControls}
       drag
       onDrag={(event, { point }) =>
-        setDragPointerCoordinates({ x: point.x, y: point.y })
+        dispatch(updateDragPointerCoordinates({ x: point.x, y: point.y }))
       }
       dragConstraints={dropAreaRef}
       dragMomentum={false}
       onDragEnd={(event, info: PanInfo) => {
-        setDragPointerCoordinates({ x: 0, y: 0 });
+        dispatch(updateDragPointerCoordinates({ x: 0, y: 0 }));
         if (info.offset.x > 360) {
           cardControls.start({
             x: -info.delta.x,

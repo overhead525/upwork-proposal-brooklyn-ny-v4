@@ -25,17 +25,10 @@ export interface Element {
 
 export interface ElementSelectorProps {
   dropAreaRef: React.RefObject<any>;
-  setDragPointerCoordinates: Dispatch<
-    SetStateAction<{
-      x: number;
-      y: number;
-    }>
-  >;
 }
 
 export const ElementSelector: React.FC<ElementSelectorProps> = ({
   dropAreaRef,
-  setDragPointerCoordinates,
 }) => {
   const elements = useSelector(elementsSelector);
   const cardControls = useAnimation();
@@ -44,7 +37,6 @@ export const ElementSelector: React.FC<ElementSelectorProps> = ({
     return _elements.map((element, index) => {
       return (
         <ElementCard
-          setDragPointerCoordinates={setDragPointerCoordinates}
           dropAreaRef={dropAreaRef}
           key={index}
           icon={element.icon}
