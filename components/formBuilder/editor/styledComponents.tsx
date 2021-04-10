@@ -37,10 +37,6 @@ export const StyledDragDestination = styled.div`
   margin: 0 auto;
 `;
 
-export const StyledFormElement = styled(Card)`
-  width: 34rem;
-`;
-
 export const StyledFormElementWrapper = styled.div`
   margin: 0 auto;
 `;

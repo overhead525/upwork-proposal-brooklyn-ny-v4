@@ -1,4 +1,8 @@
-import { StyledDragDestination, StyledFormElement } from "./styledComponents";
+import {
+  FormElementComponent,
+  StyledFormElement,
+} from "./FormElementComponent";
+import { StyledDragDestination } from "./styledComponents";
 import { DropArea } from "./dropArea";
 import { MouseEvent, PropsWithRef, useEffect, useRef, useState } from "react";
 import { EventInfo, motion, useAnimation } from "framer-motion";
@@ -93,11 +97,7 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
 
     return (
       <motion.div key={key} ref={elementRef} animate={formElementControls}>
-        <StyledFormElement>
-          <CardContent>
-            <Typography>Wonder</Typography>
-          </CardContent>
-        </StyledFormElement>
+        <FormElementComponent />
       </motion.div>
     );
   };

@@ -10,7 +10,7 @@ import {
 import { FormElementType } from "../../models/interfaces";
 import { StyledElementsSelectorIconWrapper } from "./styledComponents";
 
-function rgba(r: number, g: number, b: number, a: number): string {
+export function rgba(r: number, g: number, b: number, a: number): string {
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
