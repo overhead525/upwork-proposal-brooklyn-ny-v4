@@ -14,7 +14,18 @@ export const UserResolvers = {
   Mutation: {
     createUser: async (_source, { username }, { dataSources: { users } }) => {
       try {
-        return await users.createUser(username);
+        return await users.createUser({ username });
+      } catch (error) {
+        return error;
+      }
+    },
+    updateUserAddForms: async (
+      _source,
+      { username, formChanges },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserAddForms({ username, formChanges });
       } catch (error) {
         return error;
       }

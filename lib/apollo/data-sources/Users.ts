@@ -76,18 +76,20 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserAddFormsArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const username = response.username;
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const forms = response.forms ? response.forms : [];
-      const media = response.media ? response.media : [];
 
       const newForms = [...forms, ...args.formChanges];
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username, forms: newForms, media }
-      );
-      return updateResponse.value;
+      const query = { username: args.username };
+      const update = {
+        $set: { forms: newForms },
+      };
+
+      await this.collection.findOneAndUpdate(query, update);
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
