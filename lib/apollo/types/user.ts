@@ -45,7 +45,7 @@ const user = gql`
     createUser(username: String!): User
 
     "A mutation for updating the user's data within the database"
-    updateUserUsername(userID: String!, newUsername: String!): User
+    updateUserUsername(oldUsername: String!, newUsername: String!): User
 
     "A mutation for adding to the user's forms list"
     updateUserAddForms(username: String!, formChanges: [String!]!): User
@@ -55,8 +55,8 @@ const user = gql`
 
     "A mutation for updating the user's media list components name"
     updateUserMediaName(
-      userID: String!
-      mediaName: String!
+      username: String!
+      oldMediaName: String!
       newMediaName: String!
     ): User
 

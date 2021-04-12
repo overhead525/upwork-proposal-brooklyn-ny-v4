@@ -61,12 +61,14 @@ export class Users extends MongoDataSource<User, Context> {
   async updateUserUsername(
     args: MutationUpdateUserUsernameArgs
   ): Promise<Maybe<User>> {
+    const query = { username: args.oldUsername };
+    const update = {
+      $set: { username: args.newUsername },
+    };
+
     try {
-      const response = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username: args.newUsername }
-      );
-      return response.value;
+      await this.collection.findOneAndUpdate(query, update);
+      return this.collection.findOne({ username: args.newUsername });
     } catch (error) {
       return error;
     }
@@ -128,8 +130,9 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserMediaNameArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const forms = response.forms ? response.forms : [];
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const media = response.media ? response.media : [];
 
       const mediaExtension = args.newMediaName.match(/\.[0-9a-z]+$/i)[0];
@@ -137,7 +140,7 @@ export class Users extends MongoDataSource<User, Context> {
       const newMedia = media.map((el: MediaElementType) => {
         if (el.mediaType === mediaExtension) {
           el.data.map((tuple: MediaElementDataTuple) => {
-            if (tuple.canononicalName === args.mediaName) {
+            if (tuple.canononicalName === args.oldMediaName) {
               tuple.canononicalName = args.newMediaName;
             }
             return tuple;
@@ -146,15 +149,13 @@ export class Users extends MongoDataSource<User, Context> {
         return el;
       });
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
         {
-          ...response,
-          media: newMedia,
+          $set: { media: newMedia },
         }
       );
-
-      return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }

@@ -19,6 +19,17 @@ export const UserResolvers = {
         return error;
       }
     },
+    updateUserUsername: async (
+      _source,
+      { oldUsername, newUsername },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserUsername({ oldUsername, newUsername });
+      } catch (error) {
+        return error;
+      }
+    },
     updateUserAddForms: async (
       _source,
       { username, formChanges },
@@ -37,6 +48,21 @@ export const UserResolvers = {
     ) => {
       try {
         return await users.updateUserDeleteForms({ username, formChanges });
+      } catch (error) {
+        return error;
+      }
+    },
+    updateUserMediaName: async (
+      _source,
+      { username, oldMediaName, newMediaName },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserMediaName({
+          username,
+          oldMediaName,
+          newMediaName,
+        });
       } catch (error) {
         return error;
       }
