@@ -62,7 +62,7 @@ const user = gql`
 
     "A mutation for updating the user's media list components url"
     updateUserMediaURL(
-      userID: String!
+      username: String!
       mediaName: String!
       newMediaURL: String!
     ): User
