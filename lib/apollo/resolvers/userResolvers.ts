@@ -30,6 +30,17 @@ export const UserResolvers = {
         return error;
       }
     },
+    updateUserDeleteForms: async (
+      _source,
+      { username, formChanges },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserDeleteForms({ username, formChanges });
+      } catch (error) {
+        return error;
+      }
+    },
     deleteUser: async (
       _source,
       { userID },

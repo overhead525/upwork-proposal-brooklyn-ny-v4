@@ -51,7 +51,7 @@ const user = gql`
     updateUserAddForms(username: String!, formChanges: [String!]!): User
 
     "A mutation for deleting from the user's forms list"
-    updateUserDeleteForms(userID: String!, formChanges: [String!]!): User
+    updateUserDeleteForms(username: String!, formChanges: [String!]!): User
 
     "A mutation for updating the user's media list components name"
     updateUserMediaName(

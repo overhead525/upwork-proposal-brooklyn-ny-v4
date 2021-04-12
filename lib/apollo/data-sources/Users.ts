@@ -99,10 +99,10 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserDeleteFormsArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const username = response.username;
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const forms = response.forms ? response.forms : [];
-      const media = response.media ? response.media : [];
 
       const newForms = forms.filter((formID) => {
         if (args.formChanges.length > 0) {
@@ -112,12 +112,13 @@ export class Users extends MongoDataSource<User, Context> {
         return true;
       });
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username, forms: newForms, media }
-      );
+      const query = { username: args.username };
+      const update = {
+        $set: { forms: newForms },
+      };
 
-      return updateResponse.value;
+      await this.collection.findOneAndUpdate(query, update);
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
