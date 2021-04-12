@@ -35,7 +35,7 @@ const user = gql`
     """
     A query for fetching the user's data from the database
     """
-    getUser(username: String!): User
+    getUser(userID: String!): User
   }
 
   extend type Mutation {

@@ -5,29 +5,7 @@ export const UserResolvers = {
   Query: {
     getUser: async (_source, { userID }, { dataSources: { users } }) => {
       try {
-        return await users.getUser(userID);
-      } catch (error) {
-        return error;
-      }
-    },
-    getUserFormsAll: async (
-      _source,
-      { userID },
-      { dataSources: { users } }
-    ) => {
-      try {
-        return await users.getUserFormsAll(userID);
-      } catch (error) {
-        return error;
-      }
-    },
-    getUserMediaAll: async (
-      _source,
-      { userID },
-      { dataSources: { users } }
-    ) => {
-      try {
-        return await users.getUserMediaAll(userID);
+        return await users.getUser({ userID });
       } catch (error) {
         return error;
       }
@@ -69,17 +47,6 @@ export const UserResolvers = {
         await users.deleteUser(user.username);
 
         return `Successfully deleted user ${user.username}`;
-      } catch (error) {
-        return error;
-      }
-    },
-    updateUser: async (
-      _source,
-      { userID, alterationObject },
-      { dataSources: { users } }
-    ) => {
-      try {
-        return await users.updateUser(userID, alterationObject);
       } catch (error) {
         return error;
       }
