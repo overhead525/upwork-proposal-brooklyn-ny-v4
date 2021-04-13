@@ -13,9 +13,24 @@ export const FormResolvers = {
     },
   },
   Mutation: {
-    createForm: async (_source, { form }, { dataSources: { forms } }) => {
+    createForm: async (
+      _source,
+      { username, previewTitle, previewPages, publishedTitle, publishedPages },
+      { dataSources: { forms, users } }
+    ) => {
       try {
-        return await forms.createForm(form);
+        const outcome = await forms.createForm({
+          username,
+          previewTitle,
+          previewPages,
+          publishedTitle,
+          publishedPages,
+        });
+        await users.updateUserAddForms({
+          username,
+          formChanges: [outcome.id],
+        });
+        return outcome.form;
       } catch (error) {
         return error;
       }

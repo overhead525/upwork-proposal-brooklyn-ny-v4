@@ -89,7 +89,7 @@ const form = gql`
     A mutation for creating a new form in the database
     """
     createForm(
-      userID: String!
+      username: String!
       previewTitle: String!
       previewPages: [[String!]!]!
       publishedTitle: String!

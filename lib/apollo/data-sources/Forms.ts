@@ -11,7 +11,9 @@ import {
 import { ObjectID } from "mongodb";
 
 export class Forms extends MongoDataSource<Form> {
-  async createForm(args: MutationCreateFormArgs): Promise<Maybe<Form>> {
+  async createForm(
+    args: MutationCreateFormArgs
+  ): Promise<Maybe<{ id: string; form: Form }>> {
     const newForm: Form = {
       preview: {
         title: args.previewTitle,
@@ -25,7 +27,10 @@ export class Forms extends MongoDataSource<Form> {
 
     try {
       const response = await this.collection.insertOne(newForm);
-      return response.ops[0];
+      return {
+        id: response.insertedId.toHexString(),
+        form: await this.collection.findOne({ _id: response.insertedId }),
+      };
     } catch (error) {
       return error;
     }
