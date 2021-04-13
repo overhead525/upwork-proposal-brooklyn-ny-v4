@@ -69,7 +69,7 @@ const user = gql`
 
     "A mutation for adding new media to the user's media list"
     updateUserAddMedia(
-      userID: String!
+      username: String!
       mediaName: String!
       mediaURL: String!
     ): User

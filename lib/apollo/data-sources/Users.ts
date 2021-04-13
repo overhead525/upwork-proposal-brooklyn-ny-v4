@@ -1,4 +1,5 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
+import { ObjectID } from "mongodb";
 import {
   Maybe,
   MutationCreateUserArgs,
@@ -201,32 +202,56 @@ export class Users extends MongoDataSource<User, Context> {
   async updateUserAddMedia(
     args: MutationUpdateUserAddMediaArgs
   ): Promise<Maybe<User>> {
-    const response = await this.findOneById(args.userID);
-    const forms = response.forms ? response.forms : [];
-    const media = response.media ? response.media : [];
+    try {
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
+      const media = response.media ? response.media : [];
+      let newMedia = [];
 
-    const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
+      const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
 
-    const newMedia = media.map((el: MediaElementType) => {
-      if (el.mediaType === mediaExtension) {
-        const newTuple: MediaElementDataTuple = {
-          canononicalName: args.mediaName,
-          url: args.mediaURL,
+      if (
+        media.find((el) => {
+          return el.mediaType === mediaExtension;
+        })
+      ) {
+        newMedia = media.map((el: MediaElementType) => {
+          if (el.mediaType === mediaExtension) {
+            const newTuple: MediaElementDataTuple = {
+              canononicalName: args.mediaName,
+              url: args.mediaURL,
+            };
+            el.data.push(newTuple);
+          }
+          return el;
+        });
+      } else {
+        const newMediaElement: MediaElementType = {
+          mediaType: mediaExtension,
+          data: [
+            {
+              canononicalName: args.mediaName,
+              url: args.mediaURL,
+            },
+          ],
         };
-        el.data.push(newTuple);
+        newMedia = media;
+        console.log(newMediaElement);
+        newMedia.push(newMediaElement);
       }
-      return el;
-    });
 
-    const updateResponse = await this.collection.findOneAndUpdate(
-      { id: args.userID },
-      {
-        ...response,
-        media: newMedia,
-      }
-    );
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
+        {
+          $set: { media: newMedia },
+        }
+      );
 
-    return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
+    } catch (error) {
+      return error;
+    }
   }
 
   async updateUserDeleteMedia(

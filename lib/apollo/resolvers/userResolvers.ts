@@ -82,6 +82,21 @@ export const UserResolvers = {
         return error;
       }
     },
+    updateUserAddMedia: async (
+      _source,
+      { username, mediaName, mediaURL },
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserAddMedia({
+          username,
+          mediaName,
+          mediaURL,
+        });
+      } catch (error) {
+        return error;
+      }
+    },
     deleteUser: async (
       _source,
       { userID },
