@@ -52,7 +52,9 @@ export class Users extends MongoDataSource<User, Context> {
 
   async getUser(args: QueryGetUserArgs): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       return response;
     } catch (error) {
       return error;

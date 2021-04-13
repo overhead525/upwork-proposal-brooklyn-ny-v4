@@ -17,11 +17,11 @@ export const UserResolvers = {
   Query: {
     getUser: async (
       _source,
-      { userID }: QueryGetUserArgs,
+      { username }: QueryGetUserArgs,
       { dataSources: { users } }
     ) => {
       try {
-        return await users.getUser({ userID });
+        return await users.getUser({ username });
       } catch (error) {
         return error;
       }
