@@ -43,16 +43,23 @@ export class Forms extends MongoDataSource<Form> {
   async updateForm(args: MutationUpdateFormArgs): Promise<Maybe<Form>> {
     try {
       const form = await this.findOneById(args.formID);
+      const newForm = { ...form };
       const { formID, ...changes } = args;
-      const newForm = {
-        ...form,
-        ...changes,
-      };
-      const response = await this.collection.findOneAndUpdate(
-        { id: formID },
-        newForm
+
+      if (changes && changes.previewTitle)
+        newForm.preview.title = changes.previewTitle;
+      if (changes && changes.publishedTitle)
+        newForm.published.title = changes.publishedTitle;
+      if (changes && changes.previewPages)
+        newForm.preview.pages = changes.previewPages;
+      if (changes && changes.publishedPages)
+        newForm.published.pages = changes.publishedPages;
+
+      await this.collection.findOneAndUpdate(
+        { _id: new ObjectID(formID) },
+        { $set: { preview: newForm.preview, published: newForm.published } }
       );
-      return response.value;
+      return await this.collection.findOne({ _id: new ObjectID(formID) });
     } catch (error) {
       return error;
     }

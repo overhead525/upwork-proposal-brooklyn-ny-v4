@@ -48,11 +48,17 @@ export const FormResolvers = {
     },
     updateForm: async (
       _source,
-      { formID, alterationObject },
+      { formID, previewTitle, previewPages, publishedTitle, publishedPages },
       { dataSources: { forms } }
     ) => {
       try {
-        return await forms.updateForm(formID, alterationObject);
+        return await forms.updateForm({
+          formID,
+          previewTitle,
+          previewPages,
+          publishedTitle,
+          publishedPages,
+        });
       } catch (error) {
         return error;
       }
