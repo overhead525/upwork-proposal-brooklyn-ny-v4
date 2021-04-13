@@ -270,7 +270,7 @@ export class Users extends MongoDataSource<User, Context> {
       let newMedia: MediaElementType[] = media.map((el: MediaElementType) => {
         if (el.mediaType === mediaExtension) {
           const index = el.data.findIndex((tuple: MediaElementDataTuple) => {
-            tuple.canononicalName = args.mediaName;
+            return tuple.canononicalName === args.mediaName;
           });
           if (index !== -1) {
             el.data.splice(index, 1);
@@ -281,9 +281,13 @@ export class Users extends MongoDataSource<User, Context> {
             return null;
           }
         }
+
+        console.log(el);
+        return el;
       });
 
       newMedia = newMedia.filter((el) => el !== null);
+      console.log(newMedia);
 
       await this.collection.findOneAndUpdate(
         { username: args.username },
