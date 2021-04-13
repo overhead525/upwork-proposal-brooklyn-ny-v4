@@ -1,10 +1,15 @@
 import { FormDoc } from "../../../models/types";
+import { MutationDeleteFormArgs } from "../../../src/generated/graphql";
 import { grabFormElementIDsFromForm } from "./shared";
 
 export const FormResolvers = {
   Query: {
     getForm: async (_source, { formID }, { dataSources: { forms } }) => {
-      return await forms.getForm(formID);
+      try {
+        return await forms.getForm({ formID });
+      } catch (error) {
+        return error;
+      }
     },
   },
   Mutation: {
@@ -17,23 +22,22 @@ export const FormResolvers = {
     },
     deleteForm: async (
       _source,
-      { formID },
+      { formID }: MutationDeleteFormArgs,
       { dataSources: { forms, formElements } }
     ) => {
       try {
-        const form: FormDoc = await forms.getForm(formID);
+        const form: FormDoc = await forms.getForm({ formID });
         const formElementIDs: string[] = [];
 
         grabFormElementIDsFromForm(form, formElementIDs);
 
         formElementIDs.forEach(async (id) => {
-          await formElements.deleteFormElement(id);
+          await formElements.deleteFormElement({ id });
         });
 
-        const response = await forms.deleteForm(formID);
+        const response = await forms.deleteForm({ formID });
 
-        if (response === true) return `successfully deleted form: ${formID}`;
-        return response; // as Error
+        return response;
       } catch (error) {
         return error;
       }

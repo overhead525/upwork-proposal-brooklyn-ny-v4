@@ -8,6 +8,7 @@ import {
   MutationUpdateFormArgs,
   QueryGetFormArgs,
 } from "../../../src/generated/graphql";
+import { ObjectID } from "mongodb";
 
 export class Forms extends MongoDataSource<Form> {
   async createForm(args: MutationCreateFormArgs): Promise<Maybe<Form>> {
@@ -59,10 +60,16 @@ export class Forms extends MongoDataSource<Form> {
 
   async deleteForm(args: MutationDeleteFormArgs): Promise<Scalars["Boolean"]> {
     try {
-      const response = await this.collection.findOneAndDelete({
-        id: args.formID,
+      await this.collection.findOneAndDelete({
+        _id: new ObjectID(args.formID),
       });
-      return response.ok === 1;
+
+      const response2 = await this.collection.findOne({
+        _id: new ObjectID(args.formID),
+      });
+
+      if (!response2) return true;
+      throw Error(`form ${args.formID} was not deleted`);
     } catch (error) {
       return error;
     }
