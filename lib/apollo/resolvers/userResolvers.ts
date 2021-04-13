@@ -1,9 +1,25 @@
 import { FormDoc, UserDoc } from "../../../models/types";
+import {
+  MutationCreateUserArgs,
+  MutationDeleteUserArgs,
+  MutationUpdateUserAddFormsArgs,
+  MutationUpdateUserAddMediaArgs,
+  MutationUpdateUserDeleteFormsArgs,
+  MutationUpdateUserDeleteMediaArgs,
+  MutationUpdateUserMediaNameArgs,
+  MutationUpdateUserMediaUrlArgs,
+  MutationUpdateUserUsernameArgs,
+  QueryGetUserArgs,
+} from "../../../src/generated/graphql";
 import { grabFormElementIDsFromForm } from "./shared";
 
 export const UserResolvers = {
   Query: {
-    getUser: async (_source, { userID }, { dataSources: { users } }) => {
+    getUser: async (
+      _source,
+      { userID }: QueryGetUserArgs,
+      { dataSources: { users } }
+    ) => {
       try {
         return await users.getUser({ userID });
       } catch (error) {
@@ -12,7 +28,11 @@ export const UserResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_source, { username }, { dataSources: { users } }) => {
+    createUser: async (
+      _source,
+      { username }: MutationCreateUserArgs,
+      { dataSources: { users } }
+    ) => {
       try {
         return await users.createUser({ username });
       } catch (error) {
@@ -21,7 +41,7 @@ export const UserResolvers = {
     },
     updateUserUsername: async (
       _source,
-      { oldUsername, newUsername },
+      { oldUsername, newUsername }: MutationUpdateUserUsernameArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -32,7 +52,7 @@ export const UserResolvers = {
     },
     updateUserAddForms: async (
       _source,
-      { username, formChanges },
+      { username, formChanges }: MutationUpdateUserAddFormsArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -43,7 +63,7 @@ export const UserResolvers = {
     },
     updateUserDeleteForms: async (
       _source,
-      { username, formChanges },
+      { username, formChanges }: MutationUpdateUserDeleteFormsArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -54,7 +74,7 @@ export const UserResolvers = {
     },
     updateUserMediaName: async (
       _source,
-      { username, oldMediaName, newMediaName },
+      { username, oldMediaName, newMediaName }: MutationUpdateUserMediaNameArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -69,7 +89,7 @@ export const UserResolvers = {
     },
     updateUserMediaURL: async (
       _source,
-      { username, mediaName, newMediaURL },
+      { username, mediaName, newMediaURL }: MutationUpdateUserMediaUrlArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -84,7 +104,7 @@ export const UserResolvers = {
     },
     updateUserAddMedia: async (
       _source,
-      { username, mediaName, mediaURL },
+      { username, mediaName, mediaURL }: MutationUpdateUserAddMediaArgs,
       { dataSources: { users } }
     ) => {
       try {
@@ -97,9 +117,20 @@ export const UserResolvers = {
         return error;
       }
     },
+    updateUserDeleteMedia: async (
+      _source,
+      { username, mediaName }: MutationUpdateUserDeleteMediaArgs,
+      { dataSources: { users } }
+    ) => {
+      try {
+        return await users.updateUserDeleteMedia({ username, mediaName });
+      } catch (error) {
+        return error;
+      }
+    },
     deleteUser: async (
       _source,
-      { userID },
+      { userID }: MutationDeleteUserArgs,
       { dataSources: { users, forms, formElements } }
     ) => {
       try {

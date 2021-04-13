@@ -258,8 +258,9 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserDeleteMediaArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const forms = response.forms ? response.forms : [];
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const media = response.media ? response.media : [];
 
       const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
@@ -282,15 +283,16 @@ export class Users extends MongoDataSource<User, Context> {
 
       newMedia = newMedia.filter((el) => el !== null);
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
         {
-          ...response,
-          media: newMedia,
+          $set: {
+            media: newMedia,
+          },
         }
       );
 
-      return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }

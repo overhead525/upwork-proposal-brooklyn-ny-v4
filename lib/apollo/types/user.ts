@@ -75,7 +75,7 @@ const user = gql`
     ): User
 
     "A mutation for removing media from the user's media list"
-    updateUserDeleteMedia(userID: String!, mediaName: String!): User
+    updateUserDeleteMedia(username: String!, mediaName: String!): User
 
     "A mutation for deleting a user based on their username, which is unique"
     deleteUser(userID: String!): Boolean!
