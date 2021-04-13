@@ -22,8 +22,8 @@ export const FormResolvers = {
     },
     deleteForm: async (
       _source,
-      { formID }: MutationDeleteFormArgs,
-      { dataSources: { forms, formElements } }
+      { username, formID }: MutationDeleteFormArgs,
+      { dataSources: { forms, formElements, users } }
     ) => {
       try {
         const form: FormDoc = await forms.getForm({ formID });
@@ -35,7 +35,11 @@ export const FormResolvers = {
           await formElements.deleteFormElement({ id });
         });
 
-        const response = await forms.deleteForm({ formID });
+        const response = await forms.deleteForm({ username, formID });
+        const response2 = await users.updateUserDeleteForms({
+          username,
+          formChanges: [formID],
+        });
 
         return response;
       } catch (error) {

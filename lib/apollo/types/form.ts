@@ -104,7 +104,7 @@ const form = gql`
     """
     A mutation for deleting forms from the database by their ObjectID from MongoDB
     """
-    deleteForm(userID: String!, formID: String!): Boolean!
+    deleteForm(username: String!, formID: String!): Boolean!
 
     """
     A mutation for updating formElements, but only the property you need to specifically update.
