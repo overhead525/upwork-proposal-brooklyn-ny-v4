@@ -281,13 +281,10 @@ export class Users extends MongoDataSource<User, Context> {
             return null;
           }
         }
-
-        console.log(el);
         return el;
       });
 
       newMedia = newMedia.filter((el) => el !== null);
-      console.log(newMedia);
 
       await this.collection.findOneAndUpdate(
         { username: args.username },
