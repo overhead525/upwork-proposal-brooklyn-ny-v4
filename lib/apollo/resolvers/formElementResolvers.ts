@@ -5,7 +5,11 @@ export const FormElementResolvers = {
       { formElementID },
       { dataSources: { formElements } }
     ) => {
-      return await formElements.getFormElement(formElementID);
+      try {
+        return await formElements.getFormElement({ formElementID });
+      } catch (error) {
+        return error;
+      }
     },
   },
   Mutation: {
@@ -32,7 +36,7 @@ export const FormElementResolvers = {
         };
         if (draftOf) Object.assign(formElement, { draftOf });
         else Object.assign(formElement, { displayFor });
-        return await formElements.createFormElement(formElement);
+        return await formElements.createFormElement({ formElement });
       } catch (error) {
         return error;
       }
@@ -43,7 +47,7 @@ export const FormElementResolvers = {
       { dataSources: { formElements } }
     ) => {
       try {
-        return await formElements.deleteFormElement(formElementID);
+        return await formElements.deleteFormElement({ formElementID });
       } catch (error) {
         return error;
       }
@@ -75,10 +79,10 @@ export const FormElementResolvers = {
         Object.entries(alterationObject).forEach((pair) => {
           if (!pair[1]) delete alterationObject[pair[0].toString()];
         });
-        return await formElements.updateFormElement(
+        return await formElements.updateFormElement({
           formElementID,
-          alterationObject
-        );
+          alterationObject,
+        });
       } catch (error) {
         return error;
       }

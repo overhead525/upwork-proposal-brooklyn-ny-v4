@@ -20,7 +20,7 @@ const form = gql`
   """
   type FormElement {
     question: String!
-    type: FormElementType!
+    type: String!
     questionKey: String!
     helperText: String
     choices: [String!]
