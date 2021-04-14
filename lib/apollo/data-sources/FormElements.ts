@@ -13,12 +13,41 @@ export class FormElements extends MongoDataSource<FormElement> {
   async createFormElement(
     args: MutationCreateFormElementArgs
   ): Promise<Maybe<FormElement>> {
-    const newFormElement: FormElement = {
-      ...args,
-    };
+    const { username, ...newFormElement } = { ...args };
+    const newFormElement2 = { ...newFormElement };
     try {
-      const response = await this.collection.insertOne(newFormElement);
-      return response.ops[0];
+      const existing = await this.collection.findOne({
+        questionKey: args.questionKey,
+      });
+      if (existing)
+        throw new Error(
+          `formElement with questionKey '${args.questionKey}' already exists`
+        );
+
+      const response = await this.collection.insertMany([
+        newFormElement,
+        newFormElement2,
+      ]);
+      const [previewID, publishedID] = [...Object.values(response.insertedIds)];
+
+      await this.collection.findOneAndUpdate(
+        { _id: previewID },
+        {
+          $set: { draftOf: publishedID.toHexString() },
+        }
+      );
+      await this.collection.findOneAndUpdate(
+        { _id: publishedID },
+        {
+          $set: { draftOf: previewID.toHexString() },
+        }
+      );
+
+      const response2 = await this.collection.findOne({
+        _id: previewID,
+      });
+      if (response2) return response2;
+      throw new Error("There was an error creating your formElement");
     } catch (error) {
       return error;
     }

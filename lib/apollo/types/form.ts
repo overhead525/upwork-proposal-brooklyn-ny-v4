@@ -75,7 +75,7 @@ const form = gql`
     A mutation for creating a new form element inside of the database.
     """
     createFormElement(
-      userID: String!
+      username: String!
       question: String!
       type: FormElementType!
       questionKey: String!

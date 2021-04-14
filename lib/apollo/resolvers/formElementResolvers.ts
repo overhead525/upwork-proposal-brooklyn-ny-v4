@@ -1,3 +1,5 @@
+import { MutationCreateFormElementArgs } from "../../../src/generated/graphql";
+
 export const FormElementResolvers = {
   Query: {
     getFormElement: async (
@@ -16,6 +18,7 @@ export const FormElementResolvers = {
     createFormElement: async (
       _source,
       {
+        username,
         question,
         type,
         questionKey,
@@ -23,20 +26,19 @@ export const FormElementResolvers = {
         choices,
         draftOf = undefined,
         displayFor = undefined,
-      },
+      }: MutationCreateFormElementArgs,
       { dataSources: { formElements } }
     ) => {
       try {
-        const formElement = {
+        const formElementArgs = {
+          username,
           question,
           type,
           questionKey,
           helperText,
           choices,
         };
-        if (draftOf) Object.assign(formElement, { draftOf });
-        else Object.assign(formElement, { displayFor });
-        return await formElements.createFormElement({ formElement });
+        return await formElements.createFormElement({ ...formElementArgs });
       } catch (error) {
         return error;
       }
