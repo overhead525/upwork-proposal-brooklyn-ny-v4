@@ -1,20 +1,20 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
 import {
   Maybe,
-  MutationCreateFormElementArgs,
   QueryGetFormElementArgs,
   FormElement,
   MutationDeleteFormElementArgs,
   MutationUpdateFormElementArgs,
   Scalars,
+  MutationCreatePreviewFormElementArgs,
+  MutationCreatePublishedFormElementArgs,
 } from "../../../src/generated/graphql";
+import { ObjectID } from "mongodb";
 
 export class FormElements extends MongoDataSource<FormElement> {
-  async createFormElement(
-    args: MutationCreateFormElementArgs
-  ): Promise<Maybe<FormElement>> {
-    const { username, ...newFormElement } = { ...args };
-    const newFormElement2 = { ...newFormElement };
+  async createPreviewFormElement(
+    args: MutationCreatePreviewFormElementArgs
+  ): Promise<{ formElement: Maybe<FormElement>; previewID: string }> {
     try {
       const existing = await this.collection.findOne({
         questionKey: args.questionKey,
@@ -24,29 +24,68 @@ export class FormElements extends MongoDataSource<FormElement> {
           `formElement with questionKey '${args.questionKey}' already exists`
         );
 
-      const response = await this.collection.insertMany([
-        newFormElement,
-        newFormElement2,
-      ]);
-      const [previewID, publishedID] = [...Object.values(response.insertedIds)];
+      const { formID, ...newFormElement } = { ...args };
 
-      await this.collection.findOneAndUpdate(
-        { _id: previewID },
-        {
-          $set: { draftOf: publishedID.toHexString() },
-        }
-      );
-      await this.collection.findOneAndUpdate(
-        { _id: publishedID },
-        {
-          $set: { draftOf: previewID.toHexString() },
-        }
-      );
+      const response = await this.collection.insertOne(newFormElement);
+      const previewID = response.insertedId;
 
       const response2 = await this.collection.findOne({
         _id: previewID,
       });
-      if (response2) return response2;
+      if (response2)
+        return {
+          formElement: response2,
+          previewID: previewID.toHexString(),
+        };
+      throw new Error("There was an error creating your formElement");
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async createPublishedFormElement(
+    args: MutationCreatePublishedFormElementArgs
+  ): Promise<{ formElement: Maybe<FormElement>; publishedID: string }> {
+    try {
+      if (!args.displayFor)
+        throw new Error(
+          `Published formElements can only be created if displaying for an existing preview formElement`
+        );
+
+      const previewElement = await this.findOneById(args.displayFor);
+      if (!previewElement)
+        throw new Error(
+          `displayFor argument ERROR -> preview formElement with id: "${args.displayFor}" not found`
+        );
+
+      const existing = await this.collection.findOne({
+        questionKey: args.questionKey,
+      });
+      if (existing)
+        throw new Error(
+          `formElement with questionKey '${args.questionKey}' already exists`
+        );
+
+      const { formID, ...newFormElement } = { ...args };
+
+      const publishedResponse = await this.collection.insertOne(newFormElement);
+      const publishedID = publishedResponse.insertedId;
+
+      await this.collection.findOneAndUpdate(
+        { _id: new ObjectID(args.displayFor) },
+        {
+          $set: { draftOf: publishedID.toHexString() },
+        }
+      );
+
+      const response2 = await this.collection.findOne({
+        _id: publishedID,
+      });
+      if (response2)
+        return {
+          formElement: response2,
+          publishedID: publishedID.toHexString(),
+        };
       throw new Error("There was an error creating your formElement");
     } catch (error) {
       return error;

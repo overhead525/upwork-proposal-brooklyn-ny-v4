@@ -1,4 +1,14 @@
-import { MutationCreateFormElementArgs } from "../../../src/generated/graphql";
+import {
+  Form,
+  FormElement,
+  Maybe,
+  MutationCreatePreviewFormElementArgs,
+  MutationCreatePublishedFormElementArgs,
+  MutationDeleteFormElementArgs,
+} from "../../../src/generated/graphql";
+import { FormElements } from "../data-sources/FormElements";
+import { Forms } from "../data-sources/Forms";
+import { FEFormNotFoundError, FEFormPageNotFoundError } from "./errors";
 
 export const FormElementResolvers = {
   Query: {
@@ -15,41 +25,164 @@ export const FormElementResolvers = {
     },
   },
   Mutation: {
-    createFormElement: async (
+    createPreviewFormElement: async (
       _source,
       {
-        username,
+        formID,
+        pageNumber,
+        pageContent,
         question,
         type,
         questionKey,
         helperText,
         choices,
         draftOf = undefined,
-        displayFor = undefined,
-      }: MutationCreateFormElementArgs,
-      { dataSources: { formElements } }
-    ) => {
+      }: MutationCreatePreviewFormElementArgs,
+      {
+        dataSources: { forms, formElements },
+      }: { dataSources: { forms: Forms; formElements: FormElements } }
+    ): Promise<Maybe<FormElement>> => {
       try {
         const formElementArgs = {
-          username,
+          formID,
+          pageNumber,
+          pageContent,
           question,
           type,
           questionKey,
           helperText,
           choices,
+          draftOf,
         };
-        return await formElements.createFormElement({ ...formElementArgs });
+        const form: Form = await forms.getForm({ formID });
+        if (!form) throw FEFormNotFoundError(formID);
+        if (!form.published.pages[pageNumber])
+          throw FEFormPageNotFoundError(formID, pageNumber);
+
+        const feCreateResponse = await formElements.createPreviewFormElement(
+          formElementArgs
+        );
+
+        const newPreviewPages = [...form.preview.pages];
+        const newPageContent = pageContent.map((feID) => {
+          if (feID === "") return feCreateResponse.previewID;
+          return feID;
+        });
+        newPreviewPages[pageNumber] = newPageContent;
+
+        const formUpdateResponse = await forms.updateForm({
+          formID,
+          previewPages: newPreviewPages,
+        });
+
+        return feCreateResponse.formElement;
+      } catch (error) {
+        return error;
+      }
+    },
+    createPublishedFormElement: async (
+      _source,
+      {
+        formID,
+        pageNumber,
+        pageContent,
+        question,
+        type,
+        questionKey,
+        helperText,
+        choices,
+        displayFor = undefined,
+      }: MutationCreatePublishedFormElementArgs,
+      {
+        dataSources: { forms, formElements },
+      }: { dataSources: { forms: Forms; formElements: FormElements } }
+    ): Promise<Maybe<FormElement>> => {
+      try {
+        const formElementArgs = {
+          formID,
+          pageNumber,
+          pageContent,
+          question,
+          type,
+          questionKey,
+          helperText,
+          choices,
+          displayFor,
+        };
+
+        const form: Form = await forms.getForm({ formID });
+        if (!form) throw FEFormNotFoundError(formID);
+        if (!form.published.pages[pageNumber])
+          throw FEFormPageNotFoundError(formID, pageNumber);
+
+        const feCreateResponse = await formElements.createPublishedFormElement(
+          formElementArgs
+        );
+
+        const newPublishedPages = [...form.published.pages];
+        const newPageContent = pageContent.map((feID) => {
+          if (feID === "") return feCreateResponse.publishedID;
+          return feID;
+        });
+        newPublishedPages[pageNumber] = newPageContent;
+
+        const formUpdateResponse = await forms.updateForm({
+          formID,
+          publishedPages: newPublishedPages,
+        });
+
+        return feCreateResponse.formElement;
       } catch (error) {
         return error;
       }
     },
     deleteFormElement: async (
       _source,
-      { formElementID },
-      { dataSources: { formElements } }
-    ) => {
+      {
+        formID,
+        formElementID,
+        formStatus,
+        pageNumber,
+      }: MutationDeleteFormElementArgs,
+      {
+        dataSources: { forms, formElements },
+      }: { dataSources: { forms: Forms; formElements: FormElements } }
+    ): Promise<Boolean> => {
       try {
-        return await formElements.deleteFormElement({ formElementID });
+        const fS = formStatus.toLowerCase();
+        if (!(fS === "preview" || fS === "published")) {
+          throw new Error(
+            "formStatus invalid. must be 'preview' or 'published'"
+          );
+        }
+
+        const form = await forms.getForm({ formID });
+        if (!form) throw FEFormNotFoundError(formID);
+        if (!form[formStatus][pageNumber])
+          throw FEFormPageNotFoundError(formID, pageNumber);
+
+        const feDeleteResponse = await formElements.deleteFormElement({
+          formID,
+          formElementID,
+          pageNumber,
+          formStatus,
+        });
+
+        if (formStatus === "preview") {
+          const newPreviewPages = [...form.preview.pages];
+          newPreviewPages[pageNumber].filter((feID) => feID !== formElementID);
+
+          await forms.updateForm({ formID, previewPages: newPreviewPages });
+        } else if (formStatus === "published") {
+          const newPublishedPages = [...form.published.pages];
+          newPublishedPages[pageNumber].filter(
+            (feID) => feID !== formElementID
+          );
+
+          await forms.updateForm({ formID, publishedPages: newPublishedPages });
+        }
+
+        return feDeleteResponse;
       } catch (error) {
         return error;
       }
