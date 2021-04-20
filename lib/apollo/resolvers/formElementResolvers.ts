@@ -5,6 +5,8 @@ import {
   MutationCreatePreviewFormElementArgs,
   MutationCreatePublishedFormElementArgs,
   MutationDeleteFormElementArgs,
+  MutationUpdateFormElementArgs,
+  QueryGetFormElementArgs,
 } from "../../../src/generated/graphql";
 import { FormElements } from "../data-sources/FormElements";
 import { Forms } from "../data-sources/Forms";
@@ -14,9 +16,11 @@ export const FormElementResolvers = {
   Query: {
     getFormElement: async (
       _source,
-      { formElementID },
-      { dataSources: { formElements } }
-    ) => {
+      { formElementID }: QueryGetFormElementArgs,
+      {
+        dataSources: { formElements },
+      }: { dataSources: { formElements: FormElements } }
+    ): Promise<Maybe<FormElement>> => {
       try {
         return await formElements.getFormElement({ formElementID });
       } catch (error) {
@@ -198,9 +202,11 @@ export const FormElementResolvers = {
         choices = undefined,
         draftOf = undefined,
         displayFor = undefined,
-      },
-      { dataSources: { formElements } }
-    ) => {
+      }: MutationUpdateFormElementArgs,
+      {
+        dataSources: { formElements },
+      }: { dataSources: { formElements: FormElements } }
+    ): Promise<Maybe<FormElement>> => {
       try {
         const alterationObject = {
           question,
@@ -216,7 +222,7 @@ export const FormElementResolvers = {
         });
         return await formElements.updateFormElement({
           formElementID,
-          alterationObject,
+          ...alterationObject,
         });
       } catch (error) {
         return error;
