@@ -20,7 +20,7 @@ const form = gql`
   """
   type FormElement {
     question: String!
-    type: FormElementType!
+    type: String!
     questionKey: String!
     helperText: String
     choices: [String!]
@@ -72,16 +72,38 @@ const form = gql`
 
   extend type Mutation {
     """
-    A mutation for creating a new form element inside of the database.
+    A mutation for creating a new preview form element inside of the database.
     """
-    createFormElement(
-      userID: String!
+    createPreviewFormElement(
+      formID: String!
+      pageNumber: Int!
+      pageContent: [String!]
       question: String!
       type: FormElementType!
       questionKey: String!
       helperText: String
       choices: [String!]
       draftOf: String
+    ): FormElement
+
+    """
+    To use this mutation, pass an array of formElementIDs for the pageContent argument. To indicate which position
+    you want the new FormElement to be in, use an empty string ""
+
+    For example:
+
+    pageContent: ["6ajskf082kjf", "6ksokdnsks9d", "", "6ldkf0a02klkdj"]
+    The new formElement will be placed in position 2 (starting from zero index)
+    """
+    createPublishedFormElement(
+      formID: String!
+      pageNumber: Int!
+      pageContent: [String!]!
+      question: String!
+      type: FormElementType!
+      questionKey: String!
+      helperText: String
+      choices: [String!]
       displayFor: String
     ): FormElement
 
@@ -89,7 +111,7 @@ const form = gql`
     A mutation for creating a new form in the database
     """
     createForm(
-      userID: String!
+      username: String!
       previewTitle: String!
       previewPages: [[String!]!]!
       publishedTitle: String!
@@ -99,12 +121,17 @@ const form = gql`
     """
     A mutation for deleting formElements from the database by their ObjectID from MongoDB
     """
-    deleteFormElement(userID: String!, formElementID: String!): Boolean!
+    deleteFormElement(
+      formID: String!
+      formStatus: String!
+      pageNumber: Int!
+      formElementID: String!
+    ): Boolean!
 
     """
     A mutation for deleting forms from the database by their ObjectID from MongoDB
     """
-    deleteForm(userID: String!, formID: String!): Boolean!
+    deleteForm(username: String!, formID: String!): Boolean!
 
     """
     A mutation for updating formElements, but only the property you need to specifically update.

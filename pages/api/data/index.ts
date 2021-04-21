@@ -13,7 +13,18 @@ import { FormElementResolvers } from "../../../lib/apollo/resolvers/formElementR
 
 const apolloServer = new ApolloServer({
   typeDefs: schemaArray,
-  resolvers: { ...UserResolvers, ...FormResolvers, ...FormElementResolvers },
+  resolvers: {
+    Query: {
+      ...UserResolvers.Query,
+      ...FormResolvers.Query,
+      ...FormElementResolvers.Query,
+    },
+    Mutation: {
+      ...UserResolvers.Mutation,
+      ...FormResolvers.Mutation,
+      ...FormElementResolvers.Mutation,
+    },
+  },
   dataSources: () => ({
     users: new Users(db.collection("users")),
     forms: new Forms(db.collection("forms")),

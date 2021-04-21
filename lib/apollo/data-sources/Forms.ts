@@ -8,9 +8,12 @@ import {
   MutationUpdateFormArgs,
   QueryGetFormArgs,
 } from "../../../src/generated/graphql";
+import { ObjectID } from "mongodb";
 
 export class Forms extends MongoDataSource<Form> {
-  async createForm(args: MutationCreateFormArgs): Promise<Maybe<Form>> {
+  async createForm(
+    args: MutationCreateFormArgs
+  ): Promise<Maybe<{ id: string; form: Form }>> {
     const newForm: Form = {
       preview: {
         title: args.previewTitle,
@@ -24,7 +27,10 @@ export class Forms extends MongoDataSource<Form> {
 
     try {
       const response = await this.collection.insertOne(newForm);
-      return response.ops[0];
+      return {
+        id: response.insertedId.toHexString(),
+        form: await this.collection.findOne({ _id: response.insertedId }),
+      };
     } catch (error) {
       return error;
     }
@@ -42,16 +48,23 @@ export class Forms extends MongoDataSource<Form> {
   async updateForm(args: MutationUpdateFormArgs): Promise<Maybe<Form>> {
     try {
       const form = await this.findOneById(args.formID);
+      const newForm = { ...form };
       const { formID, ...changes } = args;
-      const newForm = {
-        ...form,
-        ...changes,
-      };
-      const response = await this.collection.findOneAndUpdate(
-        { id: formID },
-        newForm
+
+      if (changes && changes.previewTitle)
+        newForm.preview.title = changes.previewTitle;
+      if (changes && changes.publishedTitle)
+        newForm.published.title = changes.publishedTitle;
+      if (changes && changes.previewPages)
+        newForm.preview.pages = changes.previewPages;
+      if (changes && changes.publishedPages)
+        newForm.published.pages = changes.publishedPages;
+
+      await this.collection.findOneAndUpdate(
+        { _id: new ObjectID(formID) },
+        { $set: { preview: newForm.preview, published: newForm.published } }
       );
-      return response.value;
+      return await this.collection.findOne({ _id: new ObjectID(formID) });
     } catch (error) {
       return error;
     }
@@ -59,10 +72,16 @@ export class Forms extends MongoDataSource<Form> {
 
   async deleteForm(args: MutationDeleteFormArgs): Promise<Scalars["Boolean"]> {
     try {
-      const response = await this.collection.findOneAndDelete({
-        id: args.formID,
+      await this.collection.findOneAndDelete({
+        _id: new ObjectID(args.formID),
       });
-      return response.ok === 1;
+
+      const response2 = await this.collection.findOne({
+        _id: new ObjectID(args.formID),
+      });
+
+      if (!response2) return true;
+      throw Error(`form ${args.formID} was not deleted`);
     } catch (error) {
       return error;
     }

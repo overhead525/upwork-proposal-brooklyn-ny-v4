@@ -1,4 +1,5 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
+import { ObjectID } from "mongodb";
 import {
   Maybe,
   MutationCreateUserArgs,
@@ -63,12 +64,14 @@ export class Users extends MongoDataSource<User, Context> {
   async updateUserUsername(
     args: MutationUpdateUserUsernameArgs
   ): Promise<Maybe<User>> {
+    const query = { username: args.oldUsername };
+    const update = {
+      $set: { username: args.newUsername },
+    };
+
     try {
-      const response = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username: args.newUsername }
-      );
-      return response.value;
+      await this.collection.findOneAndUpdate(query, update);
+      return this.collection.findOne({ username: args.newUsername });
     } catch (error) {
       return error;
     }
@@ -78,18 +81,20 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserAddFormsArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const username = response.username;
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const forms = response.forms ? response.forms : [];
-      const media = response.media ? response.media : [];
 
       const newForms = [...forms, ...args.formChanges];
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username, forms: newForms, media }
-      );
-      return updateResponse.value;
+      const query = { username: args.username };
+      const update = {
+        $set: { forms: newForms },
+      };
+
+      await this.collection.findOneAndUpdate(query, update);
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
@@ -99,10 +104,10 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserDeleteFormsArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const username = response.username;
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const forms = response.forms ? response.forms : [];
-      const media = response.media ? response.media : [];
 
       const newForms = forms.filter((formID) => {
         if (args.formChanges.length > 0) {
@@ -112,12 +117,13 @@ export class Users extends MongoDataSource<User, Context> {
         return true;
       });
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
-        { username, forms: newForms, media }
-      );
+      const query = { username: args.username };
+      const update = {
+        $set: { forms: newForms },
+      };
 
-      return updateResponse.value;
+      await this.collection.findOneAndUpdate(query, update);
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
@@ -127,8 +133,9 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserMediaNameArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const forms = response.forms ? response.forms : [];
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const media = response.media ? response.media : [];
 
       const mediaExtension = args.newMediaName.match(/\.[0-9a-z]+$/i)[0];
@@ -136,7 +143,7 @@ export class Users extends MongoDataSource<User, Context> {
       const newMedia = media.map((el: MediaElementType) => {
         if (el.mediaType === mediaExtension) {
           el.data.map((tuple: MediaElementDataTuple) => {
-            if (tuple.canononicalName === args.mediaName) {
+            if (tuple.canononicalName === args.oldMediaName) {
               tuple.canononicalName = args.newMediaName;
             }
             return tuple;
@@ -145,15 +152,13 @@ export class Users extends MongoDataSource<User, Context> {
         return el;
       });
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
         {
-          ...response,
-          media: newMedia,
+          $set: { media: newMedia },
         }
       );
-
-      return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
@@ -163,8 +168,9 @@ export class Users extends MongoDataSource<User, Context> {
     args: MutationUpdateUserMediaUrlArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const forms = response.forms ? response.forms : [];
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const media = response.media ? response.media : [];
 
       const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
@@ -173,7 +179,7 @@ export class Users extends MongoDataSource<User, Context> {
         if (el.mediaType === mediaExtension) {
           el.data.map((tuple: MediaElementDataTuple) => {
             if (tuple.canononicalName === args.mediaName) {
-              tuple.canononicalName = args.newMediaURL;
+              tuple.url = args.newMediaURL;
             }
             return tuple;
           });
@@ -181,15 +187,15 @@ export class Users extends MongoDataSource<User, Context> {
         return el;
       });
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
         {
-          ...response,
-          media: newMedia,
+          $set: {
+            media: newMedia,
+          },
         }
       );
-
-      return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
@@ -198,40 +204,65 @@ export class Users extends MongoDataSource<User, Context> {
   async updateUserAddMedia(
     args: MutationUpdateUserAddMediaArgs
   ): Promise<Maybe<User>> {
-    const response = await this.findOneById(args.userID);
-    const forms = response.forms ? response.forms : [];
-    const media = response.media ? response.media : [];
+    try {
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
+      const media = response.media ? response.media : [];
+      let newMedia = [];
 
-    const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
+      const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
 
-    const newMedia = media.map((el: MediaElementType) => {
-      if (el.mediaType === mediaExtension) {
-        const newTuple: MediaElementDataTuple = {
-          canononicalName: args.mediaName,
-          url: args.mediaURL,
+      if (
+        media.find((el) => {
+          return el.mediaType === mediaExtension;
+        })
+      ) {
+        newMedia = media.map((el: MediaElementType) => {
+          if (el.mediaType === mediaExtension) {
+            const newTuple: MediaElementDataTuple = {
+              canononicalName: args.mediaName,
+              url: args.mediaURL,
+            };
+            el.data.push(newTuple);
+          }
+          return el;
+        });
+      } else {
+        const newMediaElement: MediaElementType = {
+          mediaType: mediaExtension,
+          data: [
+            {
+              canononicalName: args.mediaName,
+              url: args.mediaURL,
+            },
+          ],
         };
-        el.data.push(newTuple);
+        newMedia = media;
+        console.log(newMediaElement);
+        newMedia.push(newMediaElement);
       }
-      return el;
-    });
 
-    const updateResponse = await this.collection.findOneAndUpdate(
-      { id: args.userID },
-      {
-        ...response,
-        media: newMedia,
-      }
-    );
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
+        {
+          $set: { media: newMedia },
+        }
+      );
 
-    return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
+    } catch (error) {
+      return error;
+    }
   }
 
   async updateUserDeleteMedia(
     args: MutationUpdateUserDeleteMediaArgs
   ): Promise<Maybe<User>> {
     try {
-      const response = await this.findOneById(args.userID);
-      const forms = response.forms ? response.forms : [];
+      const response = await this.collection.findOne({
+        username: args.username,
+      });
       const media = response.media ? response.media : [];
 
       const mediaExtension = args.mediaName.match(/\.[0-9a-z]+$/i)[0];
@@ -239,7 +270,7 @@ export class Users extends MongoDataSource<User, Context> {
       let newMedia: MediaElementType[] = media.map((el: MediaElementType) => {
         if (el.mediaType === mediaExtension) {
           const index = el.data.findIndex((tuple: MediaElementDataTuple) => {
-            tuple.canononicalName = args.mediaName;
+            return tuple.canononicalName === args.mediaName;
           });
           if (index !== -1) {
             el.data.splice(index, 1);
@@ -250,19 +281,21 @@ export class Users extends MongoDataSource<User, Context> {
             return null;
           }
         }
+        return el;
       });
 
       newMedia = newMedia.filter((el) => el !== null);
 
-      const updateResponse = await this.collection.findOneAndUpdate(
-        { id: args.userID },
+      await this.collection.findOneAndUpdate(
+        { username: args.username },
         {
-          ...response,
-          media: newMedia,
+          $set: {
+            media: newMedia,
+          },
         }
       );
 
-      return updateResponse.value;
+      return await this.collection.findOne({ username: args.username });
     } catch (error) {
       return error;
     }
@@ -271,7 +304,7 @@ export class Users extends MongoDataSource<User, Context> {
   async deleteUser(args: MutationDeleteUserArgs): Promise<Maybe<Boolean>> {
     try {
       const response = await this.collection.findOneAndDelete({
-        id: args.userID,
+        username: args.username,
       });
       return response.ok === 1;
     } catch (error) {

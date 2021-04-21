@@ -45,40 +45,40 @@ const user = gql`
     createUser(username: String!): User
 
     "A mutation for updating the user's data within the database"
-    updateUserUsername(userID: String!, newUsername: String!): User
+    updateUserUsername(oldUsername: String!, newUsername: String!): User
 
     "A mutation for adding to the user's forms list"
-    updateUserAddForms(userID: String!, formChanges: [String!]!): User
+    updateUserAddForms(username: String!, formChanges: [String!]!): User
 
     "A mutation for deleting from the user's forms list"
-    updateUserDeleteForms(userID: String!, formChanges: [String!]!): User
+    updateUserDeleteForms(username: String!, formChanges: [String!]!): User
 
     "A mutation for updating the user's media list components name"
     updateUserMediaName(
-      userID: String!
-      mediaName: String!
+      username: String!
+      oldMediaName: String!
       newMediaName: String!
     ): User
 
     "A mutation for updating the user's media list components url"
     updateUserMediaURL(
-      userID: String!
+      username: String!
       mediaName: String!
       newMediaURL: String!
     ): User
 
     "A mutation for adding new media to the user's media list"
     updateUserAddMedia(
-      userID: String!
+      username: String!
       mediaName: String!
       mediaURL: String!
     ): User
 
     "A mutation for removing media from the user's media list"
-    updateUserDeleteMedia(userID: String!, mediaName: String!): User
+    updateUserDeleteMedia(username: String!, mediaName: String!): User
 
     "A mutation for deleting a user based on their username, which is unique"
-    deleteUser(userID: String!): Boolean!
+    deleteUser(username: String!): Boolean!
   }
 `;
 
