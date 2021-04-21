@@ -1,5 +1,7 @@
 import { FormDoc, UserDoc } from "../../../models/types";
 import {
+  Form,
+  Maybe,
   MutationCreateUserArgs,
   MutationDeleteUserArgs,
   MutationUpdateUserAddFormsArgs,
@@ -10,7 +12,11 @@ import {
   MutationUpdateUserMediaUrlArgs,
   MutationUpdateUserUsernameArgs,
   QueryGetUserArgs,
+  User,
 } from "../../../src/generated/graphql";
+import { FormElements } from "../data-sources/FormElements";
+import { Forms } from "../data-sources/Forms";
+import { Users } from "../data-sources/Users";
 import { grabFormElementIDsFromForm } from "./shared";
 
 export const UserResolvers = {
@@ -18,8 +24,8 @@ export const UserResolvers = {
     getUser: async (
       _source,
       { username }: QueryGetUserArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.getUser({ username });
       } catch (error) {
@@ -31,8 +37,8 @@ export const UserResolvers = {
     createUser: async (
       _source,
       { username }: MutationCreateUserArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.createUser({ username });
       } catch (error) {
@@ -42,8 +48,8 @@ export const UserResolvers = {
     updateUserUsername: async (
       _source,
       { oldUsername, newUsername }: MutationUpdateUserUsernameArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserUsername({ oldUsername, newUsername });
       } catch (error) {
@@ -53,8 +59,8 @@ export const UserResolvers = {
     updateUserAddForms: async (
       _source,
       { username, formChanges }: MutationUpdateUserAddFormsArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserAddForms({ username, formChanges });
       } catch (error) {
@@ -64,8 +70,8 @@ export const UserResolvers = {
     updateUserDeleteForms: async (
       _source,
       { username, formChanges }: MutationUpdateUserDeleteFormsArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserDeleteForms({ username, formChanges });
       } catch (error) {
@@ -75,8 +81,8 @@ export const UserResolvers = {
     updateUserMediaName: async (
       _source,
       { username, oldMediaName, newMediaName }: MutationUpdateUserMediaNameArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserMediaName({
           username,
@@ -90,8 +96,8 @@ export const UserResolvers = {
     updateUserMediaURL: async (
       _source,
       { username, mediaName, newMediaURL }: MutationUpdateUserMediaUrlArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserMediaURL({
           username,
@@ -105,8 +111,8 @@ export const UserResolvers = {
     updateUserAddMedia: async (
       _source,
       { username, mediaName, mediaURL }: MutationUpdateUserAddMediaArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserAddMedia({
           username,
@@ -120,8 +126,8 @@ export const UserResolvers = {
     updateUserDeleteMedia: async (
       _source,
       { username, mediaName }: MutationUpdateUserDeleteMediaArgs,
-      { dataSources: { users } }
-    ) => {
+      { dataSources: { users } }: { dataSources: { users: Users } }
+    ): Promise<Maybe<User>> => {
       try {
         return await users.updateUserDeleteMedia({ username, mediaName });
       } catch (error) {
@@ -130,32 +136,49 @@ export const UserResolvers = {
     },
     deleteUser: async (
       _source,
-      { userID }: MutationDeleteUserArgs,
-      { dataSources: { users, forms, formElements } }
-    ) => {
+      { username }: MutationDeleteUserArgs,
+      {
+        dataSources: { users, forms, formElements },
+      }: {
+        dataSources: { users: Users; forms: Forms; formElements: FormElements };
+      }
+    ): Promise<Boolean> => {
       try {
-        const user: UserDoc = await users.getUser(userID);
-        const userForms: FormDoc[] = forms.getForms(user.forms);
-        const userFormElementIDs: string[] = [];
+        const user: User = await users.getUser({ username });
 
-        userForms.forEach((form) => {
-          grabFormElementIDsFromForm(form, userFormElementIDs);
-        });
-
-        // Delete formElements associated with current user
-        userFormElementIDs.forEach(async (formElementID) => {
-          await formElements.deleteFormElement(formElementID);
-        });
-
-        // Delete forms associated with current user
         user.forms.forEach(async (formID) => {
-          await forms.deleteForm(formID);
+          const form = await forms.getForm({ formID });
+
+          // Recursively delete all formElements from each page in the preview version of the form
+          form.preview.pages.forEach((page, pageNumber) => {
+            page.forEach(async (formElementID) => {
+              await formElements.deleteFormElement({
+                formStatus: "preview",
+                formElementID,
+                formID: formID,
+                pageNumber,
+              });
+            });
+          });
+
+          // Recursively delete all formElements from each pages in the published version of the form
+          form.published.pages.forEach((page, pageNumber) => {
+            page.forEach(async (formElementID) => {
+              await formElements.deleteFormElement({
+                formStatus: "published",
+                formElementID,
+                formID: formID,
+                pageNumber,
+              });
+            });
+          });
+
+          // Delete the form from the forms table
+          await forms.deleteForm({ username, formID });
         });
 
-        // Delete current user
-        await users.deleteUser(user.username);
-
-        return `Successfully deleted user ${user.username}`;
+        // Remove the user from the users table
+        return await users.deleteUser({ username });
       } catch (error) {
         return error;
       }

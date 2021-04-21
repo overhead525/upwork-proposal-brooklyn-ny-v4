@@ -304,7 +304,7 @@ export class Users extends MongoDataSource<User, Context> {
   async deleteUser(args: MutationDeleteUserArgs): Promise<Maybe<Boolean>> {
     try {
       const response = await this.collection.findOneAndDelete({
-        id: args.userID,
+        username: args.username,
       });
       return response.ok === 1;
     } catch (error) {
