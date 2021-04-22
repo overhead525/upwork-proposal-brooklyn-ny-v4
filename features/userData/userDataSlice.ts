@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { User, Form, FormElement } from "../../src/generated/graphql";
 
 export const fetchUserData = createAsyncThunk(
   "userData/fetchUserData",
@@ -163,5 +164,17 @@ export const userDataSlice = createSlice({
 });
 
 export const {} = userDataSlice.actions;
+
+export const userDataSelector = (state): User => {
+  return state.userData.user;
+};
+
+export const formDataSelector = (state): Form => {
+  return state.userData.forms;
+};
+
+export const formElementDataSelector = (state): FormElement => {
+  return state.userData.formElements;
+};
 
 export default userDataSlice.reducer;

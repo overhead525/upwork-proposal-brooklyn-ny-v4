@@ -4,10 +4,16 @@ import {
 } from "./FormElementComponent";
 import { StyledDragDestination } from "./styledComponents";
 import { DropArea } from "./dropArea";
+import { useSelector } from "react-redux";
 import { MouseEvent, PropsWithRef, useEffect, useRef, useState } from "react";
 import { EventInfo, motion, useAnimation } from "framer-motion";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import { isInsidePolygon } from "./utility";
+import {
+  userDataSelector,
+  formDataSelector,
+  formElementDataSelector,
+} from "../../../features/userData/userDataSlice";
 
 interface ElementsDestinationProps {
   dragPointerCoordinates: { x: number; y: number };
@@ -18,7 +24,9 @@ type Orientation = "above" | "below";
 export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   dragPointerCoordinates,
 }) => {
-  const [formElements, setFormElements] = useState([0, 1, 2]);
+  const formElements = Object.entries(useSelector(formElementDataSelector));
+
+  const dragDestinationRef = useRef(null);
 
   const renderSingleElement = (key) => {
     // const [translated, setTranslated] = useState(false);
@@ -126,8 +134,42 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
     return finalFEs;
   };
 
+  useEffect(() => {
+    const dragDestRect: DOMRect = dragDestinationRef.current.getBoundingClientRect();
+    const dragDestScrollTop = dragDestinationRef.current.clientTop;
+    const dragDestScrollHeight = dragDestinationRef.current.clientHeight;
+    const areas = {
+      upperTop: dragDestRect.top,
+      upperBottom: dragDestRect.height / 6 + dragDestRect.top,
+      lowerTop:
+        dragDestRect.top + dragDestScrollHeight - dragDestRect.height / 6,
+      lowerBottom: dragDestRect.top + dragDestScrollHeight,
+    };
+
+    if (isInsidePolygon(dragDestinationRef, dragPointerCoordinates)) {
+      if (
+        dragPointerCoordinates.y < areas.upperBottom &&
+        dragPointerCoordinates.y > areas.upperTop
+      ) {
+        dragDestinationRef.current.scroll({
+          top: -100,
+          behavior: "smooth",
+        });
+      }
+      if (
+        dragPointerCoordinates.y < areas.lowerBottom &&
+        dragPointerCoordinates.y > areas.lowerTop
+      ) {
+        dragDestinationRef.current.scroll({
+          top: 100,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [dragPointerCoordinates]);
+
   return (
-    <StyledDragDestination>
+    <StyledDragDestination ref={dragDestinationRef}>
       <DropArea dragPointerCoordinates={dragPointerCoordinates} />
       <div>{renderFormElements()}</div>
       <DropArea dragPointerCoordinates={dragPointerCoordinates} />

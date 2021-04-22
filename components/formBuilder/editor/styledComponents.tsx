@@ -34,7 +34,17 @@ export const StyledDragDestination = styled.div`
   display: grid;
   grid-template-rows: 1fr auto 1fr;
 
-  margin: 0 auto;
+  height: 66vh;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  margin: auto;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 export const StyledFormElementWrapper = styled.div`
@@ -60,6 +70,8 @@ export const StyledDropArea = styled.div`
 export const StyledDropArea = styled.div`
   width: 34rem;
   height: ${(props) => (props.className === "between" ? "3rem" : "100%")};
+
+  min-height: 3rem;
 
   background-color: ${(props) =>
     props.about === "hovered" ? "rgba(0, 0, 255, 0.5)" : ""};
