@@ -96,7 +96,9 @@ export class FormElements extends MongoDataSource<FormElement> {
     args: QueryGetFormElementArgs
   ): Promise<Maybe<FormElement>> {
     try {
-      const response = await this.findOneById(args.formElementID);
+      const response = await this.collection.findOne({
+        _id: new ObjectID(args.formElementID),
+      });
       return response;
     } catch (error) {
       return error;

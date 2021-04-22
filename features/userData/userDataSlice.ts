@@ -87,6 +87,57 @@ export const fetchFormData = createAsyncThunk(
   }
 );
 
+export const fetchFormElementData = createAsyncThunk(
+  "userData/fetchFormElementData",
+  async (formElementIDs: string[], thunkAPI) => {
+    try {
+      const formElementQuery = `
+      query GetFormElement($formElementID: String!) {
+        getFormElement(formElementID: $formElementID) {
+          question
+          type
+          questionKey
+          helperText
+          choices
+          draftOf
+          displayFor
+        }
+      }
+      `;
+
+      const formElementData = await formElementIDs.reduce(
+        async (o, formElementID) => {
+          const formElementResponse = await fetch(
+            "http://localhost:3000/api/data",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify({
+                query: formElementQuery,
+                variables: { formElementID },
+              }),
+            }
+          );
+
+          const parsedFormElement = await formElementResponse.json();
+          const data = parsedFormElement.data.getFormElement;
+
+          return { ...(await o), [formElementID]: data };
+        },
+        {}
+      );
+
+      return formElementData;
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
+  }
+);
+
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
@@ -97,12 +148,16 @@ export const userDataSlice = createSlice({
   reducers: {},
   extraReducers: {
     // @ts-ignore
-    [fetchUserData.fulfilled.toString()]: (state, action) => {
+    [fetchUserData.fulfilled]: (state, action) => {
       state.user = action.payload;
     },
     // @ts-ignore
-    [fetchFormData.fulfilled.toString()]: (state, action) => {
+    [fetchFormData.fulfilled]: (state, action) => {
       state.forms = action.payload;
+    },
+    // @ts-ignore
+    [fetchFormElementData.fulfilled]: (state, action) => {
+      state.formElements = action.payload;
     },
   },
 });

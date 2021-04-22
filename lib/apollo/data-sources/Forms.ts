@@ -38,7 +38,9 @@ export class Forms extends MongoDataSource<Form> {
 
   async getForm(args: QueryGetFormArgs): Promise<Maybe<Form>> {
     try {
-      const response = await this.findOneById(args.formID);
+      const response = await this.collection.findOne({
+        _id: new ObjectID(args.formID),
+      });
       return response;
     } catch (error) {
       return error;
@@ -47,7 +49,9 @@ export class Forms extends MongoDataSource<Form> {
 
   async updateForm(args: MutationUpdateFormArgs): Promise<Maybe<Form>> {
     try {
-      const form = await this.findOneById(args.formID);
+      const form = await this.collection.findOne({
+        _id: new ObjectID(args.formID),
+      });
       const newForm = { ...form };
       const { formID, ...changes } = args;
 

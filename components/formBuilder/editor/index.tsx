@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { dragPointerCoordinatesSelector } from "../../../features/formBuilder/editorDragAndDropSlice";
 import {
   fetchFormData,
+  fetchFormElementData,
   fetchUserData,
 } from "../../../features/userData/userDataSlice";
 import { ElementsDestination } from "./elementDestination";
@@ -31,16 +32,6 @@ export const Editor: React.FC<EditorProps> = () => {
 
   const elementsHome = useRef(null);
   const dropArea = useRef(null);
-
-  const dispatch = useDispatch();
-  dispatch(fetchUserData("hmcilwrick0"));
-  dispatch(
-    fetchFormData([
-      "608055d8cac45a2092177173",
-      "608055d8cac45a209217717f",
-      "608055d8cac45a2092177182",
-    ])
-  );
 
   return (
     <StyledEditorWrapper>
