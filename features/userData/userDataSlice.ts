@@ -3,9 +3,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchUserData = createAsyncThunk(
   "userData/fetchUserData",
   async (username: string, thunkAPI) => {
-    const query = `
-      query GetUser($usrnm: String!) {
-        getUser(username: $usrnm) {
+    try {
+      const userQuery = `
+      query GetUser($username: String!) {
+        getUser(username: $username) {
           username
           forms
           media {
@@ -19,20 +20,70 @@ export const fetchUserData = createAsyncThunk(
       }
     `;
 
-    const response = await fetch("http://localhost:3000/api/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query,
-        variables: { usrnm: username },
-      }),
-    });
+      const userResponse = await fetch("http://localhost:3000/api/data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: userQuery,
+          variables: { username },
+        }),
+      });
 
-    const parsed = await response.json();
-    return parsed.data.getUser;
+      const parsedUser = await userResponse.json();
+      return parsedUser.data.getUser;
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
+  }
+);
+
+export const fetchFormData = createAsyncThunk(
+  "userData/fetchFormData",
+  async (formIDs: string[], thunkAPI) => {
+    try {
+      const formQuery = `
+      query GetForm($formID: String!) {
+        getForm(formID: $formID) {
+          preview {
+            title
+            pages
+          }
+          published {
+            title
+            pages
+          }
+        }
+      }
+    `;
+
+      const formData = await formIDs.reduce(async (o, formID) => {
+        const formResponse = await fetch("http://localhost:3000/api/data", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: formQuery,
+            variables: { formID },
+          }),
+        });
+
+        const parsedForm = await formResponse.json();
+        const data = parsedForm.data.getForm;
+
+        return { ...(await o), [formID]: data };
+      }, {});
+
+      return formData;
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
   }
 );
 
@@ -46,8 +97,12 @@ export const userDataSlice = createSlice({
   reducers: {},
   extraReducers: {
     // @ts-ignore
-    [fetchUserData.fulfilled]: (state, action) => {
+    [fetchUserData.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
+    },
+    // @ts-ignore
+    [fetchFormData.fulfilled.toString()]: (state, action) => {
+      state.forms = action.payload;
     },
   },
 });

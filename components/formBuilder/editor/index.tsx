@@ -2,7 +2,10 @@ import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { dragPointerCoordinatesSelector } from "../../../features/formBuilder/editorDragAndDropSlice";
-import { fetchUserData } from "../../../features/userData/userDataSlice";
+import {
+  fetchFormData,
+  fetchUserData,
+} from "../../../features/userData/userDataSlice";
 import { ElementsDestination } from "./elementDestination";
 import { ElementSelector } from "./elementSelector";
 import { StyledDragDestination } from "./styledComponents";
@@ -31,6 +34,13 @@ export const Editor: React.FC<EditorProps> = () => {
 
   const dispatch = useDispatch();
   dispatch(fetchUserData("hmcilwrick0"));
+  dispatch(
+    fetchFormData([
+      "608055d8cac45a2092177173",
+      "608055d8cac45a209217717f",
+      "608055d8cac45a2092177182",
+    ])
+  );
 
   return (
     <StyledEditorWrapper>
