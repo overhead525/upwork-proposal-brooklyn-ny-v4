@@ -126,7 +126,8 @@ export const fetchFormElementData = createAsyncThunk(
           const parsedFormElement = await formElementResponse.json();
           const data = parsedFormElement.data.getFormElement;
 
-          return { ...(await o), [formElementID]: data };
+          const result = { ...(await o), [formElementID]: data };
+          return result;
         },
         {}
       );
@@ -148,16 +149,13 @@ export const userDataSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    // @ts-ignore
-    [fetchUserData.fulfilled]: (state, action) => {
+    [fetchUserData.fulfilled.toString()]: (state, action) => {
       state.user = action.payload;
     },
-    // @ts-ignore
-    [fetchFormData.fulfilled]: (state, action) => {
+    [fetchFormData.fulfilled.toString()]: (state, action) => {
       state.forms = action.payload;
     },
-    // @ts-ignore
-    [fetchFormElementData.fulfilled]: (state, action) => {
+    [fetchFormElementData.fulfilled.toString()]: (state, action) => {
       state.formElements = action.payload;
     },
   },

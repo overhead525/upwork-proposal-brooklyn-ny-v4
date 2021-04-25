@@ -117,6 +117,7 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         : renderSingleElement(index);
     });
     const finalFEs = [];
+    let initialDPKey = 101;
     formElementsArr.forEach((el, i, arr) => {
       if (i < arr.length - 1) {
         finalFEs.push(el);
@@ -124,8 +125,10 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
           <DropArea
             dragPointerCoordinates={dragPointerCoordinates}
             className="between"
+            key={initialDPKey}
           />
         );
+        initialDPKey += 1;
       } else {
         finalFEs.push(el);
       }
@@ -136,14 +139,14 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
 
   useEffect(() => {
     const dragDestRect: DOMRect = dragDestinationRef.current.getBoundingClientRect();
-    const dragDestScrollTop = dragDestinationRef.current.clientTop;
-    const dragDestScrollHeight = dragDestinationRef.current.clientHeight;
+    const dragDestClientTop = dragDestinationRef.current.clientTop;
+    const dragDestClientHeight = dragDestinationRef.current.clientHeight;
     const areas = {
       upperTop: dragDestRect.top,
       upperBottom: dragDestRect.height / 6 + dragDestRect.top,
       lowerTop:
-        dragDestRect.top + dragDestScrollHeight - dragDestRect.height / 6,
-      lowerBottom: dragDestRect.top + dragDestScrollHeight,
+        dragDestRect.top + dragDestClientHeight - dragDestClientHeight / 6,
+      lowerBottom: dragDestRect.top + dragDestClientHeight,
     };
 
     if (isInsidePolygon(dragDestinationRef, dragPointerCoordinates)) {
@@ -160,8 +163,9 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         dragPointerCoordinates.y < areas.lowerBottom &&
         dragPointerCoordinates.y > areas.lowerTop
       ) {
+        console.log("in the money");
         dragDestinationRef.current.scroll({
-          top: 100,
+          top: 300,
           behavior: "smooth",
         });
       }
