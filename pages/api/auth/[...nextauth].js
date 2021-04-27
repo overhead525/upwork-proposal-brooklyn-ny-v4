@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
+import NextAuth from "next-auth";
+import Providers from "next-auth/providers";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -67,14 +67,14 @@ const options = {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `jwt` is automatically set to `true` if no database is specified.
-    jwt: true, 
-    
+    jwt: true,
+
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
 
     // Seconds - Throttle how frequently to write to database to extend a session.
     // Use it to limit write operations. Set to 0 to always update the database.
-    // Note: This option is ignored if using JSON Web Tokens 
+    // Note: This option is ignored if using JSON Web Tokens
     // updateAge: 24 * 60 * 60, // 24 hours
   },
 
@@ -83,11 +83,9 @@ const options = {
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
-    // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw', 
-    
+    // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
     // Set to true to use encryption (default: false)
     // encryption: true,
-
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
     // encode: async ({ secret, token, maxAge }) => {},
@@ -108,8 +106,8 @@ const options = {
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
-  // https://next-auth.js.org/configuration/callbacks 
-  callbacks: { 
+  // https://next-auth.js.org/configuration/callbacks
+  callbacks: {
     // signIn: async (user, account, profile) => { return Promise.resolve(true) },
     // redirect: async (url, baseUrl) => { return Promise.resolve(baseUrl) },
     // session: async (session, user) => { return Promise.resolve(session) },
@@ -118,10 +116,10 @@ const options = {
 
   // Events are useful for logging
   // https://next-auth.js.org/configuration/events
-  events: { },
+  events: {},
 
   // Enable debug messages in the console if you are having problems
   debug: false,
-}
+};
 
-export default (req, res) => NextAuth(req, res, options)
+export default (req, res) => NextAuth(req, res, options);

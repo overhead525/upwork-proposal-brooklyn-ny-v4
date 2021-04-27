@@ -1,34 +1,27 @@
-import { useSession } from "next-auth/client";
-import { useDispatch } from "react-redux";
+import { signIn, useSession } from "next-auth/client";
+import { useDispatch, useSelector } from "react-redux";
+import { grabFormElementIDsFromForm } from "../lib/apollo/resolvers/shared";
 import { FormBuilder } from "../components/formBuilder";
 import {
-  fetchFormData,
-  fetchFormElementData,
-  fetchUserData,
+  fetchAllData,
+  formElementDataSelector,
+  formDataSelector,
+  userDataSelector,
 } from "../features/userData/userDataSlice";
 
 export default function App() {
   const [session, loading] = useSession();
 
-  const dispatch = useDispatch();
-  dispatch(fetchUserData("hmcilwrick0"));
-  dispatch(
-    fetchFormData([
-      "608055d8cac45a2092177173",
-      "608055d8cac45a209217717f",
-      "608055d8cac45a2092177182",
-    ])
-  );
-  dispatch(
-    fetchFormElementData([
-      "608055d7cac45a2092177165",
-      "608055d7cac45a2092177167",
-      "608055d7cac45a2092177169",
-      "608055d7cac45a2092177166",
-      "608055d7cac45a2092177168",
-      "608055d7cac45a209217716a",
-    ])
-  );
+  if (session) {
+    const dispatch = useDispatch();
+    dispatch(fetchAllData(session.user.name));
+    return <FormBuilder username="marcus" />;
+  }
 
-  return <FormBuilder username="marcus" />;
+  return (
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign In</button>
+    </>
+  );
 }
