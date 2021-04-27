@@ -328,13 +328,13 @@ export const userDataSelector = (state): User => {
   return state.userData.user;
 };
 
-export const formDataSelector = (state): Form => {
+export const formDataSelector = (state): { [formID: string]: Form } => {
   return state.userData.forms;
 };
 
 export const formElementDataSelector = (
   state
-): { [key: string]: FormElement } => {
+): { [formElementID: string]: FormElement } => {
   return state.userData.formElements;
 };
 
