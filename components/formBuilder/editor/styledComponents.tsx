@@ -37,6 +37,8 @@ export const StyledDragDestination = styled.div`
   height: 66vh;
   overflow: auto;
 
+  padding: 0 5rem;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -68,7 +70,7 @@ export const StyledDropArea = styled.div`
 */
 
 export const StyledDropArea = styled.div`
-  width: 34rem;
+  width: 100%;
   height: ${(props) => (props.className === "between" ? "3rem" : "100%")};
 
   min-height: 3rem;

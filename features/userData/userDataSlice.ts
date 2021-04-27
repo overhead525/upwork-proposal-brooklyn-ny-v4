@@ -332,7 +332,9 @@ export const formDataSelector = (state): Form => {
   return state.userData.forms;
 };
 
-export const formElementDataSelector = (state): FormElement => {
+export const formElementDataSelector = (
+  state
+): { [key: string]: FormElement } => {
   return state.userData.formElements;
 };
 

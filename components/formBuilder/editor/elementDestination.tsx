@@ -14,6 +14,8 @@ import {
   formDataSelector,
   formElementDataSelector,
 } from "../../../features/userData/userDataSlice";
+import { BaseFormElement } from "./FormElements/BaseFormElement";
+import { FormElement } from "../../../src/generated/graphql";
 
 interface ElementsDestinationProps {
   dragPointerCoordinates: { x: number; y: number };
@@ -23,26 +25,13 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   dragPointerCoordinates,
 }) => {
   const formElements = Object.entries(useSelector(formElementDataSelector));
+  console.log(formElements);
 
   const dragDestinationRef = useRef(null);
 
-  const renderSingleElement = (key) => {
-    const elementRef = useRef(null);
-
-    const formElementControls = useAnimation();
-
-    return (
-      <motion.div key={key} ref={elementRef} animate={formElementControls}>
-        <FormElementComponent />
-      </motion.div>
-    );
-  };
-
   const renderFormElements = () => {
-    const formElementsArr = formElements.map((el, index, arr) => {
-      return index < arr.length - 1
-        ? renderSingleElement(index)
-        : renderSingleElement(index);
+    const formElementsArr = formElements.map((fe, index, arr) => {
+      return <BaseFormElement formElement={fe[1]} />;
     });
     const finalFEs = [];
     let initialDPKey = 101;
