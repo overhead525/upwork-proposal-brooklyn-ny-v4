@@ -1,5 +1,145 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { grabFormElementIDsFromFormV2 } from "../../lib/apollo/resolvers/shared";
 import { User, Form, FormElement } from "../../src/generated/graphql";
+
+export const fetchAllData = createAsyncThunk(
+  "userData/fetchUserData",
+  async (username: string, thunkAPI) => {
+    try {
+      const userQuery = `
+      query GetUser($username: String!) {
+        getUser(username: $username) {
+          username
+          forms
+          media {
+            mediaType
+            data {
+              url
+              canononicalName
+            }
+          }
+        }
+      }
+    `;
+
+      const formQuery = `
+      query GetForm($formID: String!) {
+        getForm(formID: $formID) {
+          preview {
+            title
+            pages
+          }
+          published {
+            title
+            pages
+          }
+        }
+      }
+    `;
+
+      const formElementQuery = `
+      query GetFormElement($formElementID: String!) {
+        getFormElement(formElementID: $formElementID) {
+          question
+          type
+          questionKey
+          helperText
+          choices
+          draftOf
+          displayFor
+        }
+      }
+      `;
+
+      const userResponse = await fetch("http://localhost:3000/api/data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: userQuery,
+          variables: { username },
+        }),
+      });
+
+      const parsedUser = await userResponse.json();
+      const userData = parsedUser.data.getUser as User;
+
+      const formIDs = userData.forms;
+
+      const formData: { [key: string]: Form } = await formIDs.reduce(
+        async (o, formID) => {
+          const formResponse = await fetch("http://localhost:3000/api/data", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              query: formQuery,
+              variables: { formID },
+            }),
+          });
+
+          const parsedForm = await formResponse.json();
+          const data = parsedForm.data.getForm;
+
+          return { ...(await o), [formID]: data as Form };
+        },
+        {}
+      );
+
+      let formElementIDs = [];
+
+      const formElementData = Object.entries(formData).reduce(
+        async (o, formPair) => {
+          formPair[1].preview.pages.forEach((page) => {
+            page.forEach((id) => formElementIDs.push(id));
+          });
+
+          formPair[1].published.pages.forEach((page) => {
+            page.forEach((id) => formElementIDs.push(id));
+          });
+
+          const formElementData: {
+            [key: string]: FormElement;
+          } = await formElementIDs.reduce(async (o, formElementID) => {
+            const formElementResponse = await fetch(
+              "http://localhost:3000/api/data",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({
+                  query: formElementQuery,
+                  variables: { formElementID },
+                }),
+              }
+            );
+
+            const parsedFormElement = await formElementResponse.json();
+            const data = parsedFormElement.data.getFormElement;
+
+            const result = { ...(await o), [formElementID]: data };
+            return result;
+          }, {});
+
+          return formElementData;
+        },
+        {}
+      );
+
+      return { userData, formData, formElementData: await formElementData };
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
+  }
+);
 
 export const fetchUserData = createAsyncThunk(
   "userData/fetchUserData",
@@ -132,7 +272,7 @@ export const fetchFormElementData = createAsyncThunk(
         {}
       );
 
-      return formElementData;
+      return await formElementData;
     } catch (error) {
       console.error(error);
       return {};
@@ -149,14 +289,35 @@ export const userDataSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [fetchUserData.fulfilled.toString()]: (state, action) => {
+    /*
+    // @ts-ignore
+    [fetchUserData.fulfilled]: (state, action) => {
       state.user = action.payload;
     },
-    [fetchFormData.fulfilled.toString()]: (state, action) => {
+    // @ts-ignore
+    [fetchFormData.fulfilled]: (state, action) => {
       state.forms = action.payload;
     },
-    [fetchFormElementData.fulfilled.toString()]: (state, action) => {
+    // @ts-ignore
+    [fetchFormElementData.fulfilled]: (state, action) => {
       state.formElements = action.payload;
+    },
+    */
+    // @ts-ignore
+    [fetchAllData.fulfilled]: (
+      state,
+      action: {
+        payload: {
+          userData: any;
+          formData: any;
+          formElementData: any;
+        };
+      }
+    ) => {
+      console.log(action.payload);
+      state.user = action.payload.userData;
+      state.forms = action.payload.formData;
+      state.formElements = action.payload.formElementData;
     },
   },
 });
