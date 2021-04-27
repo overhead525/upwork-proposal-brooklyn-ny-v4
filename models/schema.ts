@@ -9,7 +9,6 @@ export const formElementSchema = new Schema({
   },
   type: {
     type: String,
-    enum: Object.values(formElementType),
     required: true,
   },
   questionKey: {
