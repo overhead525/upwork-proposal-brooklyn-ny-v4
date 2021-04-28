@@ -21,7 +21,11 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
   return (
     <StyledQuestionSummaryCard>
       <div
-        style={{ display: "grid", placeItems: "center", marginRight: "1rem" }}
+        style={{
+          display: "grid",
+          placeItems: "center",
+          justifySelf: "center",
+        }}
       >
         {
           parsedElements.find(

@@ -30,6 +30,7 @@ export const StyledQuestionSummaryCard = styled(Card)`
   width: 100%;
   padding: 0.5rem 1rem;
 
-  display: flex;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 5fr;
 `;
