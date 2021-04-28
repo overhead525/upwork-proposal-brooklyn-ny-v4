@@ -31,7 +31,7 @@ const icons = {
     `;
     return <StyledRadioIcon style={{ height: "1rem" }} />;
   })(),
-  checkboxes: (() => {
+  checkbox: (() => {
     const StyledCheckboxIcon = styled(CheckBoxRounded)`
       color: ${rgba(68, 110, 197, 1)};
     `;

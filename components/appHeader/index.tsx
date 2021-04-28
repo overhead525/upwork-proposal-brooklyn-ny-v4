@@ -30,7 +30,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ actionButtons }) => {
         <Image src="/logo.png" width={94} height={40} />
         <BreadcrumbHandler
           username={session ? session.user.name : null}
-          formTitles={[Object.entries(formData)[0][1].preview.title]}
+          formTitles={["Water Gun"]}
         />
       </StyledSide>
       <StyledSide side="right">

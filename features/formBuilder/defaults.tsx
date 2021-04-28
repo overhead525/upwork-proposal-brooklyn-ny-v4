@@ -2,6 +2,7 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Typography from "@material-ui/core/Typography";
 import { ActionButtonProps } from "../../components/appHeader/actionButtonGroup";
 import { Editor } from "../../components/formBuilder/editor";
+import { Overview } from "../../components/formBuilder/overview";
 import { TabsHandlerProps } from "../../components/formBuilder/tabsHandler";
 import { Element } from "../../components/formBuilder/editor/elementSelector";
 import { ElementsSelectorIcon } from "./components";
@@ -57,8 +58,8 @@ export const elements: Element[] = [
     text: "Radio",
   },
   {
-    icon: <ElementsSelectorIcon color="blue" icon="checkboxes" />,
-    text: "Checkboxes",
+    icon: <ElementsSelectorIcon color="blue" icon="checkbox" />,
+    text: "Checkbox",
   },
   {
     icon: <ElementsSelectorIcon color="orange" icon="short_answer" />,
