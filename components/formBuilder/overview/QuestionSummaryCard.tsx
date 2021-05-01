@@ -6,10 +6,15 @@ import { FormElement } from "../../../src/generated/graphql";
 
 export interface QuestionSummaryCardProps {
   formElement: FormElement;
+  stateUpdateFunctions: {
+    setQuestionDetailView: React.Dispatch<React.SetStateAction<boolean>>;
+    setQuestionFormElement: React.Dispatch<React.SetStateAction<FormElement>>;
+  };
 }
 
 export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
   formElement,
+  stateUpdateFunctions,
 }) => {
   const parsedElements = elements.map((el) => {
     return {
@@ -19,12 +24,19 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
   });
 
   return (
-    <StyledQuestionSummaryCard>
+    <StyledQuestionSummaryCard
+      onClick={() => {
+        stateUpdateFunctions.setQuestionFormElement(formElement);
+        stateUpdateFunctions.setQuestionDetailView(true);
+      }}
+    >
       <div
         style={{
           display: "grid",
           placeItems: "center",
-          justifySelf: "center",
+          justifySelf: "left",
+          width: "2rem",
+          flexGrow: 1,
         }}
       >
         {
@@ -32,13 +44,10 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
             (el) => el.text === formElement.type.replace(" ", "").toLowerCase()
           ).icon
         }
-        <Typography style={{ fontSize: "0.5rem" }}>
-          {formElement.type.toUpperCase()}
-        </Typography>
       </div>
       <Typography
         variant="h6"
-        style={{ justifySelf: "start", fontWeight: 500 }}
+        style={{ justifySelf: "start", fontWeight: 500, flexGrow: 7 }}
       >
         {formElement.question.length <= 30
           ? formElement.question

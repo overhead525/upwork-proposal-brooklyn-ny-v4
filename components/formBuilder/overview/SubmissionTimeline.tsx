@@ -24,7 +24,7 @@ const data = {
       label: "Submission Count",
       data: [0, 10, 20, 2, 5, 15, 9],
       fill: true,
-      backgroundColor: "rgb(0, 100, 255)",
+      backgroundColor: "rgba(0, 100, 255, 0.3)",
       borderColor: "rgba(0, 50, 255, 1)",
     },
   ],

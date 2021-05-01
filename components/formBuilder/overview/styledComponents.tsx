@@ -18,19 +18,24 @@ export const StyledOverviewRow = styled.div`
 `;
 
 export const StyledOverviewNestedColumn = styled.div`
-  width: 100%;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+
+  margin-right: ${(props) => (props.about === "left" ? "2rem" : "0")};
 `;
 
 export const StyledQuestionSummaryCard = styled(Card)`
-  width: 100%;
   padding: 0.5rem 1rem;
 
+  display: flex;
+  justify-content: flex-start;
+`;
+
+export const StyledQuestionDetailCard = styled(Card)`
+  width: 60%;
   display: grid;
-  place-items: center;
-  grid-template-columns: 1fr 5fr;
+  justify-items: start;
+  padding: 1rem 1.3rem;
 `;
