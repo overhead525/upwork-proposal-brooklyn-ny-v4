@@ -16,4 +16,6 @@ const Template: Story<SubmissionTimelineProps> = (args) => (
 );
 
 export const SubmissionTimelineExample = Template.bind({});
-SubmissionTimelineExample.args = {} as SubmissionTimelineProps;
+SubmissionTimelineExample.args = {
+  resultData: [0, 10, 15, 9, 3, 17, 7],
+} as SubmissionTimelineProps;

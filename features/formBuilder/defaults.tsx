@@ -31,7 +31,7 @@ export const tabs: TabsHandlerProps = {
   tabs: [
     {
       label: "Overview",
-      content: <Typography variant="subtitle1">Overview</Typography>,
+      content: <Overview resultData={[0, 10, 15, 9, 3, 17, 7]} />,
     },
     {
       label: "Editor",

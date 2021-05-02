@@ -14,16 +14,18 @@ import {
 } from "./styledComponents";
 import { SubmissionTimeline } from "./SubmissionTimeline";
 
-export interface OverviewProps {}
+export interface OverviewProps {
+  resultData: number[];
+}
 
-export const Overview: React.FC<OverviewProps> = () => {
+export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
   const [questionDetailView, setQuestionDetailView] = useState(false);
   const [questionFormElement, setQuestionFormElement] = useState(
     null as FormElement
   );
 
   const selection = {
-    formTitle: "Water Gun",
+    formTitle: "PTA Meeting Feedback",
     publishedFormTitle: "Water Guns",
     formElements: [...formElements.slice(0, 5)],
   };
@@ -109,9 +111,21 @@ export const Overview: React.FC<OverviewProps> = () => {
 
   return (
     <StyledOverviewWrapper>
-      <Typography variant="h2" align="left" style={{ marginBottom: "3rem" }}>
-        {selection.formTitle}
-      </Typography>
+      <div
+        style={{
+          width: "100%",
+          display: "grid",
+          placeItems: "center",
+          marginBottom: "3rem",
+        }}
+      >
+        <div style={{ width: "73%", display: "flex", flexDirection: "column" }}>
+          <Typography variant="h2" align="left">
+            {selection.formTitle}
+          </Typography>
+          <Typography variant="caption">{`\nCreated on: 04-06-2021`}</Typography>
+        </div>
+      </div>
       <div
         style={{
           width: "100%",
@@ -120,8 +134,8 @@ export const Overview: React.FC<OverviewProps> = () => {
           marginBottom: "2rem",
         }}
       >
-        <div style={{ width: "61%" }}>
-          <SubmissionTimeline />
+        <div style={{ width: "51%" }}>
+          <SubmissionTimeline resultData={resultData} />
         </div>
       </div>
       {questionDetailView ? (
@@ -133,7 +147,11 @@ export const Overview: React.FC<OverviewProps> = () => {
           }}
         />
       ) : (
-        <TabsHandler tabs={tabs.tabs} />
+        <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
+          <div style={{ width: "73%" }}>
+            <TabsHandler tabs={tabs.tabs} />
+          </div>
+        </div>
       )}
     </StyledOverviewWrapper>
   );

@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import FilterOutlined from "@material-ui/icons/FilterOutlined";
+import { StyledVisibilityIcon } from "./styledComponents";
 import { StyledQuestionSummaryCard } from "./styledComponents";
 import { elements } from "../../../features/formBuilder/defaults";
 import { FormElement } from "../../../src/generated/graphql";
@@ -53,6 +53,7 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
           ? formElement.question
           : formElement.question.slice(0, 29) + "..."}
       </Typography>
+      <StyledVisibilityIcon />
     </StyledQuestionSummaryCard>
   );
 };

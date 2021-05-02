@@ -11,4 +11,6 @@ export default {
 const Template: Story<OverviewProps> = (args) => <Overview {...args} />;
 
 export const OverviewTab = Template.bind({});
-OverviewTab.args = {} as OverviewProps;
+OverviewTab.args = {
+  resultData: [0, 10, 15, 9, 3, 17, 7],
+} as OverviewProps;

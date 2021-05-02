@@ -17,19 +17,6 @@ const lastThreeDays = daysOfTheWeek.slice(day + 1, daysOfTheWeek.length);
 
 const days = [...lastThreeDays, ...firstFourDays];
 
-const data = {
-  labels: days,
-  datasets: [
-    {
-      label: "Submission Count",
-      data: [0, 10, 20, 2, 5, 15, 9],
-      fill: true,
-      backgroundColor: "rgba(0, 100, 255, 0.3)",
-      borderColor: "rgba(0, 50, 255, 1)",
-    },
-  ],
-};
-
 const options = {
   scales: {
     yAxes: [
@@ -67,8 +54,25 @@ const options2 = {
   },
 };
 
-export interface SubmissionTimelineProps {}
+export interface SubmissionTimelineProps {
+  resultData: number[];
+}
 
-export const SubmissionTimeline: React.FC<SubmissionTimelineProps> = ({}) => {
+export const SubmissionTimeline: React.FC<SubmissionTimelineProps> = ({
+  resultData,
+}) => {
+  const data = {
+    labels: days,
+    datasets: [
+      {
+        label: "Submission Count",
+        data: resultData,
+        fill: true,
+        backgroundColor: "rgba(0, 100, 255, 0.3)",
+        borderColor: "rgba(0, 50, 255, 1)",
+      },
+    ],
+  };
+
   return <Line type="line" data={data} options={options} />;
 };

@@ -14,12 +14,12 @@ import { rgba, colors } from "../../../features/formBuilder/components";
 const colorVals = Object.values(colors);
 
 const colorMap = {
-  radio: colorVals[1],
-  checkbox: colorVals[2],
-  shortanswer: colorVals[3],
-  longanswer: colorVals[4],
-  email: colorVals[5],
-  url: colorVals[6],
+  radio: colorVals[0],
+  checkbox: colorVals[1],
+  shortanswer: colorVals[2],
+  longanswer: colorVals[3],
+  email: colorVals[4],
+  url: colorVals[5],
 };
 
 export interface QuestionDetailProps {
