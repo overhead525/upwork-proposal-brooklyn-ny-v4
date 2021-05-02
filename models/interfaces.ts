@@ -1,6 +1,6 @@
 export type FormElementType =
   | "radio"
-  | "checkboxes"
+  | "checkbox"
   | "short_answer"
   | "long_answer"
   | "email"
