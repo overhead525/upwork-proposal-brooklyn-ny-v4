@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { colors } from "../styledComponents";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import { motion } from "framer-motion";
 
 export const StyledElementSelectorWrapper = styled.div`
   height: 100%;
@@ -10,7 +11,7 @@ export const StyledElementSelectorWrapper = styled.div`
   grid-template-rows: auto 1fr;
 `;
 
-export const StyledHeaderWrapper = styled.div`
+export const StyledHeaderWrapper = styled(motion.div)`
   padding: 1rem 1.25rem;
   background-color: ${colors.headerGray};
 `;

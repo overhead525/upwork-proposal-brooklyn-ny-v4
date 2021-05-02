@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { LongAnswer } from "./LongAnswer";
 import { Email } from "./Email";
 import { URL } from "./URL";
+import { motion } from "framer-motion";
 
 export interface BaseFormElementProps {
   formElement: FormElement;
@@ -32,7 +33,16 @@ export const BaseFormElement: React.FC<BaseFormElementProps> = ({
   `;
 
   return (
-    <div>
+    <motion.div
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        delay: 0.3,
+      }}
+    >
       <StyledRow>
         <Typography variant="h5">{formElement.question}</Typography>
         <IconButton aria-label="edit">
@@ -45,6 +55,6 @@ export const BaseFormElement: React.FC<BaseFormElementProps> = ({
       {typeof formElement.type === "string"
         ? variants[formElement.type.toLowerCase()]
         : null}
-    </div>
+    </motion.div>
   );
 };
