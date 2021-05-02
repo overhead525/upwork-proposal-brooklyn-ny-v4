@@ -1,4 +1,5 @@
 import { Typography } from "@material-ui/core";
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { formElements } from "../../../data/formElements";
@@ -119,12 +120,22 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
           marginBottom: "3rem",
         }}
       >
-        <div style={{ width: "73%", display: "flex", flexDirection: "column" }}>
+        <motion.div
+          style={{ width: "73%", display: "flex", flexDirection: "column" }}
+          initial={{ x: -100 }}
+          animate={{ x: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            duration: 1,
+          }}
+        >
           <Typography variant="h2" align="left">
             {selection.formTitle}
           </Typography>
           <Typography variant="caption">{`\nCreated on: 04-06-2021`}</Typography>
-        </div>
+        </motion.div>
       </div>
       <div
         style={{
@@ -139,18 +150,29 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
         </div>
       </div>
       {questionDetailView ? (
-        <QuestionDetail
-          formElement={questionFormElement}
-          stateUpdateFunctions={{
-            setQuestionDetailView,
-            setQuestionFormElement,
-          }}
-        />
+        <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
+          <QuestionDetail
+            formElement={questionFormElement}
+            stateUpdateFunctions={{
+              setQuestionDetailView,
+              setQuestionFormElement,
+            }}
+          />
+        </div>
       ) : (
         <div style={{ width: "100%", display: "grid", placeItems: "center" }}>
-          <div style={{ width: "73%" }}>
+          <motion.div
+            style={{ width: "73%" }}
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
             <TabsHandler tabs={tabs.tabs} />
-          </div>
+          </motion.div>
         </div>
       )}
     </StyledOverviewWrapper>

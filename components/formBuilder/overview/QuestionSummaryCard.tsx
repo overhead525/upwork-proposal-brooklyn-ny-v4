@@ -24,12 +24,7 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
   });
 
   return (
-    <StyledQuestionSummaryCard
-      onClick={() => {
-        stateUpdateFunctions.setQuestionFormElement(formElement);
-        stateUpdateFunctions.setQuestionDetailView(true);
-      }}
-    >
+    <StyledQuestionSummaryCard>
       <div
         style={{
           display: "grid",
@@ -53,7 +48,12 @@ export const QuestionSummaryCard: React.FC<QuestionSummaryCardProps> = ({
           ? formElement.question
           : formElement.question.slice(0, 29) + "..."}
       </Typography>
-      <StyledVisibilityIcon />
+      <StyledVisibilityIcon
+        onClick={() => {
+          stateUpdateFunctions.setQuestionFormElement(formElement);
+          stateUpdateFunctions.setQuestionDetailView(true);
+        }}
+      />
     </StyledQuestionSummaryCard>
   );
 };

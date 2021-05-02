@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Card from "@material-ui/core/Card";
-import { Visibility } from "@material-ui/icons";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { motion } from "framer-motion";
 
 export const StyledOverviewWrapper = styled.div`
   width: 100%;
@@ -20,7 +21,7 @@ export const StyledOverviewRow = styled.div`
   grid-template-columns: 1fr 1fr;
 `;
 
-export const StyledOverviewNestedColumn = styled.div`
+export const StyledOverviewNestedColumn = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,6 +48,15 @@ export const StyledQuestionDetailCard = styled(Card)`
 `;
 
 export const StyledVisibilityIcon = styled(Visibility)`
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    color: rgba(0, 0, 0, 0.75);
+  }
+`;
+
+export const StyledVisibilityOffIcon = styled(VisibilityOff)`
   cursor: pointer;
   color: rgba(0, 0, 0, 0.25);
 

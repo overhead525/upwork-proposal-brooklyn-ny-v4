@@ -8,8 +8,12 @@ import {
   TableBody,
 } from "@material-ui/core";
 import { FormElement } from "../../../src/generated/graphql";
-import { StyledQuestionDetailCard } from "./styledComponents";
+import {
+  StyledQuestionDetailCard,
+  StyledVisibilityOffIcon,
+} from "./styledComponents";
 import { rgba, colors } from "../../../features/formBuilder/components";
+import { motion } from "framer-motion";
 
 const colorVals = Object.values(colors);
 
@@ -61,39 +65,61 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
   };
 
   return (
-    <StyledQuestionDetailCard
-      style={{
-        backgroundColor: `${typeColor}`,
-      }}
-      onClick={() => {
-        stateUpdateFunctions.setQuestionFormElement({} as FormElement);
-        stateUpdateFunctions.setQuestionDetailView(false);
+    <motion.div
+      style={{ width: "100%", display: "grid", placeItems: "center" }}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
       }}
     >
-      <Typography
-        variant="caption"
+      <StyledQuestionDetailCard
         style={{
-          marginBottom: "0.5rem",
-          color: "white",
+          backgroundColor: `${typeColor}`,
         }}
       >
-        {formElement.questionKey}
-      </Typography>
-      <Paper elevation={3} style={{ width: "100%" }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h6">Property</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="h6">Value</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{renderTableBody()}</TableBody>
-        </Table>
-      </Paper>
-    </StyledQuestionDetailCard>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <Typography
+            variant="caption"
+            style={{
+              color: "white",
+            }}
+          >
+            {formElement.questionKey}
+          </Typography>
+          <StyledVisibilityOffIcon
+            onClick={() => {
+              stateUpdateFunctions.setQuestionFormElement({} as FormElement);
+              stateUpdateFunctions.setQuestionDetailView(false);
+            }}
+          />
+        </div>
+        <Paper elevation={3} style={{ width: "100%" }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography variant="h6">Property</Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography variant="h6">Value</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{renderTableBody()}</TableBody>
+          </Table>
+        </Paper>
+      </StyledQuestionDetailCard>
+    </motion.div>
   );
 };
