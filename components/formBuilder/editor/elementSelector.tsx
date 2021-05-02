@@ -48,7 +48,18 @@ export const ElementSelector: React.FC<ElementSelectorProps> = ({
 
   return (
     <StyledElementSelectorWrapper>
-      <StyledHeaderWrapper>ELEMENTS</StyledHeaderWrapper>
+      <StyledHeaderWrapper
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          duration: 2,
+        }}
+      >
+        ELEMENTS
+      </StyledHeaderWrapper>
       <StyledElementsWrapper>
         {renderElementCards(elements)}
       </StyledElementsWrapper>
