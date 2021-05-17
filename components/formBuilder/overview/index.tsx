@@ -1,9 +1,18 @@
-import { Typography } from "@material-ui/core";
+import {
+  CircularProgress,
+  LinearProgress,
+  Typography,
+} from "@material-ui/core";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { formElements } from "../../../data/formElements";
 import { questionDetailViewSelector } from "../../../features/formBuilder/overviewSlice";
+import {
+  currentFormIndexSelector,
+  formDataSelector,
+  formElementDataSelector,
+} from "../../../features/userData/userDataSlice";
 import { FormElement } from "../../../src/generated/graphql";
 import { TabsHandler, TabsHandlerProps } from "../tabsHandler";
 import { QuestionDetail } from "./QuestionDetail";
@@ -24,12 +33,55 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
   const [questionFormElement, setQuestionFormElement] = useState(
     null as FormElement
   );
+  const currentFormIndex = useSelector(currentFormIndexSelector);
+  const formElementData = useSelector(formElementDataSelector);
+  const formData = useSelector(formDataSelector);
+  const currentForm = formData[Object.keys(formData)[currentFormIndex]];
+  const [selection, setSelection] = useState({
+    previewFormTitle: "pending",
+    publishedFormTitle: "pending",
+    formElements: {
+      preview: [],
+      published: [],
+    },
+  });
 
-  const selection = {
-    formTitle: "PTA Meeting Feedback",
-    publishedFormTitle: "Water Guns",
-    formElements: [...formElements.slice(0, 5)],
+  const populateStateFormElements = (): {
+    preview: FormElement[];
+    published: FormElement[];
+  } => {
+    let preview = [];
+    currentForm.preview.pages.forEach((page) => {
+      page.forEach((formElementID) => {
+        preview.push(formElementData[formElementID]);
+      });
+    });
+
+    let published = [];
+    currentForm.published.pages.forEach((page) => {
+      page.forEach((formElementID) => {
+        published.push(formElementData[formElementID]);
+      });
+    });
+
+    return {
+      preview,
+      published,
+    };
   };
+
+  useEffect(() => {
+    if (currentForm) {
+      const FEs = populateStateFormElements();
+
+      setSelection({
+        ...selection,
+        previewFormTitle: currentForm.preview.title,
+        publishedFormTitle: currentForm.published.title,
+        formElements: FEs,
+      });
+    }
+  }, [currentForm]);
 
   const tabs: TabsHandlerProps = {
     tabs: [
@@ -40,9 +92,9 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
             <Typography variant="h6">Preview</Typography>
             <Typography variant="body1" aria-label="title">
               {`Title: `}
-              <strong>{selection.publishedFormTitle}</strong>
+              <strong>{selection.previewFormTitle}</strong>
             </Typography>
-            {selection.formElements.map((el: FormElement, i, arr) => {
+            {selection.formElements.preview.map((el: FormElement, i, arr) => {
               if (i < arr.length - 1)
                 return (
                   <div style={{ marginBottom: "1rem", width: "100%" }}>
@@ -79,7 +131,7 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
               {`Title: `}
               <strong>{selection.publishedFormTitle}</strong>
             </Typography>
-            {selection.formElements.map((el: FormElement, i, arr) => {
+            {selection.formElements.published.map((el: FormElement, i, arr) => {
               if (i < arr.length - 1)
                 return (
                   <div style={{ marginBottom: "1rem", width: "100%" }} key={i}>
@@ -110,7 +162,18 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
     ],
   };
 
-  return (
+  return selection.publishedFormTitle === "pending" ? (
+    <div
+      style={{
+        width: "100%",
+        height: "90vh",
+        display: "grid",
+        placeItems: "center",
+      }}
+    >
+      <CircularProgress size="20vw" />
+    </div>
+  ) : (
     <StyledOverviewWrapper>
       <div
         style={{
@@ -132,7 +195,7 @@ export const Overview: React.FC<OverviewProps> = ({ resultData }) => {
           }}
         >
           <Typography variant="h2" align="left">
-            {selection.formTitle}
+            {selection.publishedFormTitle}
           </Typography>
           <Typography variant="caption">{`\nCreated on: 04-06-2021`}</Typography>
         </motion.div>

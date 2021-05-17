@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Tabs from "@atlaskit/tabs";
 import { StyledTabsWrapper } from "./styledComponents";
 
