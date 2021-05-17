@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { Form } from "../../src/generated/graphql";
+import { FormPage as FormPageComponent } from "../../components/formPage";
 
 const fetchFormIDsRequest = async (): Promise<string[]> => {
   const query = `
@@ -34,12 +34,7 @@ function FormPage() {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div>
-      <p>This means we found the formID! 🤣</p>
-      <p>{id}</p>
-    </div>
-  );
+  return <FormPageComponent id={id} />;
 }
 
 export default FormPage;
