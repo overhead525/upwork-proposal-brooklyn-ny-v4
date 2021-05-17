@@ -68,6 +68,9 @@ const form = gql`
 
     "Retrieves a specific FormElement based on its UUID."
     getFormElement(formElementID: String!): FormElement
+
+    "Retrieves every formID in the form collection, regardless of user ownership."
+    getAllFormIDs: [String!]
   }
 
   extend type Mutation {

@@ -6,6 +6,7 @@ import {
   MutationDeleteFormArgs,
   MutationUpdateFormArgs,
   QueryGetFormArgs,
+  Scalars,
 } from "../../../src/generated/graphql";
 import { FormElements } from "../data-sources/FormElements";
 import { Forms } from "../data-sources/Forms";
@@ -21,6 +22,17 @@ export const FormResolvers = {
     ): Promise<Maybe<Form>> => {
       try {
         return await forms.getForm({ formID });
+      } catch (error) {
+        return error;
+      }
+    },
+    getAllFormIDs: async (
+      _source,
+      {},
+      { dataSources: { forms } }: { dataSources: { forms: Forms } }
+    ): Promise<Maybe<Array<Scalars["String"]>>> => {
+      try {
+        return await forms.getAllFormIDs();
       } catch (error) {
         return error;
       }

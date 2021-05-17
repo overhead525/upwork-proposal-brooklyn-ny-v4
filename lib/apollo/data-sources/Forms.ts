@@ -47,6 +47,18 @@ export class Forms extends MongoDataSource<Form> {
     }
   }
 
+  async getAllFormIDs(): Promise<Maybe<Array<Scalars["String"]>>> {
+    try {
+      const response = await this.collection.find({});
+      const formsArr = await response.toArray();
+      // @ts-ignore
+      const result = formsArr.map((form) => form._id.toHexString());
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async updateForm(args: MutationUpdateFormArgs): Promise<Maybe<Form>> {
     try {
       const form = await this.collection.findOne({
