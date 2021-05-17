@@ -6,8 +6,12 @@ import { AvatarHandler } from "./avatarHandler";
 import { BreadcrumbHandler } from "./breadcrumbHandler";
 import { SettingsButton } from "./settingsButton";
 import { StyledAppHeader, StyledSide } from "./styledComponents";
-import { formDataSelector } from "../../features/userData/userDataSlice";
+import {
+  currentFormIndexSelector,
+  formDataSelector,
+} from "../../features/userData/userDataSlice";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 interface PageThemeObject {
   [page: string]: {
@@ -21,7 +25,20 @@ interface AppHeaderProps {
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ actionButtons }) => {
   const [session, loading] = useSession();
+  const [state, setState] = useState({
+    title: null,
+  });
   const formData = useSelector(formDataSelector);
+  const currentFormIndex = useSelector(currentFormIndexSelector);
+  const currentForm = formData[Object.keys(formData)[currentFormIndex]];
+
+  useEffect(() => {
+    if (currentForm)
+      setState({
+        ...state,
+        title: currentForm.published.title,
+      });
+  }, [currentForm]);
 
   return (
     <StyledAppHeader>
@@ -30,7 +47,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ actionButtons }) => {
         <Image src="/logo.png" width={94} height={40} />
         <BreadcrumbHandler
           username={session ? session.user.name : null}
-          formTitles={["Water Gun"]}
+          formTitles={[!state.title ? "..." : state.title]}
         />
       </StyledSide>
       <StyledSide side="right">
