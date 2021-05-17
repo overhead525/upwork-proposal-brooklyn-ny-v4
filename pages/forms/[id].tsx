@@ -28,6 +28,7 @@ const fetchFormIDsRequest = async (): Promise<string[]> => {
 
 function FormPage() {
   const router = useRouter();
+  const { id } = router.query;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -36,32 +37,9 @@ function FormPage() {
   return (
     <div>
       <p>This means we found the formID! 🤣</p>
+      <p>{id}</p>
     </div>
   );
-}
-
-export async function getStaticPaths() {
-  const formData = await fetchFormIDsRequest();
-  const formIDs = formData.map((id) => {
-    return {
-      params: {
-        id,
-      },
-    };
-  });
-  const paths = formIDs;
-
-  return {
-    paths,
-    fallback: true,
-  };
-}
-
-export async function getStaticProps({ params }: { params: { id: string } }) {
-  const formData = await fetchFormIDsRequest();
-  return {
-    props: {},
-  };
 }
 
 export default FormPage;
