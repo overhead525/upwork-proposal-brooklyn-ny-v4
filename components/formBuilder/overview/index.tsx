@@ -6,8 +6,6 @@ import {
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { formElements } from "../../../data/formElements";
-import { questionDetailViewSelector } from "../../../features/formBuilder/overviewSlice";
 import {
   currentFormIndexSelector,
   formDataSelector,
