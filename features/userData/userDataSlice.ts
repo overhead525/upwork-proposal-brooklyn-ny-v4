@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import { grabFormElementIDsFromFormV2 } from "../../lib/apollo/resolvers/shared";
-import { User, Form, FormElement } from "../../src/generated/graphql";
+import {
+  User,
+  Form,
+  FormElement,
+  FormObject,
+  Scalars,
+} from "../../src/generated/graphql";
 
 export const fetchAllData = createAsyncThunk(
   "userData/fetchUserData",
@@ -280,12 +284,30 @@ export const fetchFormElementData = createAsyncThunk(
   }
 );
 
+interface SetCurrentFormDataAction {
+  payload: {
+    formID: string;
+  };
+  type: string;
+}
+
+interface PopulatedFormObject {
+  title: Scalars["String"];
+  pages: Array<Array<FormElement>>;
+}
+
+export interface PopulatedForm {
+  preview: PopulatedFormObject;
+  published: PopulatedFormObject;
+}
+
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
     user: {},
     forms: {},
     formElements: {},
+    currentFormIndex: 0,
   },
   reducers: {},
   extraReducers: {
@@ -337,5 +359,8 @@ export const formElementDataSelector = (
 ): { [formElementID: string]: FormElement } => {
   return state.userData.formElements;
 };
+
+export const currentFormIndexSelector = (state): number =>
+  state.userData.currentFormIndex;
 
 export default userDataSlice.reducer;
