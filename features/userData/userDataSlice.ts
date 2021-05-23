@@ -336,7 +336,6 @@ export const userDataSlice = createSlice({
         };
       }
     ) => {
-      console.log(action.payload);
       state.user = action.payload.userData;
       state.forms = action.payload.formData;
       state.formElements = action.payload.formElementData;

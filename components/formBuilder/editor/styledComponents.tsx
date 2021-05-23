@@ -74,9 +74,19 @@ export const StyledDropArea = styled.div`
   width: 100%;
   height: ${(props) => (props.className === "between" ? "3rem" : "100%")};
 
+  display: grid;
+  place-items: center;
+
   min-height: 3rem;
 
   background-color: ${(props) =>
     props.about === "hovered" ? "rgba(0, 0, 255, 0.5)" : ""};
   border-radius: ${(props) => (props.about === "hovered" ? "3px" : "")};
+`;
+
+export const StyledDropAreaCube = styled.div`
+  width: 5%;
+  height: 3%;
+  background-color: rgba(0, 0, 255, 0.5);
+  border-radius: 3px;
 `;

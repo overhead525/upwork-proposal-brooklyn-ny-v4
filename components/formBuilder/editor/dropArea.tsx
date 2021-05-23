@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { StyledDropArea } from "./styledComponents";
+import { useSelector } from "react-redux";
+import { lastDragPointsSelector } from "../../../features/formBuilder/editorDragAndDropSlice";
+import { StyledDropArea, StyledDropAreaCube } from "./styledComponents";
 import { isInsidePolygon } from "./utility";
 
 export interface DropAreaProps {
@@ -12,6 +14,7 @@ export const DropArea: React.FC<DropAreaProps> = ({
   className,
 }) => {
   const [hovered, setHovered] = useState(false);
+  const lastDragPoints = useSelector(lastDragPointsSelector);
 
   const dropAreaRef = useRef(null);
 
@@ -21,6 +24,12 @@ export const DropArea: React.FC<DropAreaProps> = ({
       : setHovered(false);
   });
 
+  useEffect(() => {
+    isInsidePolygon(dropAreaRef, lastDragPoints, 0)
+      ? console.log(dropAreaRef.current)
+      : null;
+  }, [lastDragPoints]);
+
   return (
     <div>
       <StyledDropArea
@@ -28,7 +37,7 @@ export const DropArea: React.FC<DropAreaProps> = ({
         ref={dropAreaRef}
         className={className}
       >
-        {" "}
+        {hovered ? " " : <StyledDropAreaCube />}
       </StyledDropArea>
     </div>
   );

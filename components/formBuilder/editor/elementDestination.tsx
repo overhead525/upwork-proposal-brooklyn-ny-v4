@@ -25,7 +25,6 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
   dragPointerCoordinates,
 }) => {
   const formElements = Object.entries(useSelector(formElementDataSelector));
-  console.log(formElements);
 
   const dragDestinationRef = useRef(null);
 
@@ -50,10 +49,10 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
         finalFEs.push(el);
       }
     });
-    console.log(finalFEs);
     return finalFEs;
   };
 
+  /*
   useEffect(() => {
     const dragDestRect: DOMRect = dragDestinationRef.current.getBoundingClientRect();
     const dragDestClientTop = dragDestinationRef.current.clientTop;
@@ -82,12 +81,13 @@ export const ElementsDestination: React.FC<ElementsDestinationProps> = ({
       ) {
         console.log("in the money");
         dragDestinationRef.current.scroll({
-          top: 300,
+          top: 500,
           behavior: "smooth",
         });
       }
     }
   }, [dragPointerCoordinates]);
+  */
 
   return (
     <StyledDragDestination ref={dragDestinationRef}>

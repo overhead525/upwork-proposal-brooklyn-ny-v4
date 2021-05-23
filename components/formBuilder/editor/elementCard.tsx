@@ -3,7 +3,10 @@ import { StyledElementCard, StyledCardContent } from "./styledComponents";
 import Typography from "@material-ui/core/Typography";
 import { Dispatch, SetStateAction } from "react";
 import { useDispatch } from "react-redux";
-import { updateDragPointerCoordinates } from "../../../features/formBuilder/editorDragAndDropSlice";
+import {
+  updateDragPointerCoordinates,
+  updateLastDragPoints,
+} from "../../../features/formBuilder/editorDragAndDropSlice";
 
 interface ElementCardProps {
   dropAreaRef: React.RefObject<any>;
@@ -40,6 +43,7 @@ export const ElementCard: React.FC<ElementCardProps> = ({
         dragMomentum={false}
         onDragEnd={(event, info: PanInfo) => {
           dispatch(updateDragPointerCoordinates({ x: 0, y: 0 }));
+          dispatch(updateLastDragPoints({ x: info.point.x, y: info.point.y }));
           if (info.offset.x > 360) {
             cardControls.start({
               x: -info.delta.x,
