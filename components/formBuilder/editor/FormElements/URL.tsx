@@ -1,12 +1,14 @@
 import TextField from "@material-ui/core/TextField";
 import { useEffect, useState } from "react";
 import { FormElement } from "../../../../src/generated/graphql";
+import { ReportStateFunction } from "./BaseFormElement";
 
 export interface URLProps {
   formElement: FormElement;
+  reportState?: ReportStateFunction;
 }
 
-export const URL: React.FC<URLProps> = ({ formElement }) => {
+export const URL: React.FC<URLProps> = ({ formElement, reportState }) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
 
@@ -20,7 +22,22 @@ export const URL: React.FC<URLProps> = ({ formElement }) => {
     );
   };
 
+  const reporting = () => {
+    const data: {
+      question: string;
+      type: string;
+      value: any;
+    } = {
+      question: formElement.question,
+      type: formElement.type,
+      value,
+    };
+
+    reportState(data);
+  };
+
   useEffect(() => {
+    reportState && reporting();
     setError(!isURL(value));
   }, [value]);
 

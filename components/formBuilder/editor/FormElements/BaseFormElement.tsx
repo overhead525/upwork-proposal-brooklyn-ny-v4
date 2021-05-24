@@ -12,18 +12,30 @@ import { motion } from "framer-motion";
 
 export interface BaseFormElementProps {
   formElement: FormElement;
+  reportState?: ReportStateFunction;
 }
+
+export type ReportStateFunction = (data: {
+  question: string;
+  type: string;
+  value: any;
+}) => void;
 
 export const BaseFormElement: React.FC<BaseFormElementProps> = ({
   formElement,
+  reportState,
 }) => {
   const variants = {
-    radio: <Radio formElement={formElement} />,
-    checkbox: <Checkbox formElement={formElement} />,
-    shortanswer: <ShortAnswer formElement={formElement} />,
-    longanswer: <LongAnswer formElement={formElement} />,
-    email: <Email formElement={formElement} />,
-    url: <URL formElement={formElement} />,
+    radio: <Radio reportState={reportState} formElement={formElement} />,
+    checkbox: <Checkbox reportState={reportState} formElement={formElement} />,
+    shortanswer: (
+      <ShortAnswer reportState={reportState} formElement={formElement} />
+    ),
+    longanswer: (
+      <LongAnswer reportState={reportState} formElement={formElement} />
+    ),
+    email: <Email reportState={reportState} formElement={formElement} />,
+    url: <URL reportState={reportState} formElement={formElement} />,
   };
 
   const StyledRow = styled.div`

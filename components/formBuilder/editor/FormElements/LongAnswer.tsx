@@ -1,17 +1,40 @@
 import TextField from "@material-ui/core/TextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormElement } from "../../../../src/generated/graphql";
+import { ReportStateFunction } from "./BaseFormElement";
 
 export interface LongAnswerProps {
   formElement: FormElement;
+  reportState?: ReportStateFunction;
 }
 
-export const LongAnswer: React.FC<LongAnswerProps> = ({ formElement }) => {
+export const LongAnswer: React.FC<LongAnswerProps> = ({
+  formElement,
+  reportState,
+}) => {
   const [value, setValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+
+  const reporting = () => {
+    const data: {
+      question: string;
+      type: string;
+      value: any;
+    } = {
+      question: formElement.question,
+      type: formElement.type,
+      value,
+    };
+
+    reportState(data);
+  };
+
+  useEffect(() => {
+    reportState && reporting();
+  }, [value]);
 
   return (
     <TextField
