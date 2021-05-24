@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FormElement } from "../../src/generated/graphql";
 import { BaseFormElement } from "../formBuilder/editor/FormElements/BaseFormElement";
+import { SubmitButton } from "./submitButton";
 
 interface FormElementRendererProps {
   formElements: FormElement[][];
@@ -29,5 +30,10 @@ export const FormElementRenderer: React.FC<FormElementRendererProps> = ({
     setTimeout(() => setLoaded(true), 100);
   });
 
-  return <StyledWrapper>{loaded ? renderFormElements() : null}</StyledWrapper>;
+  return (
+    <StyledWrapper>
+      {loaded ? renderFormElements() : null}
+      <SubmitButton />
+    </StyledWrapper>
+  );
 };
