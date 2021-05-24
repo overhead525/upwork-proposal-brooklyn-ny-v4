@@ -20,6 +20,14 @@ export const FormElementRenderer: React.FC<FormElementRendererProps> = ({
   const [loaded, setLoaded] = useState(false);
   const [formState, setFormState] = useState({});
 
+  const handleSubmit = () => {
+    alert(`
+      Here is the data you submitted:
+
+      ${JSON.stringify(formState)}
+    `);
+  };
+
   const reportStateManager: ReportStateFunction = (data) => {
     const stateCopy = { ...formState };
     stateCopy[data.question] = {
@@ -50,7 +58,7 @@ export const FormElementRenderer: React.FC<FormElementRendererProps> = ({
   return (
     <StyledWrapper>
       {loaded ? renderFormElements() : null}
-      <SubmitButton />
+      <SubmitButton onClick={handleSubmit} />
     </StyledWrapper>
   );
 };
