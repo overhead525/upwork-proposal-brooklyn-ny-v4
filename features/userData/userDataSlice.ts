@@ -291,7 +291,7 @@ interface SetCurrentFormDataAction {
   type: string;
 }
 
-interface PopulatedFormObject {
+export interface PopulatedFormObject {
   title: Scalars["String"];
   pages: Array<Array<FormElement>>;
 }
