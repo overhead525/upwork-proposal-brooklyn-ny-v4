@@ -36,7 +36,7 @@
     "graphql": "^15.5.0",
     "newman": "^5.2.2",
     "next": "^10.0.5",
-    "next-auth": "^3.3.0",
+    "next-auth": "^3.29.5",
     "point-in-polygon": "^1.1.0",
     "react": "^16.13.1",
     "react-chartjs-2": "^3.0.3",
